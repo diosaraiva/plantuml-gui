@@ -1,4 +1,6 @@
 @startuml
+!pragma layout smetana
+
 title Object Diagram
 
 object "john : User" as john {

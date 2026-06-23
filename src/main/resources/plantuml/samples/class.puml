@@ -1,4 +1,5 @@
 @startuml
+!pragma layout smetana
 title Class Diagram
 
 abstract class Animal {

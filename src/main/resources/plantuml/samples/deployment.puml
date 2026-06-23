@@ -1,4 +1,6 @@
 @startuml
+!pragma layout smetana
+
 title Deployment Diagram
 
 node "Web Server" as web {

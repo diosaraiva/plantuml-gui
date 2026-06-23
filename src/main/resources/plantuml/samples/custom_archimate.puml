@@ -1,0 +1,58 @@
+@startuml
+!pragma layout smetana
+!include <archimate/Archimate>
+
+!define actor(alias,stereotype,actorName) Business_Actor(alias,<<stereotype>>\nactorName <font color=green>**[N]**</font>)
+!define assetNew(alias,stereotype,assetName) Application_Component(alias,"<<stereotype>>\nassetName <font color=green>**[N]**</font>")
+!define assetReused(alias,stereotype,assetName) Application_Component(alias,<<stereotype>>\nassetName <font color=blue>**[R]**</font>)
+!define exchNew(aliasOrigin,aliasDest,stereotype,exchLabel) Rel_Serving(aliasOrigin, aliasDest, "<<stereotype>>\nexchLabel")
+!define legendEntry(col,sign,desc) |<font color=col>** sign**</font>|desc|
+
+'###SETTINGS###
+title Customized Archimate Architecture View
+skinparam backgroundColor white
+skinparam legendBackgroundColor white
+skinparam legendBorderColor white
+skinparam legendFontColor black
+top to bottom direction
+
+'###ACTORS###
+actor(x1,"External","Customer")
+actor(x2,"Internal","Cardif")
+
+'###COMPONENTS###
+Group(g1, "Frontend"){
+    assetNew(y11,"Application","SPA Application")
+    assetNew(y12,"Application","Mobile Application")
+    assetNew(y13,"Application","Windows Application")
+}
+
+Group(g2, "Backend"){
+    assetReused(y21,"Application","API Backend")
+}
+
+Group(g3, "Data"){
+    assetReused(z11,"Database","PostgreSQL")
+}
+
+'###EXCHANGES###
+exchNew(x1, y11, "GUI","subscription")
+exchNew(x1, y12, "GUI","subscription")
+exchNew(x2, y11, "GUI","reporting")
+exchNew(y11, y21, "API","subscription")
+exchNew(y12, y21, "API","subscription")
+exchNew(y11, y21, "API","reporting")
+exchNew(y21, z11, "SQL","query")
+
+'###LEGEND###
+legend left
+| **Sign** | **Description** |
+legendEntry(black,-->,Existing Exchange)
+legendEntry(blue,-->,New Exchange)
+legendEntry(red,-->,Removed Exchange)
+legendEntry(green,[N],New Asset)
+legendEntry(black,[R],Reused Asset)
+legendEntry(red,[D],Decomissioned Asset)
+endlegend
+
+@enduml

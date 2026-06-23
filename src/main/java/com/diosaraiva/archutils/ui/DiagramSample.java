@@ -27,7 +27,8 @@ public enum DiagramSample {
     SEQUENCE("Sequence", "sequence.puml"),
     STATE("State", "state.puml"),
     TIMING("Timing", "timing.puml"),
-    USE_CASE("Use Case", "usecase.puml");
+    USE_CASE("Use Case", "usecase.puml"),
+	CUSTOM_ARCHIMATE("Custom Archimate", "custom_archimate.puml");
 
     private final String displayName;
     private final String fileName;

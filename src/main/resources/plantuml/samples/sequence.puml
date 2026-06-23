@@ -1,4 +1,6 @@
 @startuml
+!pragma layout smetana
+
 title Sequence Diagram
 
 actor User

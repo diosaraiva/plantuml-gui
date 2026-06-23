@@ -1,4 +1,5 @@
 @startuml
+!pragma layout smetana
 title Component Diagram
 
 package "Frontend" {

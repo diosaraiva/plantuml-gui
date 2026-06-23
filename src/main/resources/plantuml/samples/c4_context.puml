@@ -1,4 +1,5 @@
 @startuml
+!pragma layout smetana
 !include <C4/C4_Context>
 
 title System Context Diagram

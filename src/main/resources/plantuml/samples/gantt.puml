@@ -1,4 +1,6 @@
 @startgantt
+!pragma layout smetana
+
 title Project Schedule
 
 Project starts 2026-01-05

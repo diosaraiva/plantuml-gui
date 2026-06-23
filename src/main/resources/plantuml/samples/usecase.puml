@@ -1,4 +1,6 @@
 @startuml
+!pragma layout smetana
+
 title Use Case Diagram
 
 left to right direction

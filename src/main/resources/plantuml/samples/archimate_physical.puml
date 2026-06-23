@@ -1,4 +1,5 @@
 @startuml
+!pragma layout smetana
 !include <archimate/Archimate>
 
 title Archimate Physical Layer

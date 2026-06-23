@@ -1,4 +1,6 @@
 @startuml
+!pragma layout smetana
+
 title Timing Diagram
 
 robust "Web Server" as WS
