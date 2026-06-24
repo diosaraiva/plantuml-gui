@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -60,9 +61,21 @@ public final class JarUtils {
     public static int runJar(String resourcePath, File workingDir,
                              String... args)
             throws IOException, InterruptedException {
+        return runJar(resourcePath, workingDir, Collections.emptyList(), args);
+    }
+
+    /**
+     * Runs a resource JAR with optional JVM options (e.g. {@code -Dkey=value}),
+     * a working directory and program arguments. JVM options are placed before
+     * {@code -jar} so they are interpreted by the JVM rather than the program.
+     */
+    public static int runJar(String resourcePath, File workingDir,
+                             List<String> jvmOptions, String... args)
+            throws IOException, InterruptedException {
         File jar = extractJar(resourcePath);
         List<String> cmd = new java.util.ArrayList<>();
         cmd.add("java");
+        if (jvmOptions != null) { cmd.addAll(jvmOptions); }
         cmd.add("-jar");
         cmd.add(jar.getAbsolutePath());
         cmd.addAll(Arrays.asList(args));

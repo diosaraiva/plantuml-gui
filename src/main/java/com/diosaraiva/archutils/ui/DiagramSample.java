@@ -29,6 +29,7 @@ public enum DiagramSample {
     TIMING("Timing", "timing.puml"),
     USE_CASE("Use Case", "usecase.puml"),
 	CUSTOM_ARCHIMATE("Custom Archimate", "custom_archimate.puml"),
+	CUSTOM_MODULAR("Custom Modular", "custom_modular.puml"),
 	UTILS_COLORS("List Available [colors]", "util_colors.puml"),
 	UTILS_OPENICONIC("List Available [icons]", "util_openiconic.puml"),
 	UTILS_SKINPARAMS("List Available [skinparams]", "util_skinparams.puml"),

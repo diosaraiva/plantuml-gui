@@ -4,10 +4,14 @@ import com.diosaraiva.archutils.util.JarUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Service layer for PlantUML operations: command building and diagram rendering.
@@ -15,6 +19,14 @@ import java.nio.file.Paths;
 public final class PlantUmlService {
 
     private static final String PLANTUML_JAR = "plantuml/plantuml-1.2026.6.jar";
+
+    /** Resource path of the bundled sample diagrams (also holds shared includes). */
+    private static final String SAMPLES_RESOURCE = "plantuml/samples";
+
+    /** Filesystem fallback for the samples directory (running from project root). */
+    private static final String SAMPLES_FS = "src" + File.separator + "main"
+            + File.separator + "resources" + File.separator + "plantuml"
+            + File.separator + "samples";
 
     private PlantUmlService() { }
 
@@ -59,6 +71,7 @@ public final class PlantUmlService {
                 ? "-tsvg" : "-t" + ext;
 
         JarUtils.runJar(PLANTUML_JAR, target.getParentFile(),
+                includePathOptions(),
                 formatArg, pumlPath.toAbsolutePath().toString(),
                 "-o", target.getParent());
     }
@@ -74,10 +87,45 @@ public final class PlantUmlService {
         Path pumlPath = Paths.get(tempDir, "_preview.puml");
         Files.write(pumlPath, code.getBytes(StandardCharsets.UTF_8));
         JarUtils.runJar(PLANTUML_JAR, dir,
+                includePathOptions(),
                 "-tpng", pumlPath.toAbsolutePath().toString(),
                 "-o", tempDir);
         File preview = new File(tempDir, "_preview.png");
         return preview.isFile() ? preview : null;
+    }
+
+    /**
+     * Builds the JVM options that let PlantUML resolve {@code !include} of
+     * shared sample files (e.g. {@code !include custom_modular_ref.puml}).
+     * Because each diagram is rendered from a standalone file written to a
+     * temp/output folder, sibling include files would otherwise be missing;
+     * pointing {@code plantuml.include.path} at the samples directory makes
+     * those relative includes resolvable. Bundled stdlib includes written
+     * with angle brackets (e.g. {@code <archimate/Archimate>}) keep working
+     * from inside the jar regardless.
+     */
+    private static List<String> includePathOptions() {
+        File samplesDir = resolveSamplesDir();
+        if (samplesDir == null) {
+            return Collections.emptyList();
+        }
+        List<String> opts = new ArrayList<>();
+        opts.add("-Dplantuml.include.path=" + samplesDir.getAbsolutePath());
+        return opts;
+    }
+
+    /** Resolves the samples directory on the classpath, then the filesystem. */
+    private static File resolveSamplesDir() {
+        URL url = PlantUmlService.class.getClassLoader()
+                .getResource(SAMPLES_RESOURCE);
+        if (url != null && "file".equals(url.getProtocol())) {
+            File dir = new File(url.getPath());
+            if (dir.isDirectory()) {
+                return dir;
+            }
+        }
+        File fsDir = new File(SAMPLES_FS);
+        return fsDir.isDirectory() ? fsDir : null;
     }
 
     private static void ensureParentDir(File target) throws IOException {

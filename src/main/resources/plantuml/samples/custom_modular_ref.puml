@@ -1,0 +1,5 @@
+@startuml
+'###LIBS###
+!pragma layout smetana
+title Component Diagram Template
+@enduml
