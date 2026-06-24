@@ -28,7 +28,11 @@ public enum DiagramSample {
     STATE("State", "state.puml"),
     TIMING("Timing", "timing.puml"),
     USE_CASE("Use Case", "usecase.puml"),
-	CUSTOM_ARCHIMATE("Custom Archimate", "custom_archimate.puml");
+	CUSTOM_ARCHIMATE("Custom Archimate", "custom_archimate.puml"),
+	UTILS_COLORS("List Available [colors]", "util_colors.puml"),
+	UTILS_OPENICONIC("List Available [icons]", "util_openiconic.puml"),
+	UTILS_SKINPARAMS("List Available [skinparams]", "util_skinparams.puml"),
+	UTILS_SPRITES("List Available [sprites]", "util_sprites.puml");
 
     private final String displayName;
     private final String fileName;
