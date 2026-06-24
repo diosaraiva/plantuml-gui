@@ -14,7 +14,7 @@ import java.nio.file.Paths;
  */
 public final class PlantUmlService {
 
-    private static final String PLANTUML_JAR = "plantuml/plantuml-1.2024.8.jar";
+    private static final String PLANTUML_JAR = "plantuml/plantuml-1.2026.6.jar";
 
     private PlantUmlService() { }
 
