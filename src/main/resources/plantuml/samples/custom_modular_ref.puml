@@ -1,5 +1,65 @@
 @startuml
-'###LIBS###
 !pragma layout smetana
-title Component Diagram Template
+
+skinparam BackgroundColor #ffffff
+skinparam DefaultFontName Helvetica
+skinparam DefaultFontSize 12
+skinparam DefaultFontColor #2c3e50
+
+skinparam component {
+    BackgroundColor #d6eaf8
+    BorderColor     #2e86c1
+    FontColor       #1a5276
+    FontSize        11
+    BorderThickness 1.5
+    RoundCorner     6
+}
+skinparam rectangle {
+    BackgroundColor #ffffff
+    BorderColor     #adb5bd
+    FontColor       #2c3e50
+    FontSize        11
+    RoundCorner     6
+}
+
+skinparam frame {
+    BackgroundColor #d0e8f5
+    BorderColor     #2e86c1
+    BorderThickness 1
+    FontColor       #1a5276
+    FontStyle       bold
+    RoundCorner     4
+}
+
+skinparam package {
+    FontColor       #ffffff
+    FontStyle       bold
+    BorderThickness 2
+    RoundCorner     6
+}
+skinparam packageBackgroundColor<<Group1>>      #1a3a5c
+skinparam packageBorderColor<<Group1>>          #154360
+skinparam packageBackgroundColor<<Group2>>      #1e6b4a
+skinparam packageBorderColor<<Group2>>          #145a32
+
+skinparam legend {
+    BorderColor     #ffffff
+    BackgroundColor #f8f9fa
+    FontColor       #495057
+    FontSize        11
+}
+
+skinparam arrow {
+    FontColor       #495057
+    FontSize        10
+    MessageAlignment center
+}
+
+skinparam ArrowThickness 1.5
+
+!define exch(stereotype,exchLabel) "<center><<stereotype>>\nexchLabel"
+!define legendEntry(col,sign,desc) "|<font color=col>**  sign**</font>|desc|
+
+top to bottom direction
+
 @enduml

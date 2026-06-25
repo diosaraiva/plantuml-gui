@@ -1,3 +1,46 @@
 @startuml
 !include custom_modular_ref.puml
+
+title Modular PlantUML Template
+
+rectangle "<center><<External>>\nCustomers"  as x1
+rectangle "<center><<Internal>>\nManagement" as x2
+
+package "Group1" <<Group1>> {
+    frame "On Premises" {
+        component "<center><<Application>>\nSPA Application\n<font color=#2ecc71>**[N]**</font>" as y11 {
+            component "<center><<Module>>\nAuth Module\n<font color=#2ecc71>**[N]**</font>"      as y11a
+            component "<center><<Module>>\nDashboard Module\n<font color=#2ecc71>**[N]**</font>" as y11b
+        }
+        component "<center><<Application>>\nMobile Application\n<font color=#3498db>**[R]**</font>"  as y12
+        component "<center><<Application>>\nWindows Application\n<font color=#e74c3c>**[D]**</font>" as y13
+    }
+}
+package "Group2" <<Group2>> {
+    component "<center><<Application>>\nAPI Group2\n<font color=#3498db>**[R]**</font>" as y21
+}
+package "Group 1" <<Group1>> {
+    component "<center><<Database>>\nPostgreSQL\n<font color=#3498db>**[R]**</font>" as z11
+}
+
+x1 -[#e74c3c]->  y13: exch("GUI","subscription")
+x1 -[#2c3e50]->  y12: exch("GUI","reporting")
+x1 -[#3498db]->  y11: exch("GUI","subscription")
+x2 -[#2c3e50]->  y11: exch("GUI","subscription")
+y11 -[#2c3e50]-> y21: exch("API","subscription")
+y12 -[#2c3e50]-> y21: exch("API","subscription")
+y13 -[#2c3e50]-> y21: exch("API","subscription")
+y11 -[#2c3e50]-> y21: exch("API","reporting")
+y21 -[#2c3e50]-> z11: exch("SQL","query")
+
+legend left
+    | **Sign** | **Description**          |
+    legendEntry(#2c3e50,--->,"Existing Exchange")
+    legendEntry(#3498db,--->,"New Exchange")
+    legendEntry(#e74c3c,--->,"Removed Exchange")
+    legendEntry(#2ecc71,[N], "New Asset")
+    legendEntry(#2c3e50,[R], "Reused Asset")
+    legendEntry(#e74c3c,[D], "Decommissioned Asset")
+endlegend
+
 @enduml
