@@ -1,65 +1,76 @@
 @startuml
+
 !pragma layout smetana
+top to bottom direction
 
-skinparam BackgroundColor #ffffff
-skinparam DefaultFontName Helvetica
-skinparam DefaultFontSize 12
+skinparam BackgroundColor  #ffffff
+skinparam DefaultFontName  Helvetica
+skinparam DefaultFontSize  12
 skinparam DefaultFontColor #2c3e50
+skinparam ArrowThickness   1.5
 
+' ### FLOWS
+skinparam arrow {
+    FontColor        #495057
+    FontSize         10
+    MessageAlignment center
+}
+
+' ### BOXES
 skinparam component {
-    BackgroundColor #d6eaf8
-    BorderColor     #2e86c1
-    FontColor       #1a5276
+    BackgroundColor #cfffff
+    BorderColor     #006080
+    FontColor       #003040
     FontSize        11
-    BorderThickness 1.5
-    RoundCorner     6
-}
-skinparam rectangle {
-    BackgroundColor #ffffff
-    BorderColor     #adb5bd
-    FontColor       #2c3e50
-    FontSize        11
-    RoundCorner     6
-}
-
-skinparam frame {
-    BackgroundColor #d0e8f5
-    BorderColor     #2e86c1
     BorderThickness 1
-    FontColor       #1a5276
-    FontStyle       bold
-    RoundCorner     4
+    RoundCorner     0
 }
+skinparam rectangleBackgroundColor<<Actor>>                 #ffffcc
+skinparam rectangleBorderColor<<Actor>>                     #c8a000
+skinparam rectangleFontColor<<Actor>>                       #5a4500
 
+skinparam componentBackgroundColor<<Application>>           #cfffff
+skinparam componentBorderColor<<Application>>               #006080
+skinparam componentFontColor<<Application>>                 #003040
+
+skinparam componentBackgroundColor<<ApplicationComponent>>  #cfffff
+skinparam componentBorderColor<<ApplicationComponent>>      #006080
+skinparam componentFontColor<<ApplicationComponent>>        #003040
+
+' ### GROUP1
 skinparam package {
     FontColor       #ffffff
     FontStyle       bold
     BorderThickness 2
-    RoundCorner     6
+    RoundCorner     0
 }
-skinparam packageBackgroundColor<<Group1>>      #1a3a5c
-skinparam packageBorderColor<<Group1>>          #154360
-skinparam packageBackgroundColor<<Group2>>      #1e6b4a
-skinparam packageBorderColor<<Group2>>          #145a32
+skinparam packageBackgroundColor<<PkgBlue>>   #1a3a5c
+skinparam packageBorderColor<<PkgBlue>>       #154360
+skinparam packageBackgroundColor<<PkgGreen>>  #1e6b4a
+skinparam packageBorderColor<<PkgGreen>>      #145a32
 
+' ### GROUP2
+skinparam frame {
+    BackgroundColor #f0f0f0
+    BorderColor     #a0a0a0
+    BorderThickness 1
+    FontColor       #404040
+    FontStyle       bold
+    RoundCorner     0
+}
+
+' ### LEGEND
 skinparam legend {
-    BorderColor     #ffffff
-    BackgroundColor #f8f9fa
-    FontColor       #495057
-    FontSize        11
+    BorderColor      #ffffff
+    BackgroundColor  #f8f9fa
+    FontColor        #495057
+    FontSize         10
 }
 
-skinparam arrow {
-    FontColor       #495057
-    FontSize        10
-    MessageAlignment center
-}
-
-skinparam ArrowThickness 1.5
-
-!define exch(stereotype,exchLabel) "<center><<stereotype>>\nexchLabel"
-!define legendEntry(col,sign,desc) "|<font color=col>**  sign**</font>|desc|
-
-top to bottom direction
+' ### MACROS
+!define Actor(alias,stereotype,label) rectangle <<stereotype>>\nlabel as alias <<Actor>>
+!define Component(type,alias,stereotype,label) component <<stereotype>>\nlabel as alias <<type>>
+!define Flow(stereotype,label) <<stereotype>>\nlabel
+!define Legend(col1,col2) | col1 | col2 |
 
 @enduml
