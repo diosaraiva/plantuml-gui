@@ -7,8 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -42,8 +40,8 @@ public class CsvPanel extends JPanel {
         add(createColumn("JSON", jsonArea));
         add(createColumn("Markdown", markdownArea));
         markdownArea.setEditable(false);
-        csvArea.getDocument().addDocumentListener(syncListener(true));
-        jsonArea.getDocument().addDocumentListener(syncListener(false));
+        csvArea.getDocument().addDocumentListener(SwingUtils.onDocumentChange(() -> sync(true)));
+        jsonArea.getDocument().addDocumentListener(SwingUtils.onDocumentChange(() -> sync(false)));
     }
 
     private JPanel createColumn(String title, JTextArea area) {
@@ -57,29 +55,23 @@ public class CsvPanel extends JPanel {
         return col;
     }
 
-    private DocumentListener syncListener(boolean csvToJson) {
-        return new DocumentListener() {
-            @Override public void insertUpdate(DocumentEvent e) { sync(); }
-            @Override public void removeUpdate(DocumentEvent e) { sync(); }
-            @Override public void changedUpdate(DocumentEvent e) { sync(); }
-            private void sync() {
-                if (updating) return;
-                updating = true;
-                try {
-                    if (csvToJson) {
-                        jsonArea.setText(CsvJsonConverter.csvToJson(csvArea.getText()));
-                        markdownArea.setText(CsvJsonConverter.csvToMarkdown(csvArea.getText()));
-                    } else {
-                        csvArea.setText(CsvJsonConverter.jsonToCsv(jsonArea.getText()));
-                        markdownArea.setText(CsvJsonConverter.csvToMarkdown(csvArea.getText()));
-                    }
-                } catch (Exception ignored) { }
-                finally { updating = false; }
+    /** Regenerates the derived columns from whichever source was edited. */
+    private void sync(boolean fromCsv) {
+        if (updating) {
+            return;
+        }
+        updating = true;
+        try {
+            if (fromCsv) {
+                jsonArea.setText(CsvJsonConverter.csvToJson(csvArea.getText()));
+            } else {
+                csvArea.setText(CsvJsonConverter.jsonToCsv(jsonArea.getText()));
             }
-        };
+            markdownArea.setText(CsvJsonConverter.csvToMarkdown(csvArea.getText()));
+        } catch (Exception ignored) {
+            // Malformed intermediate input while typing – ignore until valid.
+        } finally {
+            updating = false;
+        }
     }
-
-    public String getCsvText() { return csvArea.getText(); }
-
-    public String getJsonText() { return jsonArea.getText(); }
 }

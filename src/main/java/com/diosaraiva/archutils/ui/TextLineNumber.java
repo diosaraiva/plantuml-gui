@@ -10,7 +10,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
-import javax.swing.text.Utilities;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -143,11 +142,5 @@ public class TextLineNumber extends JComponent
     @Override
     public void changedUpdate(DocumentEvent e) {
         documentChanged();
-    }
-
-    /** Retained for compatibility with older Swing utility usages. */
-    @SuppressWarnings("unused")
-    private int offsetToLineStartY(int offset) throws BadLocationException {
-        return editor.modelToView2D(Utilities.getRowStart(editor, offset)).getBounds().y;
     }
 }

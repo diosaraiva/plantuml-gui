@@ -2,6 +2,7 @@ package com.diosaraiva.archutils.ui;
 
 import com.diosaraiva.archutils.util.SampleLoader;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -12,19 +13,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -124,11 +119,7 @@ public class PlantUmlInputPanel extends JPanel {
 
     /** Updates the character/line count label whenever the document changes. */
     private void initCountLabel() {
-        codeTextArea.getDocument().addDocumentListener(new DocumentListener() {
-            @Override public void insertUpdate(javax.swing.event.DocumentEvent e)  { updateCounts(); }
-            @Override public void removeUpdate(javax.swing.event.DocumentEvent e)  { updateCounts(); }
-            @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { updateCounts(); }
-        });
+        codeTextArea.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::updateCounts));
         updateCounts();
     }
 
@@ -140,27 +131,22 @@ public class PlantUmlInputPanel extends JPanel {
 
     /** Wires the undo manager, keyboard shortcuts and state notifications. */
     private void initUndo() {
-        codeTextArea.getDocument().addUndoableEditListener(new UndoableEditListener() {
-            @Override
-            public void undoableEditHappened(UndoableEditEvent e) {
-                undoManager.addEdit(e.getEdit());
-                fireUndoStateChanged();
-            }
+        codeTextArea.getDocument().addUndoableEditListener(e -> {
+            undoManager.addEdit(e.getEdit());
+            fireUndoStateChanged();
         });
 
-        int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
-        codeTextArea.getInputMap().put(
-                KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut), "archutils-undo");
-        codeTextArea.getInputMap().put(
-                KeyStroke.getKeyStroke(KeyEvent.VK_Y, shortcut), "archutils-redo");
-        codeTextArea.getInputMap().put(
-                KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut | InputEvent.SHIFT_DOWN_MASK),
-                "archutils-redo");
-        codeTextArea.getActionMap().put("archutils-undo", new javax.swing.AbstractAction() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent e) { undo(); }
-        });
-        codeTextArea.getActionMap().put("archutils-redo", new javax.swing.AbstractAction() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent e) { redo(); }
+        int mod = SwingUtils.menuShortcut();
+        bindKey(KeyStroke.getKeyStroke(KeyEvent.VK_Z, mod), "archutils-undo", this::undo);
+        bindKey(KeyStroke.getKeyStroke(KeyEvent.VK_Y, mod), "archutils-redo", this::redo);
+        bindKey(KeyStroke.getKeyStroke(KeyEvent.VK_Z, mod | InputEvent.SHIFT_DOWN_MASK),
+                "archutils-redo", this::redo);
+    }
+
+    private void bindKey(KeyStroke stroke, String actionKey, Runnable action) {
+        codeTextArea.getInputMap().put(stroke, actionKey);
+        codeTextArea.getActionMap().put(actionKey, new AbstractAction() {
+            @Override public void actionPerformed(ActionEvent e) { action.run(); }
         });
     }
 
@@ -231,24 +217,16 @@ public class PlantUmlInputPanel extends JPanel {
 
     /** Performs an undo on the editor if possible. */
     public void undo() {
-        try {
-            if (undoManager.canUndo()) {
-                undoManager.undo();
-            }
-        } catch (CannotUndoException ignored) {
-            // Nothing to undo.
+        if (undoManager.canUndo()) {
+            undoManager.undo();
         }
         fireUndoStateChanged();
     }
 
     /** Performs a redo on the editor if possible. */
     public void redo() {
-        try {
-            if (undoManager.canRedo()) {
-                undoManager.redo();
-            }
-        } catch (CannotRedoException ignored) {
-            // Nothing to redo.
+        if (undoManager.canRedo()) {
+            undoManager.redo();
         }
         fireUndoStateChanged();
     }
@@ -259,15 +237,8 @@ public class PlantUmlInputPanel extends JPanel {
      */
     public void copyToClipboard() {
         String selected = codeTextArea.getSelectedText();
-        String text = (selected != null && !selected.isEmpty())
-                ? selected : codeTextArea.getText();
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(new StringSelection(text), null);
-    }
-
-    /** Copies the current selection to the clipboard (standard editor Copy). */
-    public void copy() {
-        codeTextArea.copy();
+        SwingUtils.copyText((selected != null && !selected.isEmpty())
+                ? selected : codeTextArea.getText());
     }
 
     /** Pastes the clipboard contents into the editor at the caret (standard editor Paste). */

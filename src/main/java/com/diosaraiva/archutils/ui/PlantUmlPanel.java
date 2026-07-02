@@ -9,11 +9,7 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.BorderLayout;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
@@ -77,11 +73,7 @@ public class PlantUmlPanel extends JPanel {
         exportPanel.setCopyImageEnabled(false);
 
         // Live preview: listen to every code change
-        inputPanel.addCodeDocumentListener(new DocumentListener() {
-            @Override public void insertUpdate(DocumentEvent e)  { restartPreviewTimer(); }
-            @Override public void removeUpdate(DocumentEvent e)  { restartPreviewTimer(); }
-            @Override public void changedUpdate(DocumentEvent e) { restartPreviewTimer(); }
-        });
+        inputPanel.addCodeDocumentListener(SwingUtils.onDocumentChange(this::restartPreviewTimer));
 
         // Manual Preview button (used when Auto Preview is off)
         inputPanel.addPreviewButtonListener(e -> onLivePreview());
@@ -218,8 +210,7 @@ public class PlantUmlPanel extends JPanel {
             previewPanel.showMessage("No diagram to copy yet. Generate a preview first.");
             return false;
         }
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(new ImageTransferable(image), null);
+        SwingUtils.copyImage(image);
         return true;
     }
 

@@ -5,7 +5,6 @@ import com.diosaraiva.archutils.util.JarUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,26 +30,6 @@ public final class PlantUmlService {
     private PlantUmlService() { }
 
     /**
-     * Builds a human-readable command string for rendering a diagram.
-     */
-    public static String buildCommand(String code, String targetFile) {
-        File target = new File(targetFile);
-        String outputDir = target.getParent() != null ? target.getParent() : ".";
-        String baseName = stripExtension(target.getName());
-        String sourceFile = outputDir + File.separator + baseName + ".puml";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("# Step 1: Save PlantUML code to source file\n");
-        sb.append("# ").append(sourceFile).append("\n\n");
-        sb.append("# Step 2: Run PlantUML to generate output\n");
-        sb.append("java -jar plantuml.jar");
-        appendFormatFlag(sb, target.getName());
-        sb.append(" \"").append(sourceFile).append("\"");
-        sb.append(" -o \"").append(outputDir).append("\"");
-        return sb.toString();
-    }
-
-    /**
      * Renders a PlantUML diagram to the target file.
      */
     public static void render(String code, String targetFile)
@@ -60,7 +39,7 @@ public final class PlantUmlService {
 
         String baseName = stripExtension(target.getName());
         Path pumlPath = Paths.get(target.getParent(), baseName + ".puml");
-        Files.write(pumlPath, code.getBytes(StandardCharsets.UTF_8));
+        Files.writeString(pumlPath, code);
 
         String ext = getExtension(target.getName());
         if ("puml".equals(ext)) {
@@ -85,7 +64,7 @@ public final class PlantUmlService {
         File dir = new File(tempDir);
         if (!dir.exists()) { Files.createDirectories(dir.toPath()); }
         Path pumlPath = Paths.get(tempDir, "_preview.puml");
-        Files.write(pumlPath, code.getBytes(StandardCharsets.UTF_8));
+        Files.writeString(pumlPath, code);
         JarUtils.runJar(PLANTUML_JAR, dir,
                 includePathOptions(),
                 "-tpng", pumlPath.toAbsolutePath().toString(),
@@ -143,12 +122,5 @@ public final class PlantUmlService {
     private static String getExtension(String fileName) {
         int dot = fileName.lastIndexOf('.');
         return dot > 0 ? fileName.substring(dot + 1).toLowerCase() : "";
-    }
-
-    private static void appendFormatFlag(StringBuilder sb, String fileName) {
-        String ext = getExtension(fileName);
-        if (!ext.isEmpty() && !"puml".equals(ext) && !"txt".equals(ext)) {
-            sb.append(" -t").append(ext);
-        }
     }
 }
