@@ -38,7 +38,7 @@ public class AboutDialog extends JDialog {
         descLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(descLabel, BorderLayout.CENTER);
 
-        JLabel versionLabel = new JLabel("Version 1.0.1");
+        JLabel versionLabel = new JLabel("Version 1.1.1");
         versionLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(versionLabel, BorderLayout.SOUTH);
 

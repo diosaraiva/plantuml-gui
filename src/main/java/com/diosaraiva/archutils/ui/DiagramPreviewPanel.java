@@ -120,6 +120,16 @@ public class DiagramPreviewPanel extends JPanel {
         cards.show(cardPanel, MSG_CARD);
     }
 
+    /**
+     * Returns the currently displayed diagram image, or {@code null} if no
+     * image has been rendered yet.
+     *
+     * @return the rendered {@link BufferedImage} or {@code null}
+     */
+    public BufferedImage getCurrentImage() {
+        return imagePanel.getImage();
+    }
+
     /** Loads and displays the diagram from the given file. */
     public void showDiagram(File file) throws IOException {
         showDiagram(file, null);
@@ -145,8 +155,7 @@ public class DiagramPreviewPanel extends JPanel {
 
     // -------------------- image display --------------------
 
-    private void showPng(File file) throws IOException {
-        BufferedImage img = ImageIO.read(file);
+    private void showPng(File file) throws IOException {        BufferedImage img = ImageIO.read(file);
         if (img == null) {
             showMessage("Could not load image: " + file.getName());
             return;

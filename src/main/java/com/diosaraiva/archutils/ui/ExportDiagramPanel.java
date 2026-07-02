@@ -14,7 +14,8 @@ import java.awt.Insets;
 import java.awt.event.ActionListener;
 
 /**
- * Export panel: target file selector, format radio buttons and Export Diagram action.
+ * Export panel: target file selector, format radio buttons, an Export File
+ * action and a Copy to Clipboard action for the rendered diagram image.
  * This panel is independent of the live‑preview functionality.
  */
 public class ExportDiagramPanel extends JPanel {
@@ -25,6 +26,7 @@ public class ExportDiagramPanel extends JPanel {
     private final JRadioButton svgRadio;
     private final JRadioButton pumlRadio;
     private final JButton exportButton;
+    private final JButton copyImageButton;
 
     public ExportDiagramPanel(String defaultTargetFile) {
         targetFileField = new JTextField(20);
@@ -33,7 +35,9 @@ public class ExportDiagramPanel extends JPanel {
         pngRadio = new JRadioButton("PNG", true);
         svgRadio = new JRadioButton("SVG");
         pumlRadio = new JRadioButton("PUML");
-        exportButton = new JButton("Export Diagram");
+        exportButton = new JButton("Export File");
+        copyImageButton = new JButton("Copy to Clipboard");
+        copyImageButton.setToolTipText("Copy the rendered diagram image to the system clipboard");
         initComponents();
     }
 
@@ -80,6 +84,10 @@ public class ExportDiagramPanel extends JPanel {
         // Export button
         gbc.gridx = 6;
         add(exportButton, gbc);
+
+        // Copy rendered image to clipboard – immediately right of Export File
+        gbc.gridx = 7;
+        add(copyImageButton, gbc);
     }
 
     private void onBrowse() {
@@ -94,6 +102,16 @@ public class ExportDiagramPanel extends JPanel {
 
     public void onExportDiagram(ActionListener listener) {
         exportButton.addActionListener(listener);
+    }
+
+    /** Registers the handler for the Copy to Clipboard (image) action. */
+    public void onCopyImage(ActionListener listener) {
+        copyImageButton.addActionListener(listener);
+    }
+
+    /** Enables or disables the Copy to Clipboard button (e.g. when no image is rendered). */
+    public void setCopyImageEnabled(boolean enabled) {
+        copyImageButton.setEnabled(enabled);
     }
 
     public void onFormatChanged(ActionListener listener) {

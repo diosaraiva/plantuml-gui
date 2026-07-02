@@ -12,8 +12,11 @@ import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 /**
@@ -70,6 +73,8 @@ public class PlantUmlPanel extends JPanel {
         // ---------- wiring ----------
         exportPanel.onExportDiagram(e -> onExportDiagram());
         exportPanel.onFormatChanged(e -> onFormatChanged());
+        exportPanel.onCopyImage(e -> onCopyImageToClipboard());
+        exportPanel.setCopyImageEnabled(false);
 
         // Live preview: listen to every code change
         inputPanel.addCodeDocumentListener(new DocumentListener() {
@@ -109,11 +114,14 @@ public class PlantUmlPanel extends JPanel {
                     File preview = get();
                     if (preview != null && preview.isFile()) {
                         previewPanel.showDiagram(preview);
+                        exportPanel.setCopyImageEnabled(previewPanel.getCurrentImage() != null);
                     } else {
                         previewPanel.showMessage("Preview generation returned no image.");
+                        exportPanel.setCopyImageEnabled(false);
                     }
                 } catch (Exception ex) {
                     previewPanel.showMessage("Preview error: " + ex.getMessage());
+                    exportPanel.setCopyImageEnabled(false);
                 }
             }
         }.execute();
@@ -160,6 +168,7 @@ public class PlantUmlPanel extends JPanel {
                 try {
                     File[] result = get();
                     previewPanel.showDiagram(result[0], result[1]);
+                    exportPanel.setCopyImageEnabled(previewPanel.getCurrentImage() != null);
                     JOptionPane.showMessageDialog(PlantUmlPanel.this,
                             "Diagram exported successfully:\n" + result[0].getAbsolutePath(),
                             "Export Successful",
@@ -175,8 +184,22 @@ public class PlantUmlPanel extends JPanel {
         }.execute();
     }
 
-    // -------------------- helpers --------------------
+    /**
+     * Copies the currently rendered diagram image to the system clipboard.
+     * If no diagram has been rendered yet, a brief status message is shown
+     * instead of failing silently.
+     */
+    private void onCopyImageToClipboard() {
+        BufferedImage image = previewPanel.getCurrentImage();
+        if (image == null) {
+            previewPanel.showMessage("No diagram to copy yet. Generate a preview first.");
+            return;
+        }
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(new ImageTransferable(image), null);
+    }
 
+    // -------------------- helpers --------------------
     private static String resolveTempDir() {
         return System.getProperty("user.dir") + File.separator + "temp";
     }

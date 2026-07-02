@@ -6,10 +6,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -25,6 +28,7 @@ public final class MenuBarFactory {
     public static JMenuBar create(MainFrame frame) {
         JMenuBar bar = new JMenuBar();
         bar.add(createFileMenu(frame));
+        bar.add(createEditMenu(frame));
         bar.add(createServicesMenu(frame));
         bar.add(createSettingsMenu(frame));
         bar.add(createHelpMenu(frame));
@@ -65,6 +69,49 @@ public final class MenuBarFactory {
                         "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    /**
+     * Builds the Edit menu (Undo / Redo / Copy to Clipboard) wired to the
+     * PlantUML input editor. Undo and Redo items enable and disable
+     * dynamically based on the editor's undo history.
+     */
+    private static JMenu createEditMenu(MainFrame frame) {
+        JMenu menu = new JMenu("Edit");
+        menu.setMnemonic(KeyEvent.VK_E);
+
+        PlantUmlInputPanel input = frame.getPlantUmlPanel().getInputPanel();
+        int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+
+        JMenuItem undo = new JMenuItem("Undo");
+        undo.setMnemonic(KeyEvent.VK_U);
+        undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut));
+        undo.addActionListener(e -> input.undo());
+        menu.add(undo);
+
+        JMenuItem redo = new JMenuItem("Redo");
+        redo.setMnemonic(KeyEvent.VK_R);
+        redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut | InputEvent.SHIFT_DOWN_MASK));
+        redo.addActionListener(e -> input.redo());
+        menu.add(redo);
+
+        menu.addSeparator();
+
+        JMenuItem copy = new JMenuItem("Copy to Clipboard");
+        copy.setMnemonic(KeyEvent.VK_C);
+        copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcut | InputEvent.SHIFT_DOWN_MASK));
+        copy.addActionListener(e -> input.copyToClipboard());
+        menu.add(copy);
+
+        // Keep Undo/Redo enablement in sync with the editor's history.
+        Runnable sync = () -> {
+            undo.setEnabled(input.canUndo());
+            redo.setEnabled(input.canRedo());
+        };
+        input.addUndoStateListener(sync);
+        sync.run();
+
+        return menu;
     }
 
     private static JMenu createServicesMenu(MainFrame frame) {
