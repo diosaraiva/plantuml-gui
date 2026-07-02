@@ -1,0 +1,34 @@
+@startuml
+!pragma layout smetana
+title Project File Structure
+
+folder "project-root" {
+  folder "src" {
+    folder "main" {
+      folder "java" {
+        file "Main.java"
+        file "Service.java"
+      }
+      folder "resources" {
+        file "application.yml"
+        file "logback.xml"
+      }
+    }
+    folder "test" {
+      file "ServiceTest.java"
+    }
+  }
+  folder "docs" {
+    file "architecture.puml"
+    file "README.md"
+  }
+  file "build.gradle"
+  file ".gitignore"
+}
+
+folder "output" {
+  artifact "app.jar"
+}
+
+[project-root] --> [output] : build
+@enduml

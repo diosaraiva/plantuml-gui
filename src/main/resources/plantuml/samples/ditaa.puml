@@ -1,0 +1,23 @@
+@startditaa
+/-------------\        +---------+       +--------------+
+|cAAA         |        |         |       | Persistence  |
+| User Input  +------->+ Service +------>+   Layer      |
+|         {io}|        |  {s}    |       |         {s}  |
+\------+------/        +----+----+       +------+-------+
+       |                    |                   |
+       | validate           | transform         | store
+       v                    v                   v
++------+------+       /-----+-----\       +------+-------+
+|cGRE        |        |c1FF       |       |cRED          |
+|  Validator |        |  Mapper   |       |   Database   |
+|        {d} |        |       {d} |       |          {s} |
++-------------+        \-----+-----/       +--------------+
+                             :
+                             | audit trail
+                             v
+                       +-----+------+
+                       |cYEL        |
+                       |   Logger   |
+                       |        {d} |
+                       +------------+
+@endditaa

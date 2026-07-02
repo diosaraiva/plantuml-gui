@@ -3,6 +3,8 @@ package com.diosaraiva.archutils.ui;
 import com.diosaraiva.archutils.util.SampleLoader;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,6 +17,7 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,6 +25,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -37,6 +41,9 @@ public class PlantUmlInputPanel extends JPanel {
 
     private final JComboBox<DiagramSample> sampleCombo;
     private final JTextArea codeTextArea;
+    private final JLabel countLabel = new JLabel();
+    private final JCheckBox autoPreviewCheck = new JCheckBox("Auto Preview", true);
+    private final JButton previewButton = new JButton("Preview");
     private final UndoManager undoManager = new UndoManager();
     private final List<Runnable> undoStateListeners = new ArrayList<>();
 
@@ -77,8 +84,58 @@ public class PlantUmlInputPanel extends JPanel {
         scrollPane.setRowHeaderView(new TextLineNumber(codeTextArea));
         add(scrollPane, gbc);
 
+        // Bottom bar: Auto Preview checkbox (left), counts (centre), Preview button (right).
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(createBottomBar(), gbc);
+
         initUndo();
+        initCountLabel();
         loadSample();
+    }
+
+    /** Builds the row below the editor with Auto Preview, counts and Preview. */
+    private JPanel createBottomBar() {
+        JPanel bar = new JPanel(new BorderLayout(8, 0));
+
+        autoPreviewCheck.setFont(autoPreviewCheck.getFont().deriveFont(Font.PLAIN, 11f));
+        autoPreviewCheck.addActionListener(e -> updatePreviewButtonState());
+        bar.add(autoPreviewCheck, BorderLayout.WEST);
+
+        countLabel.setFont(countLabel.getFont().deriveFont(Font.PLAIN, 10f));
+        countLabel.setHorizontalAlignment(JLabel.RIGHT);
+        bar.add(countLabel, BorderLayout.CENTER);
+
+        previewButton.setFont(previewButton.getFont().deriveFont(Font.PLAIN, 11f));
+        bar.add(previewButton, BorderLayout.EAST);
+
+        updatePreviewButtonState();
+        return bar;
+    }
+
+    /** The manual Preview button is only usable when Auto Preview is off. */
+    private void updatePreviewButtonState() {
+        previewButton.setEnabled(!autoPreviewCheck.isSelected());
+    }
+
+    /** Updates the character/line count label whenever the document changes. */
+    private void initCountLabel() {
+        codeTextArea.getDocument().addDocumentListener(new DocumentListener() {
+            @Override public void insertUpdate(javax.swing.event.DocumentEvent e)  { updateCounts(); }
+            @Override public void removeUpdate(javax.swing.event.DocumentEvent e)  { updateCounts(); }
+            @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { updateCounts(); }
+        });
+        updateCounts();
+    }
+
+    private void updateCounts() {
+        int chars = codeTextArea.getDocument().getLength();
+        int lines = codeTextArea.getLineCount();
+        countLabel.setText("Chars: " + chars + "   Lines: " + lines);
     }
 
     /** Wires the undo manager, keyboard shortcuts and state notifications. */
@@ -145,6 +202,25 @@ public class PlantUmlInputPanel extends JPanel {
         codeTextArea.getDocument().addDocumentListener(listener);
     }
 
+    /** @return {@code true} if Auto Preview is currently enabled. */
+    public boolean isAutoPreviewEnabled() {
+        return autoPreviewCheck.isSelected();
+    }
+
+    /** Registers a handler invoked when the manual Preview button is pressed. */
+    public void addPreviewButtonListener(ActionListener listener) {
+        previewButton.addActionListener(listener);
+    }
+
+    /**
+     * Registers a handler invoked when the Auto Preview checkbox is toggled.
+     *
+     * @param listener callback receiving the toggle event
+     */
+    public void addAutoPreviewListener(ActionListener listener) {
+        autoPreviewCheck.addActionListener(listener);
+    }
+
     // -------------------- undo / redo / clipboard --------------------
 
     /** @return {@code true} if an undo operation is currently available. */
@@ -187,6 +263,16 @@ public class PlantUmlInputPanel extends JPanel {
                 ? selected : codeTextArea.getText();
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(new StringSelection(text), null);
+    }
+
+    /** Copies the current selection to the clipboard (standard editor Copy). */
+    public void copy() {
+        codeTextArea.copy();
+    }
+
+    /** Pastes the clipboard contents into the editor at the caret (standard editor Paste). */
+    public void paste() {
+        codeTextArea.paste();
     }
 
     /**

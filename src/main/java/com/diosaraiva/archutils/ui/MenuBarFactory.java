@@ -97,11 +97,23 @@ public final class MenuBarFactory {
 
         menu.addSeparator();
 
-        JMenuItem copy = new JMenuItem("Copy to Clipboard");
-        copy.setMnemonic(KeyEvent.VK_C);
-        copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcut | InputEvent.SHIFT_DOWN_MASK));
-        copy.addActionListener(e -> input.copyToClipboard());
-        menu.add(copy);
+        JMenuItem copyText = new JMenuItem("Copy Text");
+        copyText.setMnemonic(KeyEvent.VK_T);
+        copyText.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcut));
+        copyText.addActionListener(e -> input.copyToClipboard());
+        menu.add(copyText);
+
+        JMenuItem copyImage = new JMenuItem("Copy Preview Image");
+        copyImage.setMnemonic(KeyEvent.VK_I);
+        copyImage.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcut | InputEvent.SHIFT_DOWN_MASK));
+        copyImage.addActionListener(e -> frame.getPlantUmlPanel().copyImageToClipboard());
+        menu.add(copyImage);
+
+        JMenuItem paste = new JMenuItem("Paste");
+        paste.setMnemonic(KeyEvent.VK_P);
+        paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcut));
+        paste.addActionListener(e -> input.paste());
+        menu.add(paste);
 
         // Keep Undo/Redo enablement in sync with the editor's history.
         Runnable sync = () -> {

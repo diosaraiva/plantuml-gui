@@ -83,6 +83,16 @@ public class PlantUmlPanel extends JPanel {
             @Override public void changedUpdate(DocumentEvent e) { restartPreviewTimer(); }
         });
 
+        // Manual Preview button (used when Auto Preview is off)
+        inputPanel.addPreviewButtonListener(e -> onLivePreview());
+
+        // Toggling Auto Preview on triggers an immediate refresh
+        inputPanel.addAutoPreviewListener(e -> {
+            if (inputPanel.isAutoPreviewEnabled()) {
+                onLivePreview();
+            }
+        });
+
         // Pre-render the initial sample so the preview is ready on startup
         SwingUtilities.invokeLater(this::onLivePreview);
     }
@@ -90,7 +100,9 @@ public class PlantUmlPanel extends JPanel {
     // -------------------- live preview --------------------
 
     private void restartPreviewTimer() {
-        previewTimer.restart();
+        if (inputPanel.isAutoPreviewEnabled()) {
+            previewTimer.restart();
+        }
     }
 
     private void onLivePreview() {
@@ -190,13 +202,25 @@ public class PlantUmlPanel extends JPanel {
      * instead of failing silently.
      */
     private void onCopyImageToClipboard() {
+        copyImageToClipboard();
+    }
+
+    /**
+     * Copies the currently rendered diagram image to the system clipboard.
+     * If no diagram has been rendered yet, a brief status message is shown
+     * instead of failing silently.
+     *
+     * @return {@code true} if an image was copied, {@code false} otherwise
+     */
+    public boolean copyImageToClipboard() {
         BufferedImage image = previewPanel.getCurrentImage();
         if (image == null) {
             previewPanel.showMessage("No diagram to copy yet. Generate a preview first.");
-            return;
+            return false;
         }
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(new ImageTransferable(image), null);
+        return true;
     }
 
     // -------------------- helpers --------------------

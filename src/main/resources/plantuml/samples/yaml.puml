@@ -1,0 +1,30 @@
+@startyaml
+#highlight "domains" "master" "generators"
+project:
+  name: PlantUML Demo
+  version: 1.2026.6
+  active: true
+  maintainers:
+    - name: Alice
+      role: Lead
+    - name: Bob
+      role: Contributor
+  domains:
+    frontend:
+      language: TypeScript
+      frameworks:
+        - React
+        - Vite
+    backend:
+      language: Java
+      frameworks:
+        - Spring Boot
+  build:
+    tool: Gradle
+    tasks: [clean, compile, test, package]
+  master:
+    branch: main
+    protected: true
+  generators:
+    diagrams: [yaml, json, ditaa, wbs, files]
+@endyaml

@@ -1,0 +1,28 @@
+@startwbs
+* Software Release 2.0
+** Planning
+*** Requirements Gathering
+*** Risk Assessment
+*** Resource Allocation
+** Design
+*** Architecture
+**** Backend Services
+**** Frontend Modules
+*** Database Schema
+*** API Contracts
+** Implementation
+*** Core Features
+**** Authentication
+**** Reporting
+*** Integrations
+**** Payment Gateway
+**** Email Service
+** Testing
+*** Unit Tests
+*** Integration Tests
+*** User Acceptance
+** Deployment
+*** Staging Rollout
+*** Production Release
+*** Post-Release Monitoring
+@endwbs

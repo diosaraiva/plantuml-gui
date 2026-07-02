@@ -59,12 +59,14 @@ public class ExportDiagramPanel extends JPanel {
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(4, 6, 4, 1);   // tight right gap toward Browse
         add(targetFileField, gbc);
 
         // Browse button
         gbc.gridx = 2;
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
+        gbc.insets = new Insets(4, 1, 4, 6);   // tight left gap from text field
         browseButton.addActionListener(e -> onBrowse());
         add(browseButton, gbc);
 
@@ -74,6 +76,7 @@ public class ExportDiagramPanel extends JPanel {
         group.add(svgRadio);
         group.add(pumlRadio);
 
+        gbc.insets = new Insets(4, 6, 4, 6);   // restore default spacing
         gbc.gridx = 3;
         add(pngRadio, gbc);
         gbc.gridx = 4;

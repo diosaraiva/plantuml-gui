@@ -1,0 +1,31 @@
+@startjson
+#highlight "employees" /1 "skills"
+{
+  "company": "ACME Corp",
+  "founded": 1998,
+  "public": true,
+  "headquarters": {
+    "city": "Springfield",
+    "coordinates": [42.12, -71.34]
+  },
+  "employees": [
+    {
+      "name": "Alice",
+      "title": "Architect",
+      "skills": ["Java", "PlantUML", "AWS"],
+      "active": true
+    },
+    {
+      "name": "Bob",
+      "title": "Developer",
+      "skills": ["TypeScript", "React"],
+      "active": false
+    }
+  ],
+  "departments": {
+    "engineering": 42,
+    "sales": 17,
+    "support": null
+  }
+}
+@endjson
