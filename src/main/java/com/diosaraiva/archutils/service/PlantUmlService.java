@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -84,12 +83,18 @@ public final class PlantUmlService {
      * from inside the jar regardless.
      */
     private static List<String> includePathOptions() {
-        File samplesDir = resolveSamplesDir();
-        if (samplesDir == null) {
-            return Collections.emptyList();
-        }
+        // Run the PlantUML subprocess headless so it never spawns a second
+        // application icon in the macOS Dock (any JVM that touches AWT/Java2D
+        // gets its own Dock tile otherwise). PlantUML renders to file fine
+        // without a display.
         List<String> opts = new ArrayList<>();
-        opts.add("-Dplantuml.include.path=" + samplesDir.getAbsolutePath());
+        opts.add("-Djava.awt.headless=true");
+        opts.add("-Dapple.awt.UIElement=true");
+
+        File samplesDir = resolveSamplesDir();
+        if (samplesDir != null) {
+            opts.add("-Dplantuml.include.path=" + samplesDir.getAbsolutePath());
+        }
         return opts;
     }
 

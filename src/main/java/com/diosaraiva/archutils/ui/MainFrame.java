@@ -5,6 +5,8 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 
 /**
  * Main application window with menus and content panels.
@@ -42,6 +44,19 @@ public class MainFrame extends JFrame {
         contentPanel.add(panel, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
+    }
+
+    /**
+     * Resizes the window to the requested resolution, clamped to the usable
+     * screen area, then re-centres it.
+     */
+    public void applyResolution(int width, int height) {
+        Rectangle screen = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .getMaximumWindowBounds();
+        int w = Math.min(width, screen.width);
+        int h = Math.min(height, screen.height);
+        setSize(w, h);
+        setLocationRelativeTo(null);
     }
 
     public PlantUmlPanel getPlantUmlPanel() { return plantUmlPanel; }

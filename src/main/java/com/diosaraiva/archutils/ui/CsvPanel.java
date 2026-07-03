@@ -17,8 +17,10 @@ import java.awt.GridLayout;
  */
 public class CsvPanel extends JPanel {
 
-    private static final String SAMPLE_CSV =
-            "name,age,city\nAlice,30,New York\nBob,25,London";
+    private static final String SAMPLE_CSV = """
+            name,age,city
+            Alice,30,New York
+            Bob,25,London""";
 
     private final JTextArea csvArea;
     private final JTextArea jsonArea;
@@ -51,7 +53,10 @@ public class CsvPanel extends JPanel {
         col.add(header, BorderLayout.NORTH);
         area.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
         area.setLineWrap(false);
-        col.add(new JScrollPane(area), BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(area);
+        // Line-number gutter kept in sync with each editor.
+        scrollPane.setRowHeaderView(new TextLineNumber(area));
+        col.add(scrollPane, BorderLayout.CENTER);
         return col;
     }
 

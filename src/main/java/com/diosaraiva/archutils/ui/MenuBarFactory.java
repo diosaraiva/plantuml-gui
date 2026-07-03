@@ -33,6 +33,22 @@ public final class MenuBarFactory {
             "Arial", "Helvetica", "Verdana", "Tahoma",
             "Times New Roman", "Courier New", "Menlo", "Consolas");
 
+    /** A named window size offered in the Settings ▸ Window submenu. */
+    private record Resolution(int width, int height) {
+        String label() {
+            return width + " x " + height;
+        }
+    }
+
+    /** Preset window sizes offered in Settings ▸ Window. */
+    private static final List<Resolution> RESOLUTIONS = List.of(
+            new Resolution(1024, 600),
+            new Resolution(1280, 720),
+            new Resolution(1366, 768),
+            new Resolution(1440, 900),
+            new Resolution(1600, 900),
+            new Resolution(1920, 1080));
+
     private MenuBarFactory() { }
 
     public static JMenuBar create(MainFrame frame) {
@@ -113,7 +129,21 @@ public final class MenuBarFactory {
         JMenu menu = menu("Settings", KeyEvent.VK_S);
         menu.add(createThemeMenu(frame));
         menu.add(createFontMenu(frame));
+        menu.add(createWindowMenu(frame));
         return menu;
+    }
+
+    /** Window submenu: pick a preset resolution and resize the main window. */
+    private static JMenu createWindowMenu(MainFrame frame) {
+        JMenu windowMenu = menu("Window", KeyEvent.VK_W);
+        List<String> labels = RESOLUTIONS.stream().map(Resolution::label).toList();
+        String current = frame.getWidth() + " x " + frame.getHeight();
+        addRadioGroup(windowMenu, labels, labels.contains(current) ? current : null,
+                label -> RESOLUTIONS.stream()
+                        .filter(r -> r.label().equals(label))
+                        .findFirst()
+                        .ifPresent(r -> frame.applyResolution(r.width(), r.height())));
+        return windowMenu;
     }
 
     private static JMenu createThemeMenu(MainFrame frame) {
