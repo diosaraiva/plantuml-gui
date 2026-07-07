@@ -26,19 +26,21 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Input section: sample selector and code editor.
- * <p>
- * Provides a line-number gutter, undo/redo support (via {@link UndoManager})
- * and clipboard access for the PlantUML source text.
- */
+// Input section: sample selector and code editor. Provides a line-number
+// gutter, undo/redo (via UndoManager) and clipboard access for the source text.
+// Localized chrome is refreshed via applyLanguage().
 public class PlantUmlInputPanel extends JPanel {
 
     private final JComboBox<DiagramSample> sampleCombo;
     private final JTextArea codeTextArea;
     private final JLabel countLabel = new JLabel();
-    private final JCheckBox autoPreviewCheck = new JCheckBox("Auto Preview", true);
-    private final JButton previewButton = new JButton("Preview");
+    private final JLabel samplesLabel = new JLabel(com.diosaraiva.archutils.i18n.I18n.get("input.samples"));
+    private final JCheckBox autoPreviewCheck =
+            new JCheckBox(com.diosaraiva.archutils.i18n.I18n.get("input.autoPreview"), true);
+    private final JButton previewButton =
+            new JButton(com.diosaraiva.archutils.i18n.I18n.get("input.preview"));
+    private final javax.swing.border.TitledBorder titledBorder =
+            BorderFactory.createTitledBorder(com.diosaraiva.archutils.i18n.I18n.get("input.title"));
     private final UndoManager undoManager = new UndoManager();
     private final List<Runnable> undoStateListeners = new ArrayList<>();
 
@@ -52,13 +54,13 @@ public class PlantUmlInputPanel extends JPanel {
 
     private void initComponents() {
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createTitledBorder("PlantUML Input"));
+        setBorder(titledBorder);
         GridBagConstraints gbc = createGbc();
 
         gbc.gridwidth = 1;
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(new JLabel("Samples:"), gbc);
+        add(samplesLabel, gbc);
 
         gbc.gridx = 1;
         gbc.weightx = 1.0;
@@ -126,7 +128,17 @@ public class PlantUmlInputPanel extends JPanel {
     private void updateCounts() {
         int chars = codeTextArea.getDocument().getLength();
         int lines = codeTextArea.getLineCount();
-        countLabel.setText("Chars: " + chars + "   Lines: " + lines);
+        countLabel.setText(com.diosaraiva.archutils.i18n.I18n.get("input.counts", chars, lines));
+    }
+
+    // Re-applies localized chrome after a runtime language change.
+    public void applyLanguage() {
+        titledBorder.setTitle(com.diosaraiva.archutils.i18n.I18n.get("input.title"));
+        samplesLabel.setText(com.diosaraiva.archutils.i18n.I18n.get("input.samples"));
+        autoPreviewCheck.setText(com.diosaraiva.archutils.i18n.I18n.get("input.autoPreview"));
+        previewButton.setText(com.diosaraiva.archutils.i18n.I18n.get("input.preview"));
+        updateCounts();
+        repaint();
     }
 
     /** Wires the undo manager, keyboard shortcuts and state notifications. */

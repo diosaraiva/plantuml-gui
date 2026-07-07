@@ -93,6 +93,23 @@ public final class SwingUtils {
         component.setFont(UIManager.getFont("Label.font"));
     }
 
+    // Shared non-floatable toolbar so every panel toolbar looks/lays out alike.
+    public static javax.swing.JToolBar createToolBar() {
+        var toolBar = new javax.swing.JToolBar();
+        toolBar.setFloatable(false);
+        toolBar.setBorderPainted(false);
+        return toolBar;
+    }
+
+    // Shared toolbar button styling so Preview and Console buttons are identical.
+    public static javax.swing.JButton createToolButton(String text, String tooltip) {
+        var button = new javax.swing.JButton(text);
+        button.setToolTipText(tooltip);
+        button.setFocusable(false);
+        button.putClientProperty("JButton.buttonType", "roundRect");
+        return button;
+    }
+
     /** Applies a look and feel and refreshes every open window. */
     public static void applyLookAndFeel(String className) throws Exception {
         UIManager.setLookAndFeel(className);

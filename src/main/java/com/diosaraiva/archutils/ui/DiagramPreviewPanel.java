@@ -1,5 +1,7 @@
 package com.diosaraiva.archutils.ui;
 
+import com.diosaraiva.archutils.i18n.I18n;
+
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -7,30 +9,25 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+import javax.swing.border.TitledBorder;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-/**
- * Panel that displays a rendered PNG or PUML diagram inline with
- * proper scrolling and zoom controls.
- */
+// Displays a rendered PNG or PUML diagram inline with scrolling and zoom. The
+// zoom toolbar reuses the shared SwingUtils toolbar/button styling so it matches
+// the Console tab. Localized chrome is refreshed via applyLanguage().
 public class DiagramPreviewPanel extends JPanel {
 
     private static final String PNG_CARD = "png";
@@ -48,6 +45,14 @@ public class DiagramPreviewPanel extends JPanel {
     private final JTextArea pumlArea;
     private final JLabel msgLabel;
     private final JLabel zoomLabel;
+    private final TitledBorder titledBorder =
+            BorderFactory.createTitledBorder(I18n.get("preview.title"));
+
+    // Zoom buttons kept as fields so their tooltips can be re-localized.
+    private final JButton zoomInBtn = SwingUtils.createToolButton("+", I18n.get("preview.zoom.in"));
+    private final JButton zoomOutBtn = SwingUtils.createToolButton("\u2212", I18n.get("preview.zoom.out"));
+    private final JButton fitBtn = SwingUtils.createToolButton("Fit", I18n.get("preview.zoom.fit"));
+    private final JButton resetBtn = SwingUtils.createToolButton("1:1", I18n.get("preview.zoom.reset"));
 
     public DiagramPreviewPanel() {
         cards = new CardLayout();
@@ -62,14 +67,10 @@ public class DiagramPreviewPanel extends JPanel {
 
     private void initComponents() {
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createTitledBorder("Preview"));
+        setBorder(titledBorder);
 
-        // ---- zoom toolbar ----
-        JPanel zoomBar = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 2));
-        JButton zoomInBtn  = createToolButton("+",   "Zoom In");
-        JButton zoomOutBtn = createToolButton("\u2212", "Zoom Out");  // minus sign
-        JButton fitBtn     = createToolButton("Fit", "Fit to Window");
-        JButton resetBtn   = createToolButton("1:1", "Reset to 100%");
+        // Zoom toolbar: same container/button style as the Console toolbar.
+        var zoomBar = SwingUtils.createToolBar();
         zoomLabel.setFont(zoomLabel.getFont().deriveFont(Font.PLAIN, 11f));
         zoomBar.add(zoomOutBtn);
         zoomBar.add(zoomLabel);
@@ -82,7 +83,7 @@ public class DiagramPreviewPanel extends JPanel {
         resetBtn.addActionListener(e -> setZoom(1.0));
         fitBtn.addActionListener(e -> fitToWindow());
 
-        // Mouse-wheel zoom (Ctrl/Cmd + scroll)
+        // Ctrl/Cmd + wheel zoom.
         imageScroll.addMouseWheelListener(e -> {
             if (e.isControlDown() || e.isMetaDown()) {
                 e.consume();
@@ -91,51 +92,56 @@ public class DiagramPreviewPanel extends JPanel {
             }
         });
 
-        // ---- image card (toolbar + scrollable image) ----
-        JPanel pngCard = new JPanel(new BorderLayout());
+        // Image card: toolbar plus scrollable image.
+        var pngCard = new JPanel(new BorderLayout());
         pngCard.add(zoomBar, BorderLayout.NORTH);
         imageScroll.getVerticalScrollBar().setUnitIncrement(16);
         imageScroll.getHorizontalScrollBar().setUnitIncrement(16);
         pngCard.add(imageScroll, BorderLayout.CENTER);
         cardPanel.add(pngCard, PNG_CARD);
 
-        // ---- puml card ----
+        // PUML card: raw source text.
         pumlArea.setEditable(false);
         pumlArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
         cardPanel.add(new JScrollPane(pumlArea), PUML_CARD);
 
-        // ---- message card ----
+        // Message card: status/error text.
         msgLabel.setHorizontalAlignment(JLabel.CENTER);
         cardPanel.add(msgLabel, MSG_CARD);
 
         add(cardPanel, BorderLayout.CENTER);
-        showMessage("No diagram generated yet.");
+        showMessage(I18n.get("preview.none"));
+    }
+
+    // Re-applies localized chrome after a runtime language change.
+    public void applyLanguage() {
+        titledBorder.setTitle(I18n.get("preview.title"));
+        zoomInBtn.setToolTipText(I18n.get("preview.zoom.in"));
+        zoomOutBtn.setToolTipText(I18n.get("preview.zoom.out"));
+        fitBtn.setToolTipText(I18n.get("preview.zoom.fit"));
+        resetBtn.setToolTipText(I18n.get("preview.zoom.reset"));
+        repaint();
     }
 
     // -------------------- public API --------------------
 
-    /** Shows an informational or error message. */
+    // Shows an informational or error message.
     public void showMessage(String text) {
         msgLabel.setText(text);
         cards.show(cardPanel, MSG_CARD);
     }
 
-    /**
-     * Returns the currently displayed diagram image, or {@code null} if no
-     * image has been rendered yet.
-     *
-     * @return the rendered {@link BufferedImage} or {@code null}
-     */
+    // Returns the currently displayed diagram image, or null if none rendered.
     public BufferedImage getCurrentImage() {
         return imagePanel.getImage();
     }
 
-    /** Loads and displays the diagram from the given file. */
+    // Loads and displays the diagram from the given file.
     public void showDiagram(File file) throws IOException {
         showDiagram(file, null);
     }
 
-    /** Displays a diagram with an optional separate preview image. */
+    // Displays a diagram with an optional separate preview image.
     public void showDiagram(File output, File preview) throws IOException {
         String name = output.getName().toLowerCase();
         if (name.endsWith(".svg")) {
@@ -203,21 +209,11 @@ public class DiagramPreviewPanel extends JPanel {
         setZoom(Math.min(scaleX, scaleY));
     }
 
-    private JButton createToolButton(String text, String tooltip) {
-        JButton btn = new JButton(text);
-        btn.setToolTipText(tooltip);
-        btn.setFocusable(false);
-        btn.putClientProperty("JButton.buttonType", "roundRect");
-        return btn;
-    }
-
     // -------------------- inner image panel --------------------
 
-    /**
-     * A lightweight panel that paints a {@link BufferedImage} at a given scale
-     * and reports the correct preferred size so that {@link JScrollPane}
-     * scrollbars activate when the image exceeds the viewport.
-     */
+    // Lightweight panel that paints a BufferedImage at a given scale and reports
+    // the correct preferred size so the scroll pane's scrollbars activate when
+    // the image exceeds the viewport.
     private static class ImagePanel extends JPanel {
 
         private BufferedImage image;
