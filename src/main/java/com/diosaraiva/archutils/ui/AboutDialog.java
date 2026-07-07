@@ -1,6 +1,9 @@
 package com.diosaraiva.archutils.ui;
 
-import com.diosaraiva.archutils.i18n.I18n;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -10,10 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.HyperlinkEvent;
-import java.awt.BorderLayout;
-import java.awt.Cursor;
-import java.awt.FlowLayout;
-import java.awt.Font;
+
+import com.diosaraiva.archutils.i18n.I18n;
 
 /**
  * About dialog displaying application information.

@@ -1,40 +1,44 @@
 package com.diosaraiva.archutils.ui;
 
+import java.awt.Component;
+import java.awt.Desktop;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionListener;
+import java.net.URI;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.FontUIResource;
-import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionListener;
-import java.net.URI;
-import java.util.ArrayList;
 
-/**
- * Small collection of reusable Swing helpers shared across the UI, kept static
- * and dependency-free so panels and factories stay concise.
- */
+// Reusable, dependency-free Swing helpers shared across the UI: listeners,
+// menu/toolbar factories, clipboard and look-and-feel utilities.
 public final class SwingUtils {
 
     private SwingUtils() { }
 
-    /** Platform menu-shortcut modifier (Cmd on macOS, Ctrl elsewhere). */
+    // Platform menu-shortcut modifier (Cmd on macOS, Ctrl elsewhere).
     public static int menuShortcut() {
         return Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
     }
 
-    /** Returns a {@link DocumentListener} that runs {@code onChange} for any edit. */
+    // DocumentListener that runs onChange for any edit.
     public static DocumentListener onDocumentChange(Runnable onChange) {
         return new DocumentListener() {
             @Override public void insertUpdate(DocumentEvent e)  { onChange.run(); }
@@ -43,35 +47,43 @@ public final class SwingUtils {
         };
     }
 
-    /** Builds a configured {@link JMenuItem}. Mnemonic/accelerator are optional. */
+    // Configured JMenuItem; mnemonic/accelerator/action are optional.
     public static JMenuItem menuItem(String text, int mnemonic,
                                      KeyStroke accelerator, ActionListener action) {
-        JMenuItem item = new JMenuItem(text);
-        if (mnemonic != 0) {
-            item.setMnemonic(mnemonic);
-        }
-        if (accelerator != null) {
-            item.setAccelerator(accelerator);
-        }
-        if (action != null) {
-            item.addActionListener(action);
-        }
+        var item = new JMenuItem(text);
+        if (mnemonic != 0) { item.setMnemonic(mnemonic); }
+        if (accelerator != null) { item.setAccelerator(accelerator); }
+        if (action != null) { item.addActionListener(action); }
         return item;
     }
 
-    /** Copies plain text to the system clipboard. */
+    // Centered toolbar row so every panel toolbar looks and lays out alike.
+    public static JPanel createToolBar() {
+        return new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 2));
+    }
+
+    // Shared toolbar button styling so all toolbar buttons are identical.
+    public static JButton createToolButton(String text, String tooltip) {
+        var button = new JButton(text);
+        button.setToolTipText(tooltip);
+        button.setFocusable(false);
+        button.putClientProperty("JButton.buttonType", "roundRect");
+        return button;
+    }
+
+    // Copies plain text to the system clipboard.
     public static void copyText(String text) {
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(new StringSelection(text), null);
+        Toolkit.getDefaultToolkit().getSystemClipboard()
+                .setContents(new StringSelection(text), null);
     }
 
-    /** Copies an image to the system clipboard via {@link ImageTransferable}. */
+    // Copies an image to the system clipboard.
     public static void copyImage(Image image) {
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(new ImageTransferable(image), null);
+        Toolkit.getDefaultToolkit().getSystemClipboard()
+                .setContents(new ImageTransferable(image), null);
     }
 
-    /** Opens a URL in the default browser; failures are logged, never thrown. */
+    // Opens a URL in the default browser; failures are logged, never thrown.
     public static void browse(String url) {
         try {
             if (Desktop.isDesktopSupported()) {
@@ -82,43 +94,26 @@ public final class SwingUtils {
         }
     }
 
-    /** Shows a standard error dialog. */
+    // Standard error dialog.
     public static void showError(Component parent, String message) {
         JOptionPane.showMessageDialog(parent, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    /** Makes a text-based {@link JComponent} honour the current L&F font. */
+    // Makes a text-based component honour the current L&F font.
     public static void useUiFont(JComponent component) {
         component.putClientProperty(javax.swing.JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
         component.setFont(UIManager.getFont("Label.font"));
     }
 
-    // Shared non-floatable toolbar so every panel toolbar looks/lays out alike.
-    public static javax.swing.JToolBar createToolBar() {
-        var toolBar = new javax.swing.JToolBar();
-        toolBar.setFloatable(false);
-        toolBar.setBorderPainted(false);
-        return toolBar;
-    }
-
-    // Shared toolbar button styling so Preview and Console buttons are identical.
-    public static javax.swing.JButton createToolButton(String text, String tooltip) {
-        var button = new javax.swing.JButton(text);
-        button.setToolTipText(tooltip);
-        button.setFocusable(false);
-        button.putClientProperty("JButton.buttonType", "roundRect");
-        return button;
-    }
-
-    /** Applies a look and feel and refreshes every open window. */
+    // Applies a look and feel and refreshes every open window.
     public static void applyLookAndFeel(String className) throws Exception {
         UIManager.setLookAndFeel(className);
         refreshAllWindows();
     }
 
-    /** Applies a font family to all UI defaults, preserving each font's style/size. */
+    // Applies a font family to all UI defaults, preserving each font's style/size.
     public static void applyFontFamily(String family) {
-        for (Object key : new ArrayList<>(UIManager.getDefaults().keySet())) {
+        for (var key : new ArrayList<>(UIManager.getDefaults().keySet())) {
             if (UIManager.get(key) instanceof Font font) {
                 UIManager.put(key, new FontUIResource(family, font.getStyle(), font.getSize()));
             }
@@ -126,10 +121,26 @@ public final class SwingUtils {
         refreshAllWindows();
     }
 
-    /** Rebuilds the component tree of every open window (after theme/font change). */
+    // Rebuilds the component tree of every open window (after theme/font change).
     public static void refreshAllWindows() {
-        for (Window window : Window.getWindows()) {
+        for (var window : Window.getWindows()) {
             SwingUtilities.updateComponentTreeUI(window);
+        }
+    }
+
+    // Exposes an Image to the clipboard via the image DataFlavor.
+    private record ImageTransferable(Image image) implements Transferable {
+        @Override public DataFlavor[] getTransferDataFlavors() {
+            return new DataFlavor[]{DataFlavor.imageFlavor};
+        }
+        @Override public boolean isDataFlavorSupported(DataFlavor flavor) {
+            return DataFlavor.imageFlavor.equals(flavor);
+        }
+        @Override public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+            if (!DataFlavor.imageFlavor.equals(flavor)) {
+                throw new UnsupportedFlavorException(flavor);
+            }
+            return image;
         }
     }
 }

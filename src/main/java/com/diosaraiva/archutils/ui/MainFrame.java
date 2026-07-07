@@ -1,15 +1,18 @@
 package com.diosaraiva.archutils.ui;
 
-import com.diosaraiva.archutils.i18n.I18n;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
+
+import com.diosaraiva.archutils.dataexport.ui.CsvPanel;
+import com.diosaraiva.archutils.i18n.I18n;
+import com.diosaraiva.archutils.plantuml.ui.PlantUmlPanel;
 
 // Main application window: hosts the service panels and the menu bar, and
 // applies runtime resolution/language changes.

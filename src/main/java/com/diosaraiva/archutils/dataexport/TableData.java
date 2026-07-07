@@ -1,11 +1,11 @@
 package com.diosaraiva.archutils.dataexport;
 
-import com.diosaraiva.archutils.util.SimpleJsonParser;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.diosaraiva.archutils.util.SimpleJsonParser;
 
 /**
  * Immutable tabular data shared by the CSV/JSON/Markdown export services.

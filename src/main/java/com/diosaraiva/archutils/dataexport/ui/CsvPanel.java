@@ -1,19 +1,22 @@
-package com.diosaraiva.archutils.ui;
+package com.diosaraiva.archutils.dataexport.ui;
 
-import com.diosaraiva.archutils.dataexport.CsvExportService;
-import com.diosaraiva.archutils.dataexport.JsonExportService;
-import com.diosaraiva.archutils.dataexport.MarkdownExportService;
-import com.diosaraiva.archutils.dataexport.TableData;
-import com.diosaraiva.archutils.i18n.I18n;
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
+
+import com.diosaraiva.archutils.dataexport.CsvExportService;
+import com.diosaraiva.archutils.dataexport.JsonExportService;
+import com.diosaraiva.archutils.dataexport.MarkdownExportService;
+import com.diosaraiva.archutils.dataexport.TableData;
+import com.diosaraiva.archutils.i18n.I18n;
+import com.diosaraiva.archutils.ui.SwingUtils;
+import com.diosaraiva.archutils.ui.TextLineNumber;
 
 // Live CSV / JSON / Markdown editor. Editing CSV or JSON re-derives the other
 // columns via the dataexport services (TableData is the neutral intermediate).

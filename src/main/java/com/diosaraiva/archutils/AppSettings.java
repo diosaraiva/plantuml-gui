@@ -1,7 +1,9 @@
-package com.diosaraiva.archutils.i18n;
+package com.diosaraiva.archutils;
 
 import java.util.Locale;
 import java.util.prefs.Preferences;
+
+import com.diosaraiva.archutils.i18n.I18n;
 
 /**
  * Persistent application settings backed by {@link Preferences}.

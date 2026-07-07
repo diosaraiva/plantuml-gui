@@ -1,16 +1,8 @@
 package com.diosaraiva.archutils.ui;
 
-import com.diosaraiva.archutils.i18n.AppSettings;
-import com.diosaraiva.archutils.i18n.I18n;
+import static com.diosaraiva.archutils.ui.SwingUtils.menuItem;
+import static com.diosaraiva.archutils.ui.SwingUtils.menuShortcut;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.KeyStroke;
-import javax.swing.UIManager;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -24,8 +16,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static com.diosaraiva.archutils.ui.SwingUtils.menuItem;
-import static com.diosaraiva.archutils.ui.SwingUtils.menuShortcut;
+import javax.swing.ButtonGroup;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.diosaraiva.archutils.AppSettings;
+import com.diosaraiva.archutils.i18n.I18n;
+import com.diosaraiva.archutils.plantuml.ui.JavaConsoleWindow;
 
 // Builds the application menu bar. All labels come from I18n; changing language
 // rebuilds the bar in place so menus re-render without a restart.
@@ -141,7 +143,7 @@ public final class MenuBarFactory {
         menu.add(createLanguageMenu(frame));
         menu.addSeparator();
         menu.add(menuItem(I18n.get("menu.settings.console"), 0, null,
-                e -> GlobalConsoleWindow.open()));
+                e -> JavaConsoleWindow.open()));
         return menu;
     }
 

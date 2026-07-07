@@ -1,27 +1,31 @@
-package com.diosaraiva.archutils.ui;
+package com.diosaraiva.archutils.plantuml.ui;
+
+import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.File;
+
+import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import com.diosaraiva.archutils.archimate.PlantUmlArchimateConverter;
 import com.diosaraiva.archutils.i18n.I18n;
 import com.diosaraiva.archutils.plantuml.PlantUmlExporter;
 import com.diosaraiva.archutils.plantuml.PlantUmlFormat;
 import com.diosaraiva.archutils.plantuml.PlantUmlRenderer;
+import com.diosaraiva.archutils.ui.ConsoleView;
+import com.diosaraiva.archutils.ui.SwingUtils;
 import com.diosaraiva.archutils.util.Background;
-
-import javax.swing.BorderFactory;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import java.awt.BorderLayout;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.io.File;
 
 // Coordinator panel wiring input, live preview and export. Live preview: a
 // debounced timer renders into temp/ on a virtual thread and refreshes the
-// preview. Export controls live in ExportDiagramPanel. UI code never touches
-// PlantUML directly - it goes through the plantuml package.
+// preview. The right side is a Preview/Console tabbed pane. UI code never
+// touches PlantUML directly - it goes through the plantuml package.
 public class PlantUmlPanel extends JPanel {
 
     // Idle delay after the last keystroke before the live preview fires.
@@ -29,9 +33,9 @@ public class PlantUmlPanel extends JPanel {
 
     private final PlantUmlInputPanel inputPanel;
     private final ExportDiagramPanel exportPanel;
-    private final PreviewTabsPanel previewTabs;
     private final DiagramPreviewPanel previewPanel;
-    private final ConsolePanel consolePanel;
+    private final ConsoleView console;
+    private final JTabbedPane tabs = new JTabbedPane();
     private final Timer previewTimer;
 
     // Diagram export outcome; preview is non-null only for SVG (needs a PNG proxy).
@@ -41,9 +45,9 @@ public class PlantUmlPanel extends JPanel {
         var defaultTarget = resolveDefaultTarget("png");
         inputPanel = new PlantUmlInputPanel();
         exportPanel = new ExportDiagramPanel(defaultTarget);
-        previewTabs = new PreviewTabsPanel();
-        previewPanel = previewTabs.getPreviewPanel();
-        consolePanel = previewTabs.getConsolePanel();
+        previewPanel = new DiagramPreviewPanel();
+        console = new ConsoleView("console.title", "console.refresh.tooltip",
+                "console.clean.tooltip", this::onConsoleRefresh, null);
 
         previewTimer = new Timer(PREVIEW_DELAY_MS, e -> onLivePreview());
         previewTimer.setRepeats(false);
@@ -55,7 +59,10 @@ public class PlantUmlPanel extends JPanel {
         setLayout(new BorderLayout(8, 8));
         setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        var splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inputPanel, previewTabs);
+        tabs.addTab(I18n.get("tab.preview"), previewPanel);
+        tabs.addTab(I18n.get("tab.console"), console);
+
+        var splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inputPanel, tabs);
         splitPane.setResizeWeight(0.35);
         splitPane.addComponentListener(new ComponentAdapter() {
             @Override
@@ -69,20 +76,14 @@ public class PlantUmlPanel extends JPanel {
 
         exportPanel.onExportDiagram(e -> onExportDiagram());
         exportPanel.onFormatChanged(e -> onFormatChanged());
-        exportPanel.onCopyImage(e -> onCopyImageToClipboard());
+        exportPanel.onCopyImage(e -> copyImageToClipboard());
         exportPanel.setCopyImageEnabled(false);
 
         inputPanel.addCodeDocumentListener(SwingUtils.onDocumentChange(this::restartPreviewTimer));
         inputPanel.addPreviewButtonListener(e -> onLivePreview());
-
-        // Turning Auto Preview back on should refresh immediately.
         inputPanel.addAutoPreviewListener(e -> {
-            if (inputPanel.isAutoPreviewEnabled()) {
-                onLivePreview();
-            }
+            if (inputPanel.isAutoPreviewEnabled()) { onLivePreview(); }
         });
-
-        consolePanel.onRefresh(e -> onConsoleRefresh());
 
         // Pre-render the initial sample so the preview is ready on startup.
         SwingUtilities.invokeLater(this::onLivePreview);
@@ -91,9 +92,7 @@ public class PlantUmlPanel extends JPanel {
     // -------------------- live preview --------------------
 
     private void restartPreviewTimer() {
-        if (inputPanel.isAutoPreviewEnabled()) {
-            previewTimer.restart();
-        }
+        if (inputPanel.isAutoPreviewEnabled()) { previewTimer.restart(); }
     }
 
     private void onLivePreview() {
@@ -108,24 +107,26 @@ public class PlantUmlPanel extends JPanel {
         // Virtual thread avoids blocking the EDT during rendering.
         Background.run(
                 () -> PlantUmlRenderer.renderPreview(code, tempDir),
-                preview -> {
-                    try {
-                        if (preview != null && preview.isFile()) {
-                            previewPanel.showDiagram(preview);
-                            exportPanel.setCopyImageEnabled(previewPanel.getCurrentImage() != null);
-                        } else {
-                            previewPanel.showMessage(I18n.get("plantuml.preview.noimage"));
-                            exportPanel.setCopyImageEnabled(false);
-                        }
-                    } catch (Exception ex) {
-                        previewPanel.showMessage(I18n.get("plantuml.preview.error", ex.getMessage()));
-                        exportPanel.setCopyImageEnabled(false);
-                    }
-                },
+                this::showPreviewResult,
                 ex -> {
                     previewPanel.showMessage(I18n.get("plantuml.preview.error", ex.getMessage()));
                     exportPanel.setCopyImageEnabled(false);
                 });
+    }
+
+    private void showPreviewResult(File preview) {
+        try {
+            if (preview != null && preview.isFile()) {
+                previewPanel.showDiagram(preview);
+                exportPanel.setCopyImageEnabled(previewPanel.getCurrentImage() != null);
+            } else {
+                previewPanel.showMessage(I18n.get("plantuml.preview.noimage"));
+                exportPanel.setCopyImageEnabled(false);
+            }
+        } catch (Exception ex) {
+            previewPanel.showMessage(I18n.get("plantuml.preview.error", ex.getMessage()));
+            exportPanel.setCopyImageEnabled(false);
+        }
     }
 
     // -------------------- console --------------------
@@ -135,28 +136,24 @@ public class PlantUmlPanel extends JPanel {
     private void onConsoleRefresh() {
         var code = inputPanel.getCode();
         if (code.isEmpty()) {
-            consolePanel.appendOutput(I18n.get("console.refresh.skipped"),
-                    I18n.get("console.source.empty"));
+            console.appendBlock(I18n.get("console.refresh.skipped"), I18n.get("console.source.empty"));
             return;
         }
         var tempDir = resolveTempDir();
-        consolePanel.setRefreshEnabled(false);
-
+        console.setRefreshEnabled(false);
         Background.run(
                 () -> PlantUmlRenderer.compilePreview(code, tempDir),
                 result -> {
                     var header = result.isSuccess()
                             ? I18n.get("console.compile.ok", result.exitCode())
                             : I18n.get("console.compile.fail", result.exitCode());
-                    var body = result.output().isBlank()
-                            ? I18n.get("console.no.output") : result.output();
-                    consolePanel.appendOutput(header, body);
-                    consolePanel.setRefreshEnabled(true);
+                    var body = result.output().isBlank() ? I18n.get("console.no.output") : result.output();
+                    console.appendBlock(header, body);
+                    console.setRefreshEnabled(true);
                 },
                 ex -> {
-                    consolePanel.appendOutput(I18n.get("console.compile.error"),
-                            String.valueOf(ex.getMessage()));
-                    consolePanel.setRefreshEnabled(true);
+                    console.appendBlock(I18n.get("console.compile.error"), String.valueOf(ex.getMessage()));
+                    console.setRefreshEnabled(true);
                 });
     }
 
@@ -169,21 +166,12 @@ public class PlantUmlPanel extends JPanel {
     private void onExportDiagram() {
         var code = inputPanel.getCode();
         var target = exportPanel.getTargetFile();
-        if (code.isEmpty()) {
-            showError(I18n.get("plantuml.code.empty"));
-            return;
-        }
-        if (target.isEmpty()) {
-            showError(I18n.get("export.target.empty"));
-            return;
-        }
-        if (exportPanel.isArchimateSelected()) {
-            onExportArchimate(code, target);
-            return;
-        }
+        if (code.isEmpty()) { showError(I18n.get("plantuml.code.empty")); return; }
+        if (target.isEmpty()) { showError(I18n.get("export.target.empty")); return; }
+        if (exportPanel.isArchimateSelected()) { onExportArchimate(code, target); return; }
+
         previewPanel.showMessage(I18n.get("export.exporting"));
         var tempDir = resolveTempDir();
-        // Format is resolved from the target extension; PNG is the safe default.
         var format = PlantUmlFormat.fromExtension(exportPanel.getSelectedFormat())
                 .orElse(PlantUmlFormat.PNG);
 
@@ -209,8 +197,7 @@ public class PlantUmlPanel extends JPanel {
                 },
                 ex -> {
                     previewPanel.showMessage(I18n.get("plantuml.preview.error", ex.getMessage()));
-                    JOptionPane.showMessageDialog(this,
-                            I18n.get("export.fail.msg", ex.getMessage()),
+                    JOptionPane.showMessageDialog(this, I18n.get("export.fail.msg", ex.getMessage()),
                             I18n.get("export.error.title"), JOptionPane.ERROR_MESSAGE);
                 });
     }
@@ -221,9 +208,8 @@ public class PlantUmlPanel extends JPanel {
         var path = target.toLowerCase().endsWith(".xml") ? target : target + ".xml";
         var output = new File(path);
         var modelName = deriveModelName(output);
-        previewTabs.showConsole();
-        consolePanel.appendOutput(I18n.get("archimate.export.started"),
-                I18n.get("archimate.export.converting"));
+        tabs.setSelectedComponent(console);
+        console.appendBlock(I18n.get("archimate.export.started"), I18n.get("archimate.export.converting"));
 
         Background.run(
                 () -> {
@@ -233,18 +219,14 @@ public class PlantUmlPanel extends JPanel {
                 },
                 result -> {
                     var warnings = result.warnings();
-                    var sb = new StringBuilder();
-                    sb.append("Wrote ").append(output.getAbsolutePath())
+                    var sb = new StringBuilder("Wrote ").append(output.getAbsolutePath())
                             .append(System.lineSeparator())
                             .append("Elements: ").append(result.model().getElementCount())
                             .append(", Relationships: ").append(result.model().getRelationshipCount());
-                    if (!warnings.isEmpty()) {
-                        sb.append(System.lineSeparator()).append("Warnings:");
-                        for (var w : warnings) {
-                            sb.append(System.lineSeparator()).append("  - ").append(w);
-                        }
+                    for (var w : warnings) {
+                        sb.append(System.lineSeparator()).append("  - ").append(w);
                     }
-                    consolePanel.appendOutput(I18n.get("archimate.export.finished"), sb.toString());
+                    console.appendBlock(I18n.get("archimate.export.finished"), sb.toString());
                     var extra = warnings.isEmpty() ? ""
                             : I18n.get("archimate.export.warnings", warnings.size());
                     JOptionPane.showMessageDialog(this,
@@ -252,10 +234,8 @@ public class PlantUmlPanel extends JPanel {
                             I18n.get("export.success.title"), JOptionPane.INFORMATION_MESSAGE);
                 },
                 ex -> {
-                    consolePanel.appendOutput(I18n.get("archimate.export.failed"),
-                            String.valueOf(ex.getMessage()));
-                    JOptionPane.showMessageDialog(this,
-                            I18n.get("archimate.export.failmsg", ex.getMessage()),
+                    console.appendBlock(I18n.get("archimate.export.failed"), String.valueOf(ex.getMessage()));
+                    JOptionPane.showMessageDialog(this, I18n.get("archimate.export.failmsg", ex.getMessage()),
                             I18n.get("export.error.title"), JOptionPane.ERROR_MESSAGE);
                 });
     }
@@ -273,15 +253,6 @@ public class PlantUmlPanel extends JPanel {
 
     // Copies the rendered image to the clipboard; shows a status message instead
     // of failing silently when nothing is rendered yet.
-    private void onCopyImageToClipboard() {
-        copyImageToClipboard();
-    }
-
-    /**
-     * Copies the currently rendered diagram image to the system clipboard.
-     *
-     * @return {@code true} if an image was copied, {@code false} otherwise
-     */
     public boolean copyImageToClipboard() {
         var image = previewPanel.getCurrentImage();
         if (image == null) {
@@ -292,23 +263,24 @@ public class PlantUmlPanel extends JPanel {
         return true;
     }
 
-    // -------------------- helpers --------------------
+    // Propagates a runtime language change to all child components.
+    public void applyLanguage() {
+        tabs.setTitleAt(0, I18n.get("tab.preview"));
+        tabs.setTitleAt(1, I18n.get("tab.console"));
+        inputPanel.applyLanguage();
+        exportPanel.applyLanguage();
+        previewPanel.applyLanguage();
+        console.applyLanguage();
+    }
 
     private static String resolveTempDir() {
         return System.getProperty("user.dir") + File.separator + "temp";
     }
 
     private static String resolveDefaultTarget(String ext) {
-        var userDir = System.getProperty("user.dir");
-        return userDir + File.separator + "output" + File.separator + "target." + ext;
+        return System.getProperty("user.dir") + File.separator + "output"
+                + File.separator + "target." + ext;
     }
 
     public PlantUmlInputPanel getInputPanel() { return inputPanel; }
-
-    // Propagates a runtime language change to all child components.
-    public void applyLanguage() {
-        inputPanel.applyLanguage();
-        exportPanel.applyLanguage();
-        previewTabs.applyLanguage();
-    }
 }

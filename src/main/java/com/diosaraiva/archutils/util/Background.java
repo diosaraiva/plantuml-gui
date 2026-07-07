@@ -1,10 +1,11 @@
 package com.diosaraiva.archutils.util;
 
-import javax.swing.SwingUtilities;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+
+import javax.swing.SwingUtilities;
 
 /**
  * Runs blocking work (PlantUML rendering/export, file I/O) off the Event

@@ -1,14 +1,14 @@
 package com.diosaraiva.archutils;
 
-import com.diosaraiva.archutils.i18n.AppSettings;
-import com.diosaraiva.archutils.i18n.I18n;
-import com.diosaraiva.archutils.plantuml.PlantUmlConsole;
-import com.diosaraiva.archutils.ui.MainFrame;
-
-import javax.swing.SwingUtilities;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import javax.swing.SwingUtilities;
+
+import com.diosaraiva.archutils.i18n.I18n;
+import com.diosaraiva.archutils.plantuml.PlantUmlConsole;
+import com.diosaraiva.archutils.ui.MainFrame;
 
 // Application entry point. Installs the global console tee first so the Java
 // Console captures every System.out/err write from startup, restores the saved

@@ -1,16 +1,5 @@
-package com.diosaraiva.archutils.ui;
+package com.diosaraiva.archutils.plantuml.ui;
 
-import com.diosaraiva.archutils.i18n.I18n;
-
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-import javax.swing.border.TitledBorder;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -24,6 +13,19 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.border.TitledBorder;
+
+import com.diosaraiva.archutils.i18n.I18n;
+import com.diosaraiva.archutils.ui.SwingUtils;
 
 // Displays a rendered PNG or PUML diagram inline with scrolling and zoom. The
 // zoom toolbar reuses the shared SwingUtils toolbar/button styling so it matches

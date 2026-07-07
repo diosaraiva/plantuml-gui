@@ -1,6 +1,13 @@
-package com.diosaraiva.archutils.ui;
+package com.diosaraiva.archutils.plantuml.ui;
 
-import com.diosaraiva.archutils.i18n.I18n;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -10,14 +17,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
+import com.diosaraiva.archutils.i18n.I18n;
 
 // Export panel: target selector, format combo, Export and Copy actions. Format
 // acronyms (PNG/SVG/PUML) stay literal; the ArchiMate entry is localized. The
