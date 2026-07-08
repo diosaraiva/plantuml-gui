@@ -1,7 +1,5 @@
 package com.diosaraiva.archutils.dataexport;
 
-// Closed set of tabular export formats. Enum = idiomatic sealed set; carries the
-// file extension and MIME type used when writing exports.
 public enum DataExportFormat {
 
     CSV("csv", "text/csv"),

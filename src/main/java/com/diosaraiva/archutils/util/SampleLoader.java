@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-/**
- * Loads text resources from the classpath or filesystem.
- */
 public final class SampleLoader {
 
     private static final String SAMPLES_DIR = "src" + File.separator
@@ -18,7 +15,6 @@ public final class SampleLoader {
 
     private SampleLoader() { }
 
-    /** Reads a sample file by name, trying classpath then filesystem. */
     public static String load(String fileName) throws IOException {
         InputStream in = SampleLoader.class.getClassLoader()
                 .getResourceAsStream("plantuml/samples/" + fileName);

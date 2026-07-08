@@ -14,10 +14,6 @@ import com.diosaraiva.archutils.i18n.I18n;
 import com.diosaraiva.archutils.plantuml.PlantUmlConsole;
 import com.diosaraiva.archutils.ui.ConsoleView;
 
-// Standalone window mirroring the whole application's System.out/err, captured by
-// the always-on PlantUmlConsole tee (installed at startup). While visible it
-// subscribes for live chunks; Refresh re-pulls the buffer, Clean resets it. One
-// reusable instance is kept so repeated opens focus the same window.
 public final class JavaConsoleWindow extends JFrame {
 
     private static JavaConsoleWindow instance;
@@ -26,7 +22,6 @@ public final class JavaConsoleWindow extends JFrame {
             null, "gconsole.refresh.tooltip", "gconsole.clean.tooltip",
             this::refresh, () -> PlantUmlConsole.global().clear());
 
-    // Live feed: a null chunk means the buffer was cleared elsewhere.
     private final Consumer<String> feed = chunk -> {
         if (chunk == null) { console.setContent(""); } else { console.append(chunk); }
     };
@@ -44,7 +39,6 @@ public final class JavaConsoleWindow extends JFrame {
         });
     }
 
-    // Opens (or focuses) the shared console window on the EDT.
     public static void open() {
         SwingUtilities.invokeLater(() -> {
             if (instance == null) { instance = new JavaConsoleWindow(); }

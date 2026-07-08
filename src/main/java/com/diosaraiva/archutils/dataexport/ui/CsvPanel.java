@@ -18,8 +18,6 @@ import com.diosaraiva.archutils.i18n.I18n;
 import com.diosaraiva.archutils.ui.SwingUtils;
 import com.diosaraiva.archutils.ui.TextLineNumber;
 
-// Live CSV / JSON / Markdown editor. Editing CSV or JSON re-derives the other
-// columns via the dataexport services (TableData is the neutral intermediate).
 public class CsvPanel extends JPanel {
 
     private static final String SAMPLE_CSV = """
@@ -27,7 +25,6 @@ public class CsvPanel extends JPanel {
             Alice,30,New York
             Bob,25,London""";
 
-    // Stateless exporters shared across syncs.
     private static final CsvExportService CSV = new CsvExportService();
     private static final JsonExportService JSON = new JsonExportService();
     private static final MarkdownExportService MARKDOWN = new MarkdownExportService();
@@ -35,11 +32,11 @@ public class CsvPanel extends JPanel {
     private final JTextArea csvArea;
     private final JTextArea jsonArea;
     private final JTextArea markdownArea;
-    // Column headers kept as fields so they can be re-localized at runtime.
+
     private final JLabel csvHeader = createHeader(I18n.get("csv.col.csv"));
     private final JLabel jsonHeader = createHeader(I18n.get("csv.col.json"));
     private final JLabel markdownHeader = createHeader(I18n.get("csv.col.markdown"));
-    // Guards against re-entrant document events while we push derived text.
+
     private boolean updating;
 
     public CsvPanel() {
@@ -61,7 +58,6 @@ public class CsvPanel extends JPanel {
         jsonArea.getDocument().addDocumentListener(SwingUtils.onDocumentChange(() -> sync(false)));
     }
 
-    // Re-applies localized column headers after a runtime language change.
     public void applyLanguage() {
         csvHeader.setText(I18n.get("csv.col.csv"));
         jsonHeader.setText(I18n.get("csv.col.json"));
@@ -81,14 +77,12 @@ public class CsvPanel extends JPanel {
         area.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
         area.setLineWrap(false);
         var scrollPane = new JScrollPane(area);
-        // Line-number gutter kept in sync with each editor.
+
         scrollPane.setRowHeaderView(new TextLineNumber(area));
         col.add(scrollPane, BorderLayout.CENTER);
         return col;
     }
 
-    // Regenerates derived columns from whichever source was edited. Markdown is
-    // always derived from the current CSV so both edit paths converge.
     private void sync(boolean fromCsv) {
         if (updating) {
             return;
@@ -104,7 +98,7 @@ public class CsvPanel extends JPanel {
             }
             markdownArea.setText(MARKDOWN.format(TableData.fromCsv(csvArea.getText())));
         } catch (Exception ignored) {
-            // Malformed intermediate input while typing - ignore until valid.
+
         } finally {
             updating = false;
         }

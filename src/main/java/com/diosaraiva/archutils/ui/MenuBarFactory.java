@@ -29,17 +29,13 @@ import com.diosaraiva.archutils.AppSettings;
 import com.diosaraiva.archutils.i18n.I18n;
 import com.diosaraiva.archutils.plantuml.ui.JavaConsoleWindow;
 
-// Builds the application menu bar. All labels come from I18n; changing language
-// rebuilds the bar in place so menus re-render without a restart.
 public final class MenuBarFactory {
 
-    // Font families offered in Settings, filtered to those actually installed.
     private static final List<String> FONT_CHOICES = List.of(
             "Dialog", "SansSerif", "Serif", "Monospaced",
             "Arial", "Helvetica", "Verdana", "Tahoma",
             "Times New Roman", "Courier New", "Menlo", "Consolas");
 
-    // Language options shown as their own endonyms (proper nouns, not localized).
     private static final Map<String, Locale> LANGUAGES = new LinkedHashMap<>();
     static {
         LANGUAGES.put("English (US)", I18n.EN_US);
@@ -47,7 +43,6 @@ public final class MenuBarFactory {
         LANGUAGES.put("Español (ES)", I18n.ES_ES);
     }
 
-    // A named window size offered in Settings > Window.
     private record Resolution(int width, int height) {
         String label() { return width + " x " + height; }
     }
@@ -96,7 +91,6 @@ public final class MenuBarFactory {
         }
     }
 
-    // Edit menu wired to the PlantUML editor; Undo/Redo enable dynamically.
     private static JMenu createEditMenu(MainFrame frame) {
         var menu = menu(I18n.get("menu.edit"), KeyEvent.VK_E);
         var input = frame.getPlantUmlPanel().getInputPanel();
@@ -147,8 +141,6 @@ public final class MenuBarFactory {
         return menu;
     }
 
-    // Language submenu: persists the choice, switches the locale, and refreshes
-    // the whole window (menus + panels) so the change applies without a restart.
     private static JMenu createLanguageMenu(MainFrame frame) {
         var languageMenu = menu(I18n.get("menu.settings.language"), KeyEvent.VK_L);
         var current = I18n.getLocale();
@@ -224,15 +216,12 @@ public final class MenuBarFactory {
         return menu;
     }
 
-    // -------------------- helpers --------------------
-
     private static JMenu menu(String text, int mnemonic) {
         var menu = new JMenu(text);
         menu.setMnemonic(mnemonic);
         return menu;
     }
 
-    // Adds a mutually-exclusive set of radio items, invoking onSelect on click.
     private static void addRadioGroup(JMenu menu, List<String> labels,
                                       String selected, Consumer<String> onSelect) {
         var group = new ButtonGroup();

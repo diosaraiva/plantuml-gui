@@ -15,10 +15,6 @@ import javax.swing.border.TitledBorder;
 
 import com.diosaraiva.archutils.i18n.I18n;
 
-// Reusable console component: centered Refresh/Clean toolbar over a monospaced,
-// non-editable, scrollable text area. Shared by the PlantUML Console tab and the
-// standalone Java Console window; behaviour is parameterized by the handlers.
-// All mutators are EDT-safe.
 public final class ConsoleView extends JPanel {
 
     private static final DateTimeFormatter TS = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -31,9 +27,6 @@ public final class ConsoleView extends JPanel {
     private final String refreshTipKey;
     private final String cleanTipKey;
 
-    // titleKey may be null for no titled border. onRefresh/onClean may be null;
-    // Clean always clears the area first, then runs onClean (e.g. to also clear a
-    // shared buffer).
     public ConsoleView(String titleKey, String refreshTipKey, String cleanTipKey,
                        Runnable onRefresh, Runnable onClean) {
         super(new BorderLayout());
@@ -65,7 +58,6 @@ public final class ConsoleView extends JPanel {
         add(new JScrollPane(area), BorderLayout.CENTER);
     }
 
-    // Re-applies localized chrome after a runtime language change.
     public void applyLanguage() {
         if (titledBorder != null) { titledBorder.setTitle(I18n.get(titleKey)); }
         refreshButton.setText(I18n.get("console.refresh"));
@@ -79,7 +71,6 @@ public final class ConsoleView extends JPanel {
         SwingUtilities.invokeLater(() -> refreshButton.setEnabled(enabled));
     }
 
-    // Appends a timestamped header plus optional body, scrolling to the bottom.
     public void appendBlock(String header, String body) {
         SwingUtilities.invokeLater(() -> {
             var sb = new StringBuilder("[").append(LocalTime.now().format(TS)).append("] ")
@@ -92,12 +83,10 @@ public final class ConsoleView extends JPanel {
         });
     }
 
-    // Appends raw text as-is (used by the live Java Console feed).
     public void append(String text) {
         SwingUtilities.invokeLater(() -> appendRaw(text));
     }
 
-    // Replaces the whole content (used to snapshot a buffer).
     public void setContent(String text) {
         SwingUtilities.invokeLater(() -> {
             area.setText(text);

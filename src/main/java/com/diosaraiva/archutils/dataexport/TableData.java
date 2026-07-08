@@ -7,15 +7,8 @@ import java.util.Map;
 
 import com.diosaraiva.archutils.util.SimpleJsonParser;
 
-/**
- * Immutable tabular data shared by the CSV/JSON/Markdown export services.
- *
- * <p>Acts as the neutral intermediate representation: parse once from a source
- * format, then hand to any {@link ExportService} to render another format.
- */
 public record TableData(List<String> headers, List<List<String>> rows) {
 
-    // Defensive copies keep the record genuinely immutable.
     public TableData {
         headers = List.copyOf(headers);
         rows = rows.stream().map(List::copyOf).toList();
@@ -23,7 +16,6 @@ public record TableData(List<String> headers, List<List<String>> rows) {
 
     public boolean isEmpty() { return headers.isEmpty(); }
 
-    // Row-major view as ordered maps; used by the JSON writer.
     public List<Map<String, String>> asMaps() {
         var result = new ArrayList<Map<String, String>>();
         for (var row : rows) {
@@ -36,7 +28,6 @@ public record TableData(List<String> headers, List<List<String>> rows) {
         return result;
     }
 
-    // Parses simple (unquoted) CSV: first non-empty line is the header row.
     public static TableData fromCsv(String csv) {
         var lines = csv.split("\\r?\\n");
         if (lines.length == 0 || lines[0].isBlank()) {
@@ -51,7 +42,6 @@ public record TableData(List<String> headers, List<List<String>> rows) {
         return new TableData(headers, rows);
     }
 
-    // Parses a JSON array of flat objects; header order follows the first object.
     public static TableData fromJson(String json) {
         var maps = SimpleJsonParser.parseArray(json);
         if (maps.isEmpty()) {

@@ -4,8 +4,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.List;
 
-// Self-verifying tests for the sealed ExportService implementations and
-// TableData parsing. Run via main(); exits non-zero on any failure.
 public final class DataExportServiceTest {
 
     private static int failures;
@@ -47,7 +45,7 @@ public final class DataExportServiceTest {
         var csv = service.format(data);
         check("csv service target", service.target() == DataExportFormat.CSV);
         check("csv service header line", csv.startsWith("name,city"));
-        // Values with commas are quoted.
+
         check("csv quotes commas", service.format(
                 TableData.fromJson("[{\"a\":\"x,y\"}]")).contains("\"x,y\""));
     }
@@ -58,7 +56,7 @@ public final class DataExportServiceTest {
         check("json service target", service.target() == DataExportFormat.JSON);
         check("json is array", json.strip().startsWith("[") && json.strip().endsWith("]"));
         check("json has key", json.contains("\"name\""));
-        // Numeric-looking values are emitted unquoted by the writer.
+
         check("json numeric unquoted", json.contains(":30"));
     }
 

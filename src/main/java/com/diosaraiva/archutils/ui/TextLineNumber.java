@@ -18,13 +18,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 
-/**
- * A lightweight line-number gutter that is painted alongside a
- * {@link JTextComponent} (typically inside a {@link javax.swing.JScrollPane}'s
- * row header). Line numbers stay in sync when text is typed, pasted, deleted or
- * scrolled, and the component mirrors the editor's font so numbers align with
- * their lines.
- */
 public class TextLineNumber extends JComponent
         implements CaretListener, DocumentListener {
 
@@ -33,11 +26,6 @@ public class TextLineNumber extends JComponent
     private final JTextComponent editor;
     private int lastDigits;
 
-    /**
-     * Creates a line-number gutter bound to the given text component.
-     *
-     * @param editor the text component whose lines are numbered
-     */
     public TextLineNumber(JTextComponent editor) {
         this.editor = editor;
         setFont(editor.getFont());
@@ -47,7 +35,6 @@ public class TextLineNumber extends JComponent
         editor.getDocument().addDocumentListener(this);
         editor.addCaretListener(this);
 
-        // Keep the gutter font in sync if the editor font changes.
         editor.addPropertyChangeListener("font", evt -> {
             setFont(editor.getFont());
             documentChanged();
@@ -86,7 +73,6 @@ public class TextLineNumber extends JComponent
         Insets insets = getInsets();
         int availableWidth = getSize().width - insets.right - MARGIN;
 
-        // Determine the range of offsets currently visible in the clip.
         int startOffset = editor.viewToModel2D(new java.awt.Point(0, clip.y));
         int endOffset = editor.viewToModel2D(new java.awt.Point(0, clip.y + clip.height));
 
@@ -109,12 +95,10 @@ public class TextLineNumber extends JComponent
                 g.setColor(getForeground());
                 g.drawString(number, x, y);
             } catch (BadLocationException ex) {
-                // Line no longer valid – skip it.
+
             }
         }
     }
-
-    // -------------------- listeners --------------------
 
     private void documentChanged() {
         SwingUtilities.invokeLater(() -> {

@@ -14,8 +14,6 @@ import com.diosaraiva.archutils.dataexport.ui.CsvPanel;
 import com.diosaraiva.archutils.i18n.I18n;
 import com.diosaraiva.archutils.plantuml.ui.PlantUmlPanel;
 
-// Main application window: hosts the service panels and the menu bar, and
-// applies runtime resolution/language changes.
 public class MainFrame extends JFrame {
 
     private final JPanel contentPanel;
@@ -43,8 +41,6 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    // Applies a runtime language change across the whole window: title, menu bar
-    // and every panel's localized chrome, without losing editor/preview state.
     public void reloadLanguage() {
         SwingUtilities.invokeLater(() -> {
             setTitle(I18n.get("app.title"));
@@ -56,7 +52,6 @@ public class MainFrame extends JFrame {
         });
     }
 
-    // Replaces the content area with the given panel.
     public void showPanel(JPanel panel) {
         contentPanel.removeAll();
         contentPanel.add(panel, BorderLayout.CENTER);
@@ -64,8 +59,6 @@ public class MainFrame extends JFrame {
         contentPanel.repaint();
     }
 
-    // Resizes to the requested resolution, clamped to the usable screen, then
-    // re-centres the window.
     public void applyResolution(int width, int height) {
         Rectangle screen = GraphicsEnvironment.getLocalGraphicsEnvironment()
                 .getMaximumWindowBounds();

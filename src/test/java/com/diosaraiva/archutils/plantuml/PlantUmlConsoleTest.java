@@ -1,8 +1,5 @@
 package com.diosaraiva.archutils.plantuml;
 
-// Self-verifying tests for the console capture/tee: buffering, System.out/err
-// redirection, listener notification and clear. Uses a fresh instance (not the
-// global one) and always restores the original streams.
 public final class PlantUmlConsoleTest {
 
     private static int failures;
@@ -34,7 +31,7 @@ public final class PlantUmlConsoleTest {
         } finally {
             console.uninstall();
         }
-        // Streams restored; safe to assert/print normally now.
+
         check("streams restored", System.out == realOut);
         check("captures stdout", console.getText().contains("hello-out"));
         check("captures stderr", console.getText().contains("hello-err"));

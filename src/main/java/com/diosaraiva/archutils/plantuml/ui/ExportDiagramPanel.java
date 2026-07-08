@@ -20,14 +20,8 @@ import javax.swing.JTextField;
 
 import com.diosaraiva.archutils.i18n.I18n;
 
-// Export panel: target selector, format combo, Export and Copy actions. Format
-// acronyms (PNG/SVG/PUML) stay literal; the ArchiMate entry is localized. The
-// map is built after Main sets the locale, so labels reflect the active language
-// at first open (runtime switch applies on reopen).
 public class ExportDiagramPanel extends JPanel {
 
-    // Display label -> target file extension. Extension is the stable key the
-    // rest of the app switches on; the label is presentation only.
     private static final Map<String, String> FORMATS = new LinkedHashMap<>();
     static {
         FORMATS.put("PNG", "png");
@@ -75,17 +69,17 @@ public class ExportDiagramPanel extends JPanel {
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(4, 6, 4, 1);   // tight right gap toward Browse
+        gbc.insets = new Insets(4, 6, 4, 1);
         add(targetFileField, gbc);
 
         gbc.gridx = 2;
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
-        gbc.insets = new Insets(4, 1, 4, 6);   // tight left gap from text field
+        gbc.insets = new Insets(4, 1, 4, 6);
         browseButton.addActionListener(e -> onBrowse());
         add(browseButton, gbc);
 
-        gbc.insets = new Insets(4, 6, 4, 6);   // restore default spacing
+        gbc.insets = new Insets(4, 6, 4, 6);
         gbc.gridx = 3;
         add(formatLabel, gbc);
         gbc.gridx = 4;
@@ -95,14 +89,10 @@ public class ExportDiagramPanel extends JPanel {
         gbc.gridx = 5;
         add(exportButton, gbc);
 
-        // Copy rendered image to clipboard, immediately right of Export File.
         gbc.gridx = 6;
         add(copyImageButton, gbc);
     }
 
-    // Re-applies localized chrome after a runtime language change. The format
-    // combo items keep their stable acronyms; only the ArchiMate entry text is
-    // language-dependent, which is refreshed on next panel construction.
     public void applyLanguage() {
         titledBorder.setTitle(I18n.get("export.panel.title"));
         targetFileLabel.setText(I18n.get("export.targetFile"));
@@ -123,23 +113,18 @@ public class ExportDiagramPanel extends JPanel {
         }
     }
 
-    // ---------- public API ----------
-
     public void onExportDiagram(ActionListener listener) {
         exportButton.addActionListener(listener);
     }
 
-    // Registers the handler for the Copy to Clipboard (image) action.
     public void onCopyImage(ActionListener listener) {
         copyImageButton.addActionListener(listener);
     }
 
-    // Enables/disables Copy to Clipboard (e.g. when no image is rendered).
     public void setCopyImageEnabled(boolean enabled) {
         copyImageButton.setEnabled(enabled);
     }
 
-    // Adapts the format change onto an ItemListener; fires once per selection.
     public void onFormatChanged(ActionListener listener) {
         formatCombo.addItemListener((ItemListener) e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -148,13 +133,11 @@ public class ExportDiagramPanel extends JPanel {
         });
     }
 
-    // Returns "png", "svg", "puml" or "xml" for the selected format.
     public String getSelectedFormat() {
         var selected = formatCombo.getSelectedItem();
         return FORMATS.getOrDefault(selected, "png");
     }
 
-    // True when the ArchiMate Exchange XML format is selected.
     public boolean isArchimateSelected() {
         return "xml".equals(getSelectedFormat());
     }

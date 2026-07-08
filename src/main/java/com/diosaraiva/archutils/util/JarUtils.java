@@ -11,10 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Utility for running JAR files bundled in src/main/resources.
- * Extracts the JAR to a temp directory and executes it via ProcessBuilder.
- */
 public final class JarUtils {
 
     private JarUtils() { }
@@ -22,9 +18,8 @@ public final class JarUtils {
     private static final String RESOURCES_DIR = "src" + File.separator
             + "main" + File.separator + "resources";
 
-    /** Locates a resource JAR on the classpath or under src/main/resources. */
     public static File extractJar(String resourcePath) throws IOException {
-        // 1. Try classpath (works when built with Maven/Gradle)
+
         URL url = JarUtils.class.getClassLoader().getResource(resourcePath);
         if (url != null && "file".equals(url.getProtocol())) {
             return new File(url.getPath());
@@ -41,7 +36,6 @@ public final class JarUtils {
             }
         }
 
-        // 2. Fall back to filesystem under src/main/resources
         File fsFile = new File(RESOURCES_DIR, resourcePath);
         if (fsFile.isFile()) {
             return fsFile;
@@ -51,11 +45,6 @@ public final class JarUtils {
                 + fsFile.getAbsolutePath() + ": " + resourcePath);
     }
 
-    /**
-     * Runs a resource JAR with optional JVM options (e.g. {@code -Dkey=value}),
-     * a working directory and program arguments. JVM options are placed before
-     * {@code -jar} so they are interpreted by the JVM rather than the program.
-     */
     public static int runJar(String resourcePath, File workingDir,
                              List<String> jvmOptions, String... args)
             throws IOException, InterruptedException {
@@ -69,9 +58,6 @@ public final class JarUtils {
         ProcessBuilder pb = new ProcessBuilder(cmd);
         if (workingDir != null) { pb.directory(workingDir); }
 
-        // Pump the subprocess streams through this JVM's System.out/err instead
-        // of inheritIO(), so the teed Java Console captures PlantUML output while
-        // the real terminal still sees it.
         Process process = pb.start();
         Thread out = pump(process.getInputStream(), System.out);
         Thread err = pump(process.getErrorStream(), System.err);
@@ -83,7 +69,6 @@ public final class JarUtils {
         return exit;
     }
 
-    // Copies a subprocess stream to the given PrintStream on its own thread.
     private static Thread pump(InputStream in, java.io.PrintStream target) {
         var thread = new Thread(() -> {
             try {
@@ -94,23 +79,15 @@ public final class JarUtils {
                 }
                 target.flush();
             } catch (IOException ignored) {
-                // Stream closed on process exit; nothing more to copy.
+
             }
         }, "jar-io-pump");
         thread.setDaemon(true);
         return thread;
     }
 
-    /**
-     * Result of running a JAR with its console streams captured rather than
-     * inherited.
-     *
-     * @param exitCode process exit code
-     * @param stdout   captured standard output
-     * @param stderr   captured standard error (PlantUML reports syntax errors here)
-     */
     public record JarRunResult(int exitCode, String stdout, String stderr) {
-        /** @return stdout and stderr merged into a single, labelled block. */
+
         public String combinedOutput() {
             StringBuilder sb = new StringBuilder();
             if (!stdout.isBlank()) { sb.append(stdout.strip()).append(System.lineSeparator()); }
@@ -119,12 +96,6 @@ public final class JarUtils {
         }
     }
 
-    /**
-     * Runs a resource JAR exactly like
-     * {@link #runJar(String, File, List, String...)} but captures stdout and
-     * stderr instead of inheriting them, so callers (e.g. a console panel) can
-     * display PlantUML's output including compilation errors.
-     */
     public static JarRunResult runJarCapture(String resourcePath, File workingDir,
                                              List<String> jvmOptions, String... args)
             throws IOException, InterruptedException {
@@ -139,8 +110,7 @@ public final class JarUtils {
         if (workingDir != null) { pb.directory(workingDir); }
 
         Process process = pb.start();
-        // Drain both streams concurrently to avoid the subprocess blocking on a
-        // full pipe buffer.
+
         StreamCollector out = new StreamCollector(process.getInputStream());
         StreamCollector err = new StreamCollector(process.getErrorStream());
         Thread outThread = new Thread(out, "jar-stdout");
@@ -153,7 +123,6 @@ public final class JarUtils {
         return new JarRunResult(exit, out.text(), err.text());
     }
 
-    /** Reads an input stream fully into a String on its own thread. */
     private static final class StreamCollector implements Runnable {
         private final InputStream in;
         private final StringBuilder sb = new StringBuilder();
@@ -169,7 +138,7 @@ public final class JarUtils {
                     sb.append(new String(buffer, 0, read, java.nio.charset.StandardCharsets.UTF_8));
                 }
             } catch (IOException ignored) {
-                // Stream closed on process exit; whatever was read is kept.
+
             }
         }
 

@@ -1,6 +1,5 @@
 package com.diosaraiva.archutils.dataexport;
 
-// Renders TableData as a GitHub-flavoured Markdown table.
 public final class MarkdownExportService implements ExportService<TableData> {
 
     @Override

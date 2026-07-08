@@ -5,12 +5,6 @@ import java.util.prefs.Preferences;
 
 import com.diosaraiva.archutils.i18n.I18n;
 
-/**
- * Persistent application settings backed by {@link Preferences}.
- *
- * <p>Currently stores the UI language tag. Kept tiny and dependency-free so any
- * class can read/write a setting without wiring a config file.
- */
 public final class AppSettings {
 
     private static final Preferences PREFS =
@@ -20,14 +14,12 @@ public final class AppSettings {
 
     private AppSettings() { }
 
-    // Reads the stored locale, defaulting to English (US) on first run.
     public static Locale getLanguage() {
         var tag = PREFS.get(KEY_LANGUAGE, "en-US");
         var locale = Locale.forLanguageTag(tag);
         return locale.getLanguage().isEmpty() ? I18n.EN_US : locale;
     }
 
-    // Persists the selected locale as a BCP-47 language tag.
     public static void setLanguage(Locale locale) {
         PREFS.put(KEY_LANGUAGE, locale.toLanguageTag());
     }

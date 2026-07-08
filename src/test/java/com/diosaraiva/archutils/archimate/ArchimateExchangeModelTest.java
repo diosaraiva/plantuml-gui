@@ -5,15 +5,6 @@ import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Minimal, dependency-free unit tests for {@link ArchimateExchangeModel} and
- * {@link PlantUmlArchimateConverter}.
- *
- * <p>The project has no build tool / JUnit on the classpath, so this test is a
- * self-verifying program: run its {@link #main(String[])} method (e.g. from
- * Eclipse "Run As &gt; Java Application"). It prints one line per check and
- * exits with a non-zero status if any assertion fails.
- */
 public final class ArchimateExchangeModelTest {
 
     private static int failures;
@@ -35,7 +26,6 @@ public final class ArchimateExchangeModelTest {
         }
     }
 
-    /** Root element is {@code archimate:model} and standard folders exist. */
     private static void producesValidRootAndFolders() {
         var model = new ArchimateExchangeModel("MyModel");
         String xml = model.toXmlString();
@@ -52,7 +42,6 @@ public final class ArchimateExchangeModelTest {
         check("well-formed XML", isWellFormed(xml));
     }
 
-    /** Elements and relationships carry the correct {@code xsi:type}. */
     private static void usesCorrectXsiTypes() {
         var model = new ArchimateExchangeModel("Types");
         model.addElement("BusinessActor", "id-actor-1", "Customer", "business");
@@ -68,7 +57,6 @@ public final class ArchimateExchangeModelTest {
         check("still well-formed with concepts", isWellFormed(xml));
     }
 
-    /** Generated ids are unique across a large batch. */
     private static void generatesUniqueIds() {
         var seen = new java.util.HashSet<String>();
         boolean unique = true;
@@ -82,7 +70,6 @@ public final class ArchimateExchangeModelTest {
         check("id has expected prefix", ArchimateExchangeModel.newId().startsWith("id-"));
     }
 
-    /** {@link ArchimateExchangeModel#writeTo(File)} produces a readable file. */
     private static void writesFileToDisk() throws Exception {
         var model = new ArchimateExchangeModel("Disk");
         model.addElement("ApplicationComponent", "id-app-1", "Shop", "application");
@@ -95,7 +82,6 @@ public final class ArchimateExchangeModelTest {
         check("file contains element", content.contains("xsi:type=\"archimate:ApplicationComponent\""));
     }
 
-    /** The PlantUML converter maps macros to ArchiMate concepts. */
     private static void convertsPlantUmlArchimateSource() {
         String puml = """
                 @startuml
@@ -116,7 +102,6 @@ public final class ArchimateExchangeModelTest {
         check("no warnings for valid archimate source", result.warnings().isEmpty());
     }
 
-    /** Non-ArchiMate source yields warnings, not silent guesses. */
     private static void reportsWarningsForNonArchimateSource() {
         String puml = """
                 @startuml
@@ -128,8 +113,6 @@ public final class ArchimateExchangeModelTest {
         check("emits warnings for non-archimate source", !result.warnings().isEmpty());
     }
 
-    // -------------------- helpers --------------------
-
     private static final Pattern XSI_TYPE = Pattern.compile("xsi:type=\"([^\"]+)\"");
 
     private static boolean isWellFormed(String xml) {
@@ -138,7 +121,7 @@ public final class ArchimateExchangeModelTest {
             factory.setNamespaceAware(true);
             factory.newDocumentBuilder().parse(
                     new org.xml.sax.InputSource(new java.io.StringReader(xml)));
-            // sanity: every xsi:type should be namespaced with archimate:
+
             Matcher m = XSI_TYPE.matcher(xml);
             while (m.find()) {
                 if (!m.group(1).startsWith("archimate:")) {

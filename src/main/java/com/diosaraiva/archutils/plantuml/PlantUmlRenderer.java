@@ -11,17 +11,10 @@ import java.util.List;
 
 import com.diosaraiva.archutils.util.JarUtils;
 
-/**
- * Core PlantUML rendering: the single wrapper around the bundled PlantUML jar.
- *
- * <p>UI code must not touch PlantUML/JAR invocation directly; it goes through
- * this class (preview) and {@link PlantUmlExporter} (file export).
- */
 public final class PlantUmlRenderer {
 
     private static final String PLANTUML_JAR = "plantuml/plantuml-1.2026.6.jar";
 
-    // Bundled samples double as the include root for `!include` of sibling files.
     private static final String SAMPLES_RESOURCE = "plantuml/samples";
     private static final String SAMPLES_FS = "src" + File.separator + "main"
             + File.separator + "resources" + File.separator + "plantuml"
@@ -29,12 +22,10 @@ public final class PlantUmlRenderer {
 
     private PlantUmlRenderer() { }
 
-    // Outcome of a capturing preview compile: image (null on failure) + console text.
     public record CompileResult(File previewImage, int exitCode, String output) {
         public boolean isSuccess() { return exitCode == 0; }
     }
 
-    // Renders a PNG preview into tempDir, returning the file or null on failure.
     public static File renderPreview(String code, String tempDir)
             throws IOException, InterruptedException {
         var dir = new File(tempDir);
@@ -49,9 +40,6 @@ public final class PlantUmlRenderer {
         return preview.isFile() ? preview : null;
     }
 
-    // Preview compile that captures stdout+stderr so syntax errors reach the
-    // console. `-stdrpt:1` forces error reporting instead of only embedding it in
-    // the generated image.
     public static CompileResult compilePreview(String code, String tempDir)
             throws IOException, InterruptedException {
         var dir = new File(tempDir);
@@ -69,8 +57,6 @@ public final class PlantUmlRenderer {
                 run.exitCode(), run.combinedOutput());
     }
 
-    // Runs PlantUML for a concrete output file/format. Package-visible so only
-    // PlantUmlExporter drives file export.
     static void runExport(String code, File target, PlantUmlFormat format)
             throws IOException, InterruptedException {
         ensureParentDir(target);
@@ -78,7 +64,6 @@ public final class PlantUmlRenderer {
         Path pumlPath = Paths.get(target.getParent(), baseName + ".puml");
         Files.writeString(pumlPath, code);
 
-        // .puml just writes the source; nothing to render.
         if (!format.needsJar()) { return; }
 
         JarUtils.runJar(PLANTUML_JAR, target.getParentFile(),
@@ -87,8 +72,6 @@ public final class PlantUmlRenderer {
                 "-o", target.getParent());
     }
 
-    // Headless JVM options: keep the subprocess off the macOS Dock and point
-    // plantuml.include.path at the samples dir so relative `!include`s resolve.
     private static List<String> includePathOptions() {
         var opts = new ArrayList<String>();
         opts.add("-Djava.awt.headless=true");

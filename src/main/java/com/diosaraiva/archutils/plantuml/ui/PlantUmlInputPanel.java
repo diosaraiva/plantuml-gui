@@ -29,9 +29,6 @@ import com.diosaraiva.archutils.ui.SwingUtils;
 import com.diosaraiva.archutils.ui.TextLineNumber;
 import com.diosaraiva.archutils.util.SampleLoader;
 
-// Input section: sample selector and code editor. Provides a line-number
-// gutter, undo/redo (via UndoManager) and clipboard access for the source text.
-// Localized chrome is refreshed via applyLanguage().
 public class PlantUmlInputPanel extends JPanel {
 
     private final JComboBox<DiagramSample> sampleCombo;
@@ -80,11 +77,10 @@ public class PlantUmlInputPanel extends JPanel {
         codeTextArea.setLineWrap(true);
         codeTextArea.setWrapStyleWord(false);
         JScrollPane scrollPane = new JScrollPane(codeTextArea);
-        // Line-number gutter kept in sync with the editor.
+
         scrollPane.setRowHeaderView(new TextLineNumber(codeTextArea));
         add(scrollPane, gbc);
 
-        // Bottom bar: Auto Preview checkbox (left), counts (centre), Preview button (right).
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
@@ -98,7 +94,6 @@ public class PlantUmlInputPanel extends JPanel {
         loadSample();
     }
 
-    /** Builds the row below the editor with Auto Preview, counts and Preview. */
     private JPanel createBottomBar() {
         JPanel bar = new JPanel(new BorderLayout(8, 0));
 
@@ -117,12 +112,10 @@ public class PlantUmlInputPanel extends JPanel {
         return bar;
     }
 
-    /** The manual Preview button is only usable when Auto Preview is off. */
     private void updatePreviewButtonState() {
         previewButton.setEnabled(!autoPreviewCheck.isSelected());
     }
 
-    /** Updates the character/line count label whenever the document changes. */
     private void initCountLabel() {
         codeTextArea.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::updateCounts));
         updateCounts();
@@ -134,7 +127,6 @@ public class PlantUmlInputPanel extends JPanel {
         countLabel.setText(com.diosaraiva.archutils.i18n.I18n.get("input.counts", chars, lines));
     }
 
-    // Re-applies localized chrome after a runtime language change.
     public void applyLanguage() {
         titledBorder.setTitle(com.diosaraiva.archutils.i18n.I18n.get("input.title"));
         samplesLabel.setText(com.diosaraiva.archutils.i18n.I18n.get("input.samples"));
@@ -144,7 +136,6 @@ public class PlantUmlInputPanel extends JPanel {
         repaint();
     }
 
-    /** Wires the undo manager, keyboard shortcuts and state notifications. */
     private void initUndo() {
         codeTextArea.getDocument().addUndoableEditListener(e -> {
             undoManager.addEdit(e.getEdit());
@@ -174,7 +165,7 @@ public class PlantUmlInputPanel extends JPanel {
         } catch (Exception ex) {
             codeTextArea.setText("Error loading sample: " + ex.getMessage());
         }
-        // A freshly loaded sample is a clean starting point, not an undoable edit.
+
         undoManager.discardAllEdits();
         fireUndoStateChanged();
     }
@@ -198,39 +189,26 @@ public class PlantUmlInputPanel extends JPanel {
         fireUndoStateChanged();
     }
 
-    /** Allows external listeners to observe code changes for live preview. */
     public void addCodeDocumentListener(DocumentListener listener) {
         codeTextArea.getDocument().addDocumentListener(listener);
     }
 
-    /** @return {@code true} if Auto Preview is currently enabled. */
     public boolean isAutoPreviewEnabled() {
         return autoPreviewCheck.isSelected();
     }
 
-    /** Registers a handler invoked when the manual Preview button is pressed. */
     public void addPreviewButtonListener(ActionListener listener) {
         previewButton.addActionListener(listener);
     }
 
-    /**
-     * Registers a handler invoked when the Auto Preview checkbox is toggled.
-     *
-     * @param listener callback receiving the toggle event
-     */
     public void addAutoPreviewListener(ActionListener listener) {
         autoPreviewCheck.addActionListener(listener);
     }
 
-    // -------------------- undo / redo / clipboard --------------------
-
-    /** @return {@code true} if an undo operation is currently available. */
     public boolean canUndo() { return undoManager.canUndo(); }
 
-    /** @return {@code true} if a redo operation is currently available. */
     public boolean canRedo() { return undoManager.canRedo(); }
 
-    /** Performs an undo on the editor if possible. */
     public void undo() {
         if (undoManager.canUndo()) {
             undoManager.undo();
@@ -238,7 +216,6 @@ public class PlantUmlInputPanel extends JPanel {
         fireUndoStateChanged();
     }
 
-    /** Performs a redo on the editor if possible. */
     public void redo() {
         if (undoManager.canRedo()) {
             undoManager.redo();
@@ -246,27 +223,16 @@ public class PlantUmlInputPanel extends JPanel {
         fireUndoStateChanged();
     }
 
-    /**
-     * Copies the current text selection (if any) or the full editor contents
-     * to the system clipboard.
-     */
     public void copyToClipboard() {
         String selected = codeTextArea.getSelectedText();
         SwingUtils.copyText((selected != null && !selected.isEmpty())
                 ? selected : codeTextArea.getText());
     }
 
-    /** Pastes the clipboard contents into the editor at the caret (standard editor Paste). */
     public void paste() {
         codeTextArea.paste();
     }
 
-    /**
-     * Registers a listener that is notified whenever the undo/redo availability
-     * may have changed, allowing UI (e.g. menu items) to update its state.
-     *
-     * @param listener callback invoked on the EDT after a state change
-     */
     public void addUndoStateListener(Runnable listener) {
         undoStateListeners.add(listener);
     }
@@ -277,8 +243,6 @@ public class PlantUmlInputPanel extends JPanel {
         }
     }
 
-    // Bundled PlantUML diagram samples with their resource file names. Nested
-    // here because the sample selector is the only consumer.
     public enum DiagramSample {
         ACTIVITY("Activity", "activity.puml"),
         ARCHIMATE_APPLICATION("Archimate Application", "archimate_application.puml"),
@@ -329,5 +293,3 @@ public class PlantUmlInputPanel extends JPanel {
         @Override public String toString() { return displayName; }
     }
 }
-
-

@@ -22,13 +22,8 @@ import com.diosaraiva.archutils.ui.ConsoleView;
 import com.diosaraiva.archutils.ui.SwingUtils;
 import com.diosaraiva.archutils.util.Background;
 
-// Coordinator panel wiring input, live preview and export. Live preview: a
-// debounced timer renders into temp/ on a virtual thread and refreshes the
-// preview. The right side is a Preview/Console tabbed pane. UI code never
-// touches PlantUML directly - it goes through the plantuml package.
 public class PlantUmlPanel extends JPanel {
 
-    // Idle delay after the last keystroke before the live preview fires.
     private static final int PREVIEW_DELAY_MS = 800;
 
     private final PlantUmlInputPanel inputPanel;
@@ -38,7 +33,6 @@ public class PlantUmlPanel extends JPanel {
     private final JTabbedPane tabs = new JTabbedPane();
     private final Timer previewTimer;
 
-    // Diagram export outcome; preview is non-null only for SVG (needs a PNG proxy).
     private record ExportResult(File output, File preview) { }
 
     public PlantUmlPanel() {
@@ -85,11 +79,8 @@ public class PlantUmlPanel extends JPanel {
             if (inputPanel.isAutoPreviewEnabled()) { onLivePreview(); }
         });
 
-        // Pre-render the initial sample so the preview is ready on startup.
         SwingUtilities.invokeLater(this::onLivePreview);
     }
-
-    // -------------------- live preview --------------------
 
     private void restartPreviewTimer() {
         if (inputPanel.isAutoPreviewEnabled()) { previewTimer.restart(); }
@@ -104,7 +95,6 @@ public class PlantUmlPanel extends JPanel {
         previewPanel.showMessage(I18n.get("plantuml.preview.rendering"));
         var tempDir = resolveTempDir();
 
-        // Virtual thread avoids blocking the EDT during rendering.
         Background.run(
                 () -> PlantUmlRenderer.renderPreview(code, tempDir),
                 this::showPreviewResult,
@@ -129,10 +119,6 @@ public class PlantUmlPanel extends JPanel {
         }
     }
 
-    // -------------------- console --------------------
-
-    // Re-runs the current source through a capturing compile and appends the
-    // combined stdout+stderr (including syntax errors) to the console tab.
     private void onConsoleRefresh() {
         var code = inputPanel.getCode();
         if (code.isEmpty()) {
@@ -157,8 +143,6 @@ public class PlantUmlPanel extends JPanel {
                 });
     }
 
-    // -------------------- export --------------------
-
     private void onFormatChanged() {
         exportPanel.setTargetFileExtension(exportPanel.getSelectedFormat());
     }
@@ -179,7 +163,7 @@ public class PlantUmlPanel extends JPanel {
                 () -> {
                     var output = new File(target);
                     PlantUmlExporter.export(code, output, format);
-                    // SVG has no inline raster, so render a PNG proxy for preview.
+
                     File preview = format == PlantUmlFormat.SVG
                             ? PlantUmlRenderer.renderPreview(code, tempDir) : null;
                     return new ExportResult(output, preview);
@@ -202,8 +186,6 @@ public class PlantUmlPanel extends JPanel {
                 });
     }
 
-    // Best-effort ArchiMate export: unmapped PlantUML lines are reported to the
-    // console rather than guessed at (source may not be ArchiMate-aware).
     private void onExportArchimate(String code, String target) {
         var path = target.toLowerCase().endsWith(".xml") ? target : target + ".xml";
         var output = new File(path);
@@ -251,8 +233,6 @@ public class PlantUmlPanel extends JPanel {
         return dot > 0 ? name.substring(0, dot) : name;
     }
 
-    // Copies the rendered image to the clipboard; shows a status message instead
-    // of failing silently when nothing is rendered yet.
     public boolean copyImageToClipboard() {
         var image = previewPanel.getCurrentImage();
         if (image == null) {
@@ -263,7 +243,6 @@ public class PlantUmlPanel extends JPanel {
         return true;
     }
 
-    // Propagates a runtime language change to all child components.
     public void applyLanguage() {
         tabs.setTitleAt(0, I18n.get("tab.preview"));
         tabs.setTitleAt(1, I18n.get("tab.console"));

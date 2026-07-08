@@ -2,7 +2,6 @@ package com.diosaraiva.archutils.dataexport;
 
 import java.util.stream.Collectors;
 
-// Renders TableData as CSV. Values containing commas are quoted.
 public final class CsvExportService implements ExportService<TableData> {
 
     @Override

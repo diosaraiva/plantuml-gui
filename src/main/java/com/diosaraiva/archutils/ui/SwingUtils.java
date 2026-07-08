@@ -27,18 +27,14 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.FontUIResource;
 
-// Reusable, dependency-free Swing helpers shared across the UI: listeners,
-// menu/toolbar factories, clipboard and look-and-feel utilities.
 public final class SwingUtils {
 
     private SwingUtils() { }
 
-    // Platform menu-shortcut modifier (Cmd on macOS, Ctrl elsewhere).
     public static int menuShortcut() {
         return Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
     }
 
-    // DocumentListener that runs onChange for any edit.
     public static DocumentListener onDocumentChange(Runnable onChange) {
         return new DocumentListener() {
             @Override public void insertUpdate(DocumentEvent e)  { onChange.run(); }
@@ -47,7 +43,6 @@ public final class SwingUtils {
         };
     }
 
-    // Configured JMenuItem; mnemonic/accelerator/action are optional.
     public static JMenuItem menuItem(String text, int mnemonic,
                                      KeyStroke accelerator, ActionListener action) {
         var item = new JMenuItem(text);
@@ -57,12 +52,10 @@ public final class SwingUtils {
         return item;
     }
 
-    // Centered toolbar row so every panel toolbar looks and lays out alike.
     public static JPanel createToolBar() {
         return new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 2));
     }
 
-    // Shared toolbar button styling so all toolbar buttons are identical.
     public static JButton createToolButton(String text, String tooltip) {
         var button = new JButton(text);
         button.setToolTipText(tooltip);
@@ -71,19 +64,16 @@ public final class SwingUtils {
         return button;
     }
 
-    // Copies plain text to the system clipboard.
     public static void copyText(String text) {
         Toolkit.getDefaultToolkit().getSystemClipboard()
                 .setContents(new StringSelection(text), null);
     }
 
-    // Copies an image to the system clipboard.
     public static void copyImage(Image image) {
         Toolkit.getDefaultToolkit().getSystemClipboard()
                 .setContents(new ImageTransferable(image), null);
     }
 
-    // Opens a URL in the default browser; failures are logged, never thrown.
     public static void browse(String url) {
         try {
             if (Desktop.isDesktopSupported()) {
@@ -94,24 +84,20 @@ public final class SwingUtils {
         }
     }
 
-    // Standard error dialog.
     public static void showError(Component parent, String message) {
         JOptionPane.showMessageDialog(parent, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    // Makes a text-based component honour the current L&F font.
     public static void useUiFont(JComponent component) {
         component.putClientProperty(javax.swing.JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
         component.setFont(UIManager.getFont("Label.font"));
     }
 
-    // Applies a look and feel and refreshes every open window.
     public static void applyLookAndFeel(String className) throws Exception {
         UIManager.setLookAndFeel(className);
         refreshAllWindows();
     }
 
-    // Applies a font family to all UI defaults, preserving each font's style/size.
     public static void applyFontFamily(String family) {
         for (var key : new ArrayList<>(UIManager.getDefaults().keySet())) {
             if (UIManager.get(key) instanceof Font font) {
@@ -121,14 +107,12 @@ public final class SwingUtils {
         refreshAllWindows();
     }
 
-    // Rebuilds the component tree of every open window (after theme/font change).
     public static void refreshAllWindows() {
         for (var window : Window.getWindows()) {
             SwingUtilities.updateComponentTreeUI(window);
         }
     }
 
-    // Exposes an Image to the clipboard via the image DataFlavor.
     private record ImageTransferable(Image image) implements Transferable {
         @Override public DataFlavor[] getTransferDataFlavors() {
             return new DataFlavor[]{DataFlavor.imageFlavor};

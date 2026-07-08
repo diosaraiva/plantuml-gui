@@ -16,9 +16,6 @@ import javax.swing.event.HyperlinkEvent;
 
 import com.diosaraiva.archutils.i18n.I18n;
 
-/**
- * About dialog displaying application information.
- */
 public class AboutDialog extends JDialog {
 
     private static final String REPO_URL = "https://github.com/diosaraiva/arch-utils";
@@ -59,7 +56,6 @@ public class AboutDialog extends JDialog {
         setLocationRelativeTo(getParent());
     }
 
-    /** HTML description with a clickable repository link, using the UI font. */
     private JEditorPane createDescriptionPane() {
         var pane = new JEditorPane("text/html", I18n.get("about.description", REPO_URL));
         pane.setEditable(false);

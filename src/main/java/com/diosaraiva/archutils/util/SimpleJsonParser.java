@@ -5,15 +5,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Minimal JSON parser for arrays of flat objects.
- * No external libraries required.
- */
 public final class SimpleJsonParser {
 
     private SimpleJsonParser() { }
 
-    /** Parses a JSON array of objects into a list of maps. */
     public static List<Map<String, String>> parseArray(String json) {
         List<Map<String, String>> result = new ArrayList<>();
         String trimmed = json.trim();
@@ -26,7 +21,6 @@ public final class SimpleJsonParser {
         return result;
     }
 
-    /** Serialises a list of maps to a JSON array string. */
     public static String toArray(List<Map<String, String>> rows) {
         StringBuilder sb = new StringBuilder("[\n");
         for (int i = 0; i < rows.size(); i++) {

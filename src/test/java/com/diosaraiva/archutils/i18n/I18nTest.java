@@ -1,7 +1,5 @@
 package com.diosaraiva.archutils.i18n;
 
-// Self-verifying tests for I18n key resolution across the three locales,
-// argument substitution, and missing-key handling.
 public final class I18nTest {
 
     private static int failures;
@@ -12,7 +10,6 @@ public final class I18nTest {
         missingKeyIsVisible();
         allLocalesCoverCoreKeys();
 
-        // Restore default so test order never leaks locale state.
         I18n.setLocale(I18n.EN_US);
 
         System.out.println();
@@ -47,7 +44,6 @@ public final class I18nTest {
         check("missing key wrapped", I18n.get("no.such.key").equals("!no.such.key!"));
     }
 
-    // Every locale must resolve the core keys (no !key! placeholders leaking).
     private static void allLocalesCoverCoreKeys() {
         var keys = new String[]{
                 "app.title", "menu.settings.language", "menu.settings.console",

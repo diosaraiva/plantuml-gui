@@ -2,7 +2,6 @@ package com.diosaraiva.archutils.dataexport;
 
 import com.diosaraiva.archutils.util.SimpleJsonParser;
 
-// Renders TableData as a JSON array of flat objects.
 public final class JsonExportService implements ExportService<TableData> {
 
     @Override
