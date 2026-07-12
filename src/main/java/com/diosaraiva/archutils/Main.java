@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 
 import com.diosaraiva.archutils.i18n.I18n;
 import com.diosaraiva.archutils.plantuml.PlantUmlConsole;
+import com.diosaraiva.archutils.plantuml.ui.PlantUmlConsolePanel;
 import com.diosaraiva.archutils.ui.MainFrame;
 
 public class Main {
@@ -24,7 +25,11 @@ public class Main {
 
         cleanTempDir();
         Runtime.getRuntime().addShutdownHook(new Thread(Main::cleanTempDir));
-        SwingUtilities.invokeLater(() -> new MainFrame().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            // Start the Java console capturing JVM output in the background at launch.
+            PlantUmlConsolePanel.startBackground();
+            new MainFrame().setVisible(true);
+        });
     }
 
     private static void cleanTempDir() {

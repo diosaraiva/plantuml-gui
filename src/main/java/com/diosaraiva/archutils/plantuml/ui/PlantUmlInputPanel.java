@@ -2,9 +2,6 @@ package com.diosaraiva.archutils.plantuml.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -13,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -39,10 +36,12 @@ public class PlantUmlInputPanel extends JPanel {
             new JCheckBox(com.diosaraiva.archutils.i18n.I18n.get("input.autoPreview"), true);
     private final JButton previewButton =
             new JButton(com.diosaraiva.archutils.i18n.I18n.get("input.preview"));
-    private final javax.swing.border.TitledBorder titledBorder =
-            BorderFactory.createTitledBorder(com.diosaraiva.archutils.i18n.I18n.get("input.title"));
     private final UndoManager undoManager = new UndoManager();
     private final List<Runnable> undoStateListeners = new ArrayList<>();
+
+    private JPanel samplesPanel;
+    private JScrollPane editorScroll;
+    private JPanel controlsBar;
 
     public PlantUmlInputPanel() {
         sampleCombo = new JComboBox<>(DiagramSample.values());
@@ -53,46 +52,31 @@ public class PlantUmlInputPanel extends JPanel {
     }
 
     private void initComponents() {
-        setLayout(new GridBagLayout());
-        setBorder(titledBorder);
-        GridBagConstraints gbc = createGbc();
-
-        gbc.gridwidth = 1;
-        gbc.weightx = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(samplesLabel, gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        samplesPanel = new JPanel(new BorderLayout(6, 0));
+        samplesPanel.add(samplesLabel, BorderLayout.WEST);
         sampleCombo.addActionListener(e -> loadSample());
-        add(sampleCombo, gbc);
+        samplesPanel.add(sampleCombo, BorderLayout.CENTER);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
         codeTextArea.setLineWrap(true);
         codeTextArea.setWrapStyleWord(false);
-        JScrollPane scrollPane = new JScrollPane(codeTextArea);
+        editorScroll = new JScrollPane(codeTextArea);
+        editorScroll.setRowHeaderView(new TextLineNumber(codeTextArea));
 
-        scrollPane.setRowHeaderView(new TextLineNumber(codeTextArea));
-        add(scrollPane, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        gbc.weightx = 1.0;
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(createBottomBar(), gbc);
+        controlsBar = createBottomBar();
 
         initUndo();
         initCountLabel();
         loadSample();
     }
+
+    /** Header of the input section: the "Samples" label and selector. */
+    public JComponent getSamplesComponent() { return samplesPanel; }
+
+    /** Center of the input section: the code editor. */
+    public JComponent getEditorComponent() { return editorScroll; }
+
+    /** Controls placed below the input text box (auto-preview, counts, preview). */
+    public JComponent getControlsComponent() { return controlsBar; }
 
     private JPanel createBottomBar() {
         JPanel bar = new JPanel(new BorderLayout(8, 0));
@@ -128,7 +112,6 @@ public class PlantUmlInputPanel extends JPanel {
     }
 
     public void applyLanguage() {
-        titledBorder.setTitle(com.diosaraiva.archutils.i18n.I18n.get("input.title"));
         samplesLabel.setText(com.diosaraiva.archutils.i18n.I18n.get("input.samples"));
         autoPreviewCheck.setText(com.diosaraiva.archutils.i18n.I18n.get("input.autoPreview"));
         previewButton.setText(com.diosaraiva.archutils.i18n.I18n.get("input.preview"));
@@ -168,16 +151,6 @@ public class PlantUmlInputPanel extends JPanel {
 
         undoManager.discardAllEdits();
         fireUndoStateChanged();
-    }
-
-    private GridBagConstraints createGbc() {
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(4, 4, 4, 4);
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        return gbc;
     }
 
     public String getCode() { return codeTextArea.getText().trim(); }

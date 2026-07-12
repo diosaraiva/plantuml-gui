@@ -15,19 +15,17 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.border.TitledBorder;
 
 import com.diosaraiva.archutils.i18n.I18n;
 import com.diosaraiva.archutils.ui.SwingUtils;
 
-public class DiagramPreviewPanel extends JPanel {
+public class PlantUmlPreviewPanel extends JPanel {
 
     private static final String PNG_CARD = "png";
     private static final String PUML_CARD = "puml";
@@ -44,15 +42,15 @@ public class DiagramPreviewPanel extends JPanel {
     private final JTextArea pumlArea;
     private final JLabel msgLabel;
     private final JLabel zoomLabel;
-    private final TitledBorder titledBorder =
-            BorderFactory.createTitledBorder(I18n.get("preview.title"));
+
+    private JPanel zoomBar;
 
     private final JButton zoomInBtn = SwingUtils.createToolButton("+", I18n.get("preview.zoom.in"));
     private final JButton zoomOutBtn = SwingUtils.createToolButton("\u2212", I18n.get("preview.zoom.out"));
     private final JButton fitBtn = SwingUtils.createToolButton("Fit", I18n.get("preview.zoom.fit"));
     private final JButton resetBtn = SwingUtils.createToolButton("1:1", I18n.get("preview.zoom.reset"));
 
-    public DiagramPreviewPanel() {
+    public PlantUmlPreviewPanel() {
         cards = new CardLayout();
         cardPanel = new JPanel(cards);
         imagePanel = new ImagePanel();
@@ -65,9 +63,8 @@ public class DiagramPreviewPanel extends JPanel {
 
     private void initComponents() {
         setLayout(new BorderLayout());
-        setBorder(titledBorder);
 
-        var zoomBar = SwingUtils.createToolBar();
+        zoomBar = SwingUtils.createToolBar();
         zoomLabel.setFont(zoomLabel.getFont().deriveFont(Font.PLAIN, 11f));
         zoomBar.add(zoomOutBtn);
         zoomBar.add(zoomLabel);
@@ -88,12 +85,9 @@ public class DiagramPreviewPanel extends JPanel {
             }
         });
 
-        var pngCard = new JPanel(new BorderLayout());
-        pngCard.add(zoomBar, BorderLayout.NORTH);
         imageScroll.getVerticalScrollBar().setUnitIncrement(16);
         imageScroll.getHorizontalScrollBar().setUnitIncrement(16);
-        pngCard.add(imageScroll, BorderLayout.CENTER);
-        cardPanel.add(pngCard, PNG_CARD);
+        cardPanel.add(imageScroll, PNG_CARD);
 
         pumlArea.setEditable(false);
         pumlArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
@@ -103,11 +97,12 @@ public class DiagramPreviewPanel extends JPanel {
         cardPanel.add(msgLabel, MSG_CARD);
 
         add(cardPanel, BorderLayout.CENTER);
+        add(zoomBar, BorderLayout.SOUTH);
+
         showMessage(I18n.get("preview.none"));
     }
 
     public void applyLanguage() {
-        titledBorder.setTitle(I18n.get("preview.title"));
         zoomInBtn.setToolTipText(I18n.get("preview.zoom.in"));
         zoomOutBtn.setToolTipText(I18n.get("preview.zoom.out"));
         fitBtn.setToolTipText(I18n.get("preview.zoom.fit"));

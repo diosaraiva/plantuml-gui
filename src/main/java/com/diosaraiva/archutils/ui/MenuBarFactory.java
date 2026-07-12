@@ -27,7 +27,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.diosaraiva.archutils.AppSettings;
 import com.diosaraiva.archutils.i18n.I18n;
-import com.diosaraiva.archutils.plantuml.ui.JavaConsoleWindow;
+import com.diosaraiva.archutils.plantuml.ui.PlantUmlConsolePanel;
 
 public final class MenuBarFactory {
 
@@ -137,7 +137,7 @@ public final class MenuBarFactory {
         menu.add(createLanguageMenu(frame));
         menu.addSeparator();
         menu.add(menuItem(I18n.get("menu.settings.console"), 0, null,
-                e -> JavaConsoleWindow.open()));
+                e -> PlantUmlConsolePanel.open()));
         return menu;
     }
 
@@ -160,7 +160,7 @@ public final class MenuBarFactory {
     private static JMenu createWindowMenu(MainFrame frame) {
         var windowMenu = menu(I18n.get("menu.settings.window"), KeyEvent.VK_W);
         var labels = RESOLUTIONS.stream().map(Resolution::label).toList();
-        var current = frame.getWidth() + " x " + frame.getHeight();
+        var current = frame.getSelectedWidth() + " x " + frame.getSelectedHeight();
         addRadioGroup(windowMenu, labels, labels.contains(current) ? current : null,
                 label -> RESOLUTIONS.stream()
                         .filter(r -> r.label().equals(label))

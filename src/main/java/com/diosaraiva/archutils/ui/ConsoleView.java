@@ -50,12 +50,15 @@ public final class ConsoleView extends JPanel {
         var toolBar = SwingUtils.createToolBar();
         toolBar.add(refreshButton);
         toolBar.add(cleanButton);
-        add(toolBar, BorderLayout.NORTH);
 
         area.setEditable(false);
         area.setLineWrap(true);
         area.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         add(new JScrollPane(area), BorderLayout.CENTER);
+        // Controls sit below the text box so the console mirrors the ConsoleCard
+        // section layout (middle text box + bottom controls), keeping the Console
+        // and Preview middle boxes aligned with the input editor.
+        add(toolBar, BorderLayout.SOUTH);
     }
 
     public void applyLanguage() {

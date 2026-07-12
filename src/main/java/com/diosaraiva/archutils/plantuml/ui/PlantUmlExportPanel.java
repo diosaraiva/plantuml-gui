@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 
 import com.diosaraiva.archutils.i18n.I18n;
 
-public class ExportDiagramPanel extends JPanel {
+public class PlantUmlExportPanel extends JPanel {
 
     private static final Map<String, String> FORMATS = new LinkedHashMap<>();
     static {
@@ -40,7 +40,7 @@ public class ExportDiagramPanel extends JPanel {
     private final javax.swing.border.TitledBorder titledBorder =
             BorderFactory.createTitledBorder(I18n.get("export.panel.title"));
 
-    public ExportDiagramPanel(String defaultTargetFile) {
+    public PlantUmlExportPanel(String defaultTargetFile) {
         targetFileField = new JTextField(20);
         targetFileField.setText(defaultTargetFile);
         browseButton = new JButton(I18n.get("export.browse"));

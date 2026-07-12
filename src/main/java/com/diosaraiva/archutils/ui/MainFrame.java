@@ -16,9 +16,15 @@ import com.diosaraiva.archutils.plantuml.ui.PlantUmlPanel;
 
 public class MainFrame extends JFrame {
 
+    private static final int DEFAULT_WIDTH = 1024;
+    private static final int DEFAULT_HEIGHT = 600;
+
     private final JPanel contentPanel;
     private final PlantUmlPanel plantUmlPanel;
     private final CsvPanel csvPanel;
+
+    private int selectedWidth = DEFAULT_WIDTH;
+    private int selectedHeight = DEFAULT_HEIGHT;
 
     public MainFrame() {
         super(I18n.get("app.title"));
@@ -30,7 +36,7 @@ public class MainFrame extends JFrame {
 
     private void initComponents() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(1024, 600));
+        setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
         setLayout(new BorderLayout());
 
         contentPanel.add(plantUmlPanel, BorderLayout.CENTER);
@@ -64,9 +70,21 @@ public class MainFrame extends JFrame {
                 .getMaximumWindowBounds();
         int w = Math.min(width, screen.width);
         int h = Math.min(height, screen.height);
+        selectedWidth = width;
+        selectedHeight = height;
         setSize(w, h);
         setLocationRelativeTo(null);
+        // Rebuild the menu so the Window menu reflects the new selection.
+        setJMenuBar(MenuBarFactory.create(this));
+        revalidate();
+        repaint();
     }
+
+    /** Width of the resolution currently chosen from the Window menu. */
+    public int getSelectedWidth() { return selectedWidth; }
+
+    /** Height of the resolution currently chosen from the Window menu. */
+    public int getSelectedHeight() { return selectedHeight; }
 
     public PlantUmlPanel getPlantUmlPanel() { return plantUmlPanel; }
 

@@ -1,14 +1,11 @@
 package com.diosaraiva.archutils.plantuml.ui;
 
 import java.awt.BorderLayout;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -27,19 +24,20 @@ public class PlantUmlPanel extends JPanel {
     private static final int PREVIEW_DELAY_MS = 800;
 
     private final PlantUmlInputPanel inputPanel;
-    private final ExportDiagramPanel exportPanel;
-    private final DiagramPreviewPanel previewPanel;
+    private final PlantUmlExportPanel exportPanel;
+    private final PlantUmlPreviewPanel previewPanel;
     private final ConsoleView console;
     private final JTabbedPane tabs = new JTabbedPane();
     private final Timer previewTimer;
+    private PlantUmlLayoutPanel card;
 
     private record ExportResult(File output, File preview) { }
 
     public PlantUmlPanel() {
         var defaultTarget = resolveDefaultTarget("png");
         inputPanel = new PlantUmlInputPanel();
-        exportPanel = new ExportDiagramPanel(defaultTarget);
-        previewPanel = new DiagramPreviewPanel();
+        exportPanel = new PlantUmlExportPanel(defaultTarget);
+        previewPanel = new PlantUmlPreviewPanel();
         console = new ConsoleView("console.title", "console.refresh.tooltip",
                 "console.clean.tooltip", this::onConsoleRefresh, null);
 
@@ -56,16 +54,14 @@ public class PlantUmlPanel extends JPanel {
         tabs.addTab(I18n.get("tab.preview"), previewPanel);
         tabs.addTab(I18n.get("tab.console"), console);
 
-        var splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, inputPanel, tabs);
-        splitPane.setResizeWeight(0.35);
-        splitPane.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                splitPane.setDividerLocation(0.35);
-                splitPane.removeComponentListener(this);
-            }
-        });
-        add(splitPane, BorderLayout.CENTER);
+        card = new PlantUmlLayoutPanel(I18n.get("card.plantuml.title"));
+        card.setInput(inputPanel.getSamplesComponent(),
+                inputPanel.getEditorComponent(),
+                inputPanel.getControlsComponent());
+        card.setOutput(null, tabs, null);
+        card.setInputWeight(0.4);
+
+        add(card, BorderLayout.CENTER);
         add(exportPanel, BorderLayout.SOUTH);
 
         exportPanel.onExportDiagram(e -> onExportDiagram());
@@ -79,7 +75,11 @@ public class PlantUmlPanel extends JPanel {
             if (inputPanel.isAutoPreviewEnabled()) { onLivePreview(); }
         });
 
-        SwingUtilities.invokeLater(this::onLivePreview);
+        SwingUtilities.invokeLater(() -> {
+            onLivePreview();
+            // Start the PlantUML console capturing output in the background at launch.
+            runBackgroundConsoleCheck();
+        });
     }
 
     private void restartPreviewTimer() {
@@ -141,6 +141,11 @@ public class PlantUmlPanel extends JPanel {
                     console.appendBlock(I18n.get("console.compile.error"), String.valueOf(ex.getMessage()));
                     console.setRefreshEnabled(true);
                 });
+    }
+
+    /** Runs a background PlantUML compilation so its output is captured in the console at launch. */
+    public void runBackgroundConsoleCheck() {
+        onConsoleRefresh();
     }
 
     private void onFormatChanged() {
@@ -244,6 +249,7 @@ public class PlantUmlPanel extends JPanel {
     }
 
     public void applyLanguage() {
+        card.setTitle(I18n.get("card.plantuml.title"));
         tabs.setTitleAt(0, I18n.get("tab.preview"));
         tabs.setTitleAt(1, I18n.get("tab.console"));
         inputPanel.applyLanguage();
