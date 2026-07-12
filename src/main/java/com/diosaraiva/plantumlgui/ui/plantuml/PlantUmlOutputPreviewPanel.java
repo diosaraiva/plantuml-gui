@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.ui;
+package com.diosaraiva.plantumlgui.ui.plantuml;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -23,6 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import com.diosaraiva.plantumlgui.util.I18n;
+import com.diosaraiva.plantumlgui.util.SwingUtils;
 
 public class PlantUmlOutputPreviewPanel extends JPanel {
 

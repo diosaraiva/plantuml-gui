@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.plantuml;
+package com.diosaraiva.plantumlgui.service;
 
 import java.io.File;
 import java.io.IOException;

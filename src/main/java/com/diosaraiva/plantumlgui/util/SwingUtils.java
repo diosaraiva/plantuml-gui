@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.ui;
+package com.diosaraiva.plantumlgui.util;
 
 import java.awt.Component;
 import java.awt.Desktop;

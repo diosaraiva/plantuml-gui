@@ -1,7 +1,7 @@
-package com.diosaraiva.plantumlgui.ui;
+package com.diosaraiva.plantumlgui.ui.main;
 
-import static com.diosaraiva.plantumlgui.ui.SwingUtils.menuItem;
-import static com.diosaraiva.plantumlgui.ui.SwingUtils.menuShortcut;
+import static com.diosaraiva.plantumlgui.util.SwingUtils.menuItem;
+import static com.diosaraiva.plantumlgui.util.SwingUtils.menuShortcut;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.event.InputEvent;
@@ -26,7 +26,10 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.diosaraiva.plantumlgui.AppSettings;
+import com.diosaraiva.plantumlgui.ui.other.AboutDialog;
+import com.diosaraiva.plantumlgui.ui.plantuml.PlantUmlOutputConsolePanel;
 import com.diosaraiva.plantumlgui.util.I18n;
+import com.diosaraiva.plantumlgui.util.SwingUtils;
 
 public final class MenuBarFactory {
 

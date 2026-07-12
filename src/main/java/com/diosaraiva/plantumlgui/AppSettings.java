@@ -8,7 +8,7 @@ import com.diosaraiva.plantumlgui.util.I18n;
 public final class AppSettings {
 
     private static final Preferences PREFS =
-            Preferences.userRoot().node("com/diosaraiva/archutils");
+            Preferences.userRoot().node("com/diosaraiva/plantumlgui");
 
     private static final String KEY_LANGUAGE = "language";
 

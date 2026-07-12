@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.ui;
+package com.diosaraiva.plantumlgui.ui.plantuml;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -22,7 +22,9 @@ import javax.swing.KeyStroke;
 import javax.swing.event.DocumentListener;
 import javax.swing.undo.UndoManager;
 
-import com.diosaraiva.plantumlgui.util.SampleLoader;
+import com.diosaraiva.plantumlgui.service.SampleLoader;
+import com.diosaraiva.plantumlgui.util.SwingUtils;
+import com.diosaraiva.plantumlgui.util.TextLineNumber;
 
 public class PlantUmlInputPanel extends JPanel {
 

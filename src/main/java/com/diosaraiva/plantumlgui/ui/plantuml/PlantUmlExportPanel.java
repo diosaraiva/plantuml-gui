@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.ui;
+package com.diosaraiva.plantumlgui.ui.plantuml;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

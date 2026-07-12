@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.ui;
+package com.diosaraiva.plantumlgui.ui.plantuml;
 
 import java.awt.BorderLayout;
 import java.io.File;
@@ -10,12 +10,14 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import com.diosaraiva.plantumlgui.archimate.PlantUmlArchimateConverter;
-import com.diosaraiva.plantumlgui.plantuml.PlantUmlExporter;
-import com.diosaraiva.plantumlgui.plantuml.PlantUmlFormat;
-import com.diosaraiva.plantumlgui.plantuml.PlantUmlRenderer;
-import com.diosaraiva.plantumlgui.util.Background;
+import com.diosaraiva.plantumlgui.Background;
+import com.diosaraiva.plantumlgui.service.PlantUmlArchimateConverter;
+import com.diosaraiva.plantumlgui.service.PlantUmlExporter;
+import com.diosaraiva.plantumlgui.service.PlantUmlFormat;
+import com.diosaraiva.plantumlgui.service.PlantUmlRenderer;
+import com.diosaraiva.plantumlgui.ui.other.ConsoleView;
 import com.diosaraiva.plantumlgui.util.I18n;
+import com.diosaraiva.plantumlgui.util.SwingUtils;
 
 public class PlantUmlPanel extends JPanel {
 

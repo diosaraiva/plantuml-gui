@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.ui;
+package com.diosaraiva.plantumlgui.ui.main;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import com.diosaraiva.plantumlgui.ui.plantuml.PlantUmlPanel;
 import com.diosaraiva.plantumlgui.util.I18n;
 
 public class MainFrame extends JFrame {

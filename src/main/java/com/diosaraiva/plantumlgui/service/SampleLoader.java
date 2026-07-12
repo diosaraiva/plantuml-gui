@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.util;
+package com.diosaraiva.plantumlgui.service;
 
 import java.io.BufferedReader;
 import java.io.File;

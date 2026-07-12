@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.util;
+package com.diosaraiva.plantumlgui;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;

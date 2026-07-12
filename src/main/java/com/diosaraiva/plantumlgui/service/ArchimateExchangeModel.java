@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.archimate;
+package com.diosaraiva.plantumlgui.service;
 
 import java.io.File;
 import java.io.IOException;

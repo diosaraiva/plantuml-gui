@@ -6,9 +6,9 @@ import java.nio.file.Path;
 
 import javax.swing.SwingUtilities;
 
-import com.diosaraiva.plantumlgui.plantuml.PlantUmlConsole;
-import com.diosaraiva.plantumlgui.ui.MainFrame;
-import com.diosaraiva.plantumlgui.ui.PlantUmlOutputConsolePanel;
+import com.diosaraiva.plantumlgui.service.PlantUmlConsole;
+import com.diosaraiva.plantumlgui.ui.main.MainFrame;
+import com.diosaraiva.plantumlgui.ui.plantuml.PlantUmlOutputConsolePanel;
 import com.diosaraiva.plantumlgui.util.I18n;
 
 public class Main {
@@ -17,7 +17,7 @@ public class Main {
             Path.of(System.getProperty("user.dir"), "temp");
 
     public static void main(String[] args) {
-        System.setProperty("apple.awt.application.name", "Arch Utils");
+        System.setProperty("apple.awt.application.name", "PlantUML GUI");
 
         PlantUmlConsole.global().install();
 

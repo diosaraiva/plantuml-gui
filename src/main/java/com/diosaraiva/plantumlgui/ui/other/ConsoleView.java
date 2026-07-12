@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.ui;
+package com.diosaraiva.plantumlgui.ui.other;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import com.diosaraiva.plantumlgui.util.I18n;
+import com.diosaraiva.plantumlgui.util.SwingUtils;
 
 public final class ConsoleView extends JPanel {
 

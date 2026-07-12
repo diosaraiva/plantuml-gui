@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.archimate;
+package com.diosaraiva.plantumlgui.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.ui;
+package com.diosaraiva.plantumlgui.ui.plantuml;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,7 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import com.diosaraiva.plantumlgui.plantuml.PlantUmlConsole;
+import com.diosaraiva.plantumlgui.service.PlantUmlConsole;
+import com.diosaraiva.plantumlgui.ui.other.ConsoleView;
 import com.diosaraiva.plantumlgui.util.I18n;
 
 public final class PlantUmlOutputConsolePanel extends JFrame {

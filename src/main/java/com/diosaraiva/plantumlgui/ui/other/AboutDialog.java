@@ -1,4 +1,4 @@
-package com.diosaraiva.plantumlgui.ui;
+package com.diosaraiva.plantumlgui.ui.other;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -15,10 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.event.HyperlinkEvent;
 
 import com.diosaraiva.plantumlgui.util.I18n;
+import com.diosaraiva.plantumlgui.util.SwingUtils;
 
 public class AboutDialog extends JDialog {
 
-    private static final String REPO_URL = "https://github.com/diosaraiva/arch-utils";
+    private static final String REPO_URL = "https://github.com/diosaraiva/plantuml-gui";
     private static final String VERSION = "1.1.1";
 
     public AboutDialog(JFrame parent) {
