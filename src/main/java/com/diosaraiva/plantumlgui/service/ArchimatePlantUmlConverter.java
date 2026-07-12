@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class PlantUmlArchimateConverter {
+public final class ArchimatePlantUmlConverter {
 
     private static final Pattern ELEMENT = Pattern.compile(
             "^\\s*([A-Z][A-Za-z]+)_([A-Za-z]+)\\s*\\(\\s*([A-Za-z0-9_]+)\\s*,\\s*\"([^\"]*)\"");
@@ -86,7 +86,7 @@ public final class PlantUmlArchimateConverter {
         LAYER_OF.put(macro, layer);
     }
 
-    private PlantUmlArchimateConverter() { }
+    private ArchimatePlantUmlConverter() { }
 
     public record Result(ArchimateExchangeModel model, List<String> warnings) { }
 

@@ -251,7 +251,7 @@ public class PlantUmlInputPanel extends JPanel {
         UTILS_SPRITES("List Available [sprites]", "util_sprites.puml"),
         UTILS_COLORS("List Available [colors]", "util_colors.puml"),
         UTILS_OPENICONIC("List Available [icons]", "util_openiconic.puml"),
-        UTILS_CREOLE("List Available [creole]", "creole.puml");
+        UTILS_EMOJI("List Available [emoji]", "util_emoji.puml");
 
         private final String displayName;
         private final String fileName;

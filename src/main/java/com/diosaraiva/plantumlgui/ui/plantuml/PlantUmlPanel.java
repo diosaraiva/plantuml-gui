@@ -11,7 +11,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import com.diosaraiva.plantumlgui.Background;
-import com.diosaraiva.plantumlgui.service.PlantUmlArchimateConverter;
+import com.diosaraiva.plantumlgui.service.ArchimatePlantUmlConverter;
 import com.diosaraiva.plantumlgui.service.PlantUmlExporter;
 import com.diosaraiva.plantumlgui.service.PlantUmlFormat;
 import com.diosaraiva.plantumlgui.service.PlantUmlRenderer;
@@ -200,7 +200,7 @@ public class PlantUmlPanel extends JPanel {
 
         Background.run(
                 () -> {
-                    var result = PlantUmlArchimateConverter.convert(code, modelName);
+                    var result = ArchimatePlantUmlConverter.convert(code, modelName);
                     result.model().writeTo(output);
                     return result;
                 },
