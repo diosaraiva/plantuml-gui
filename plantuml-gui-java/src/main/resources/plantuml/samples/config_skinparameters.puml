@@ -1,0 +1,644 @@
+@startuml
+!pragma layout smetana
+title PlantUML Configuration Schema
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam class {
+    BackgroundColor White
+    BorderColor #666666
+    ArrowColor #666666
+    AttributeFontSize 11
+    FontSize 13
+}
+skinparam package {
+    BackgroundColor #F8F8F8
+    BorderColor #AAAAAA
+    FontSize 14
+}
+
+' ============================================================
+' 1. ACTIVITY / CONTROL / STATE
+' ============================================================
+
+package "Activity / Control / State" {
+
+class "Activity" as Activity {
+    == Activity ==
+
+    ActivityBackgroundColor : #HEX
+    ActivityBorderColor : #HEX
+    ActivityBorderThickness : > 0
+    ActivityDiamondFontColor : #HEX
+    ActivityDiamondFontName : FontName
+    ActivityDiamondFontSize : 0..∞
+    ActivityDiamondFontStyle : FontStyle
+    ActivityFontColor : #HEX
+    ActivityFontName : FontName
+    ActivityFontSize : 0..∞
+    ActivityFontStyle : FontStyle
+
+    == Condition ==
+
+    ConditionEndStyle : ConditionEndStyle
+    ConditionStyle : ConditionStyle
+
+    == State ==
+
+    StateAttributeFontColor : #HEX
+    StateAttributeFontName : FontName
+    StateAttributeFontSize : 0..∞
+    StateAttributeFontStyle : FontStyle
+    StateBorderColor : #HEX
+    StateFontColor : #HEX
+    StateFontName : FontName
+    StateFontSize : 0..∞
+    StateFontStyle : FontStyle
+    StateMessageAlignment : TextAlignment
+
+    == Partition ==
+
+    PartitionBorderThickness : > 0
+    PartitionFontColor : #HEX
+    PartitionFontName : FontName
+    PartitionFontSize : 0..∞
+    PartitionFontStyle : FontStyle
+
+    == Swimlane ==
+
+    SwimlaneBorderThickness : > 0
+    SwimlaneTitleFontColor : #HEX
+    SwimlaneTitleFontName : FontName
+    SwimlaneTitleFontSize : 0..∞
+    SwimlaneTitleFontStyle : FontStyle
+    SwimlaneWidth : > 0
+    SwimlaneWrapTitleWidth : > 0
+}
+}
+
+' ============================================================
+' 2. UML ELEMENTS
+' ============================================================
+
+package "UML Elements" {
+
+class "Actors / Nodes" as ActorsNodes {
+    == Actor ==
+
+    ActorBackgroundColor : #HEX
+    ActorBorderColor : #HEX
+    ActorFontColor : #HEX
+    ActorFontName : FontName
+    ActorFontSize : 0..∞
+    ActorFontStyle : FontStyle
+    ActorStereotypeFontColor : #HEX
+    ActorStereotypeFontName : FontName
+    ActorStereotypeFontSize : 0..∞
+    ActorStereotypeFontStyle : FontStyle
+
+    == Agent ==
+
+    AgentBorderThickness : > 0
+    AgentFontColor : #HEX
+    AgentFontName : FontName
+    AgentFontSize : 0..∞
+    AgentFontStyle : FontStyle
+    AgentStereotypeFontColor : #HEX
+    AgentStereotypeFontName : FontName
+    AgentStereotypeFontSize : 0..∞
+    AgentStereotypeFontStyle : FontStyle
+
+    == Person ==
+
+    PersonBorderThickness : > 0
+    PersonFontColor : #HEX
+    PersonFontName : FontName
+    PersonFontSize : 0..∞
+    PersonFontStyle : FontStyle
+    PersonStereotypeFontColor : #HEX
+    PersonStereotypeFontName : FontName
+    PersonStereotypeFontSize : 0..∞
+    PersonStereotypeFontStyle : FontStyle
+
+    == Node ==
+
+    NodeFontColor : #HEX
+    NodeFontName : FontName
+    NodeFontSize : 0..∞
+    NodeFontStyle : FontStyle
+    NodeStereotypeFontColor : #HEX
+    NodeStereotypeFontName : FontName
+    NodeStereotypeFontSize : 0..∞
+    NodeStereotypeFontStyle : FontStyle
+}
+
+class "Structural" as Structural {
+    == Class ==
+
+    ClassBackgroundColor : #HEX
+    ClassBorderColor : #HEX
+    ClassBorderThickness : > 0
+    ClassFontColor : #HEX
+    ClassFontName : FontName
+    ClassFontSize : 0..∞
+    ClassFontStyle : FontStyle
+    ClassStereotypeFontColor : #HEX
+    ClassStereotypeFontName : FontName
+    ClassStereotypeFontSize : 0..∞
+    ClassStereotypeFontStyle : FontStyle
+
+    == Class Attribute ==
+
+    ClassAttributeFontColor : #HEX
+    ClassAttributeFontName : FontName
+    ClassAttributeFontSize : 0..∞
+    ClassAttributeFontStyle : FontStyle
+    ClassAttributeIconSize : 0..∞
+
+    == Object ==
+
+    ObjectAttributeFontColor : #HEX
+    ObjectAttributeFontName : FontName
+    ObjectAttributeFontSize : 0..∞
+    ObjectAttributeFontStyle : FontStyle
+    ObjectBorderThickness : > 0
+    ObjectFontColor : #HEX
+    ObjectFontName : FontName
+    ObjectFontSize : 0..∞
+    ObjectFontStyle : FontStyle
+    ObjectStereotypeFontColor : #HEX
+    ObjectStereotypeFontName : FontName
+    ObjectStereotypeFontSize : 0..∞
+    ObjectStereotypeFontStyle : FontStyle
+
+    == Entity ==
+
+    EntityFontColor : #HEX
+    EntityFontName : FontName
+    EntityFontSize : 0..∞
+    EntityFontStyle : FontStyle
+    EntityStereotypeFontColor : #HEX
+    EntityStereotypeFontName : FontName
+    EntityStereotypeFontSize : 0..∞
+    EntityStereotypeFontStyle : FontStyle
+}
+
+class "Other Elements" as OtherElements {
+    == Artifact ==
+
+    ArtifactFontColor : #HEX
+    ArtifactFontName : FontName
+    ArtifactFontSize : 0..∞
+    ArtifactFontStyle : FontStyle
+    ArtifactStereotypeFontColor : #HEX
+    ArtifactStereotypeFontName : FontName
+    ArtifactStereotypeFontSize : 0..∞
+    ArtifactStereotypeFontStyle : FontStyle
+
+    == Component ==
+
+    ComponentBorderThickness : > 0
+    ComponentFontColor : #HEX
+    ComponentFontName : FontName
+    ComponentFontSize : 0..∞
+    ComponentFontStyle : FontStyle
+    ComponentStereotypeFontColor : #HEX
+    ComponentStereotypeFontName : FontName
+    ComponentStereotypeFontSize : 0..∞
+    ComponentStereotypeFontStyle : FontStyle
+    ComponentStyle : ComponentStyle
+
+    == Database ==
+
+    DatabaseFontColor : #HEX
+    DatabaseFontName : FontName
+    DatabaseFontSize : 0..∞
+    DatabaseFontStyle : FontStyle
+    DatabaseStereotypeFontColor : #HEX
+    DatabaseStereotypeFontName : FontName
+    DatabaseStereotypeFontSize : 0..∞
+    DatabaseStereotypeFontStyle : FontStyle
+
+    == Usecase ==
+
+    UsecaseBorderThickness : > 0
+    UsecaseFontColor : #HEX
+    UsecaseFontName : FontName
+    UsecaseFontSize : 0..∞
+    UsecaseFontStyle : FontStyle
+    UsecaseStereotypeFontColor : #HEX
+    UsecaseStereotypeFontName : FontName
+    UsecaseStereotypeFontSize : 0..∞
+    UsecaseStereotypeFontStyle : FontStyle
+}
+}
+
+' ============================================================
+' 3. OTHER DIAGRAM ELEMENTS
+' ============================================================
+
+package "Diagram Elements" {
+
+class "Containers" as Containers {
+    == Package ==
+
+    PackageBorderThickness : > 0
+    PackageFontColor : #HEX
+    PackageFontName : FontName
+    PackageFontSize : 0..∞
+    PackageFontStyle : FontStyle
+    PackageStyle : PackageStyle
+    PackageTitleAlignment : PackageTitleAlignment
+
+    == Rectangle ==
+
+    RectangleBorderThickness : > 0
+    RectangleFontColor : #HEX
+    RectangleFontName : FontName
+    RectangleFontSize : 0..∞
+    RectangleFontStyle : FontStyle
+    RectangleStereotypeFontColor : #HEX
+    RectangleStereotypeFontName : FontName
+    RectangleStereotypeFontSize : 0..∞
+    RectangleStereotypeFontStyle : FontStyle
+
+    == Cloud ==
+
+    CloudFontColor : #HEX
+    CloudFontName : FontName
+    CloudFontSize : 0..∞
+    CloudFontStyle : FontStyle
+    CloudStereotypeFontColor : #HEX
+    CloudStereotypeFontName : FontName
+    CloudStereotypeFontSize : 0..∞
+    CloudStereotypeFontStyle : FontStyle
+}
+
+class "Specialized" as Specialized {
+    == Archimate ==
+
+    ArchimateBorderThickness : > 0
+    ArchimateFontColor : #HEX
+    ArchimateFontName : FontName
+    ArchimateFontSize : 0..∞
+    ArchimateFontStyle : FontStyle
+    ArchimateStereotypeFontColor : #HEX
+    ArchimateStereotypeFontName : FontName
+    ArchimateStereotypeFontSize : 0..∞
+    ArchimateStereotypeFontStyle : FontStyle
+
+    == Card ==
+
+    CardBorderThickness : > 0
+    CardFontColor : #HEX
+    CardFontName : FontName
+    CardFontSize : 0..∞
+    CardFontStyle : FontStyle
+    CardStereotypeFontColor : #HEX
+    CardStereotypeFontName : FontName
+    CardStereotypeFontSize : 0..∞
+    CardStereotypeFontStyle : FontStyle
+
+    == Machine ==
+
+    MachineBackgroundColor : #HEX
+    MachineBorderColor : #HEX
+    MachineBorderThickness : > 0
+    MachineFontColor : #HEX
+    MachineFontName : FontName
+    MachineFontSize : 0..∞
+    MachineFontStyle : FontStyle
+    MachineStereotypeFontColor : #HEX
+    MachineStereotypeFontName : FontName
+    MachineStereotypeFontSize : 0..∞
+    MachineStereotypeFontStyle : FontStyle
+
+    == Queue ==
+
+    QueueBorderThickness : > 0
+    QueueFontColor : #HEX
+    QueueFontName : FontName
+    QueueFontSize : 0..∞
+    QueueFontStyle : FontStyle
+    QueueStereotypeFontColor : #HEX
+    QueueStereotypeFontName : FontName
+    QueueStereotypeFontSize : 0..∞
+    QueueStereotypeFontStyle : FontStyle
+}
+}
+
+' ============================================================
+' 4. SEQUENCE
+' ============================================================
+
+package "Sequence" {
+
+class "Sequence Configuration" as Sequence {
+    SequenceActorBorderThickness : > 0
+    SequenceArrowThickness : > 0
+
+    SequenceBoxBorderColor : #HEX
+    SequenceBoxFontColor : #HEX
+    SequenceBoxFontName : FontName
+    SequenceBoxFontSize : 0..∞
+    SequenceBoxFontStyle : FontStyle
+
+    SequenceDelayFontColor : #HEX
+    SequenceDelayFontName : FontName
+    SequenceDelayFontSize : 0..∞
+    SequenceDelayFontStyle : FontStyle
+
+    SequenceDividerBorderThickness : > 0
+    SequenceDividerFontColor : #HEX
+    SequenceDividerFontName : FontName
+    SequenceDividerFontSize : 0..∞
+    SequenceDividerFontStyle : FontStyle
+
+    SequenceGroupBodyBackgroundColor : #HEX
+    SequenceGroupBorderThickness : > 0
+    SequenceGroupFontColor : #HEX
+    SequenceGroupFontName : FontName
+    SequenceGroupFontSize : 0..∞
+    SequenceGroupFontStyle : FontStyle
+    SequenceGroupHeaderFontColor : #HEX
+    SequenceGroupHeaderFontName : FontName
+    SequenceGroupHeaderFontSize : 0..∞
+    SequenceGroupHeaderFontStyle : FontStyle
+
+    SequenceLifeLineBorderColor : #HEX
+    SequenceLifeLineBorderThickness : > 0
+
+    SequenceMessageAlignment : SequenceMessageAlignment
+    SequenceMessageTextAlignment : SequenceMessageTextAlignment
+
+    SequenceNewpageSeparatorColor : #HEX
+
+    SequenceParticipant : SequenceParticipant
+    SequenceParticipantBorderThickness : > 0
+
+    SequenceReferenceAlignment : SequenceReferenceAlignment
+    SequenceReferenceBackgroundColor : #HEX
+    SequenceReferenceBorderThickness : > 0
+    SequenceReferenceFontColor : #HEX
+    SequenceReferenceFontName : FontName
+    SequenceReferenceFontSize : 0..∞
+    SequenceReferenceFontStyle : FontStyle
+    SequenceReferenceHeaderBackgroundColor : #HEX
+
+    SequenceStereotypeFontColor : #HEX
+    SequenceStereotypeFontName : FontName
+    SequenceStereotypeFontSize : 0..∞
+    SequenceStereotypeFontStyle : FontStyle
+}
+}
+
+' ============================================================
+' 5. TEXT / PRESENTATION
+' ============================================================
+
+package "Text / Presentation" {
+
+class "Text Configuration" as TextConfig {
+    == Arrow ==
+
+    ArrowFontColor : #HEX
+    ArrowFontName : FontName
+    ArrowFontSize : 0..∞
+    ArrowFontStyle : FontStyle
+    ArrowHeadColor : #HEX
+    ArrowLollipopColor : #HEX
+    ArrowMessageAlignment : ArrowMessageAlignment
+    ArrowThickness : > 0
+
+    == Caption ==
+
+    CaptionFontColor : #HEX
+    CaptionFontName : FontName
+    CaptionFontSize : 0..∞
+    CaptionFontStyle : FontStyle
+
+    == Header ==
+
+    HeaderFontColor : #HEX
+    HeaderFontName : FontName
+    HeaderFontSize : 0..∞
+    HeaderFontStyle : FontStyle
+
+    == Footer ==
+
+    FooterFontColor : #HEX
+    FooterFontName : FontName
+    FooterFontSize : 0..∞
+    FooterFontStyle : FontStyle
+
+    == Label ==
+
+    LabelFontColor : #HEX
+    LabelFontName : FontName
+    LabelFontSize : 0..∞
+    LabelFontStyle : FontStyle
+
+    == Title ==
+
+    TitleBorderRoundCorner : 0..∞
+    TitleBorderThickness : > 0
+    TitleFontColor : #HEX
+    TitleFontName : FontName
+    TitleFontSize : 0..∞
+    TitleFontStyle : FontStyle
+
+    == Timing ==
+
+    TimingFontColor : #HEX
+    TimingFontName : FontName
+    TimingFontSize : 0..∞
+    TimingFontStyle : FontStyle
+}
+}
+
+' ============================================================
+' 6. NOTES / LEGEND / PAGE
+' ============================================================
+
+package "Notes / Page" {
+
+class "Documentation" as Documentation {
+    == Note ==
+
+    NoteBackgroundColor : #HEX
+    NoteBorderColor : #HEX
+    NoteBorderThickness : > 0
+    NoteFontColor : #HEX
+    NoteFontName : FontName
+    NoteFontSize : 0..∞
+    NoteFontStyle : FontStyle
+    NoteShadowing : true | false
+    NoteTextAlignment : TextAlignment
+
+    == Legend ==
+
+    LegendBorderThickness : > 0
+    LegendFontColor : #HEX
+    LegendFontName : FontName
+    LegendFontSize : 0..∞
+    LegendFontStyle : FontStyle
+
+    == Page ==
+
+    PageBorderColor : #HEX
+    PageExternalColor : #HEX
+    PageMargin : 0..∞
+
+    == Participant ==
+
+    ParticipantFontColor : #HEX
+    ParticipantFontName : FontName
+    ParticipantFontSize : 0..∞
+    ParticipantFontStyle : FontStyle
+    ParticipantPadding : 0..∞
+}
+}
+
+' ============================================================
+' 7. GLOBAL
+' ============================================================
+
+package "Global Configuration" {
+
+class "Global" as Global {
+    BackgroundColor : #HEX
+
+    BoxPadding : 0..∞
+    ColorArrowSeparationSpace : 0..∞
+    Padding : 0..∞
+
+    DefaultFontColor : #HEX
+    DefaultFontName : FontName
+    DefaultFontSize : 0..∞
+    DefaultFontStyle : FontStyle
+    DefaultMonospacedFontName : FontName
+    DefaultTextAlignment : TextAlignment
+
+    DiagramBorderColor : #HEX
+    DiagramBorderThickness : > 0
+
+    Dpi : > 0
+
+    FixCircleLabelOverlapping : true | false
+
+    GenericDisplay : GenericDisplay
+    Guillemet : true | false
+    Handwritten : true | false
+
+    HyperlinkColor : #HEX
+    HyperlinkUnderline : true | false
+
+    Linetype : Linetype
+
+    MaxAsciiMessageLength : > 0
+    MaxMessageSize : > 0
+    MinClassWidth : > 0
+
+    Monochrome : Monochrome
+
+    Nodesep : 0..∞
+    Ranksep : 0..∞
+
+    PathHoverColor : #HEX
+
+    RoundCorner : 0..∞
+    SameClassWidth : true | false
+
+    Shadowing : true | false
+
+    Style : string
+    SvglinkTarget : SequenceTarget
+
+    TabSize : > 0
+    WrapWidth : > 0
+}
+}
+
+' ============================================================
+' 8. ICONS / REQUIREMENTS / MISC
+' ============================================================
+
+package "Special / Miscellaneous" {
+
+class "Icons" as Icons {
+    IconIEMandatoryColor : #HEX
+    IconPackageBackgroundColor : #HEX
+    IconPackageColor : #HEX
+    IconPrivateBackgroundColor : #HEX
+    IconPrivateColor : #HEX
+    IconProtectedBackgroundColor : #HEX
+    IconProtectedColor : #HEX
+    IconPublicBackgroundColor : #HEX
+    IconPublicColor : #HEX
+}
+
+class "Requirement" as Requirement {
+    RequirementBackgroundColor : #HEX
+    RequirementBorderColor : #HEX
+    RequirementBorderThickness : > 0
+    RequirementFontColor : #HEX
+    RequirementFontName : FontName
+    RequirementFontSize : 0..∞
+    RequirementFontStyle : FontStyle
+    RequirementStereotypeFontColor : #HEX
+    RequirementStereotypeFontName : FontName
+    RequirementStereotypeFontSize : 0..∞
+    RequirementStereotypeFontStyle : FontStyle
+}
+
+class "Specialized" as Misc {
+    BiddableBackgroundColor : #HEX
+    BiddableBorderColor : #HEX
+
+    CircledCharacterFontColor : #HEX
+    CircledCharacterFontName : FontName
+    CircledCharacterFontSize : 0..∞
+    CircledCharacterFontStyle : FontStyle
+    CircledCharacterRadius : 0..∞
+
+    StorageFontColor : #HEX
+    StorageFontName : FontName
+    StorageFontSize : 0..∞
+    StorageFontStyle : FontStyle
+    StorageStereotypeFontColor : #HEX
+    StorageStereotypeFontName : FontName
+    StorageStereotypeFontSize : 0..∞
+    StorageStereotypeFontStyle : FontStyle
+
+    StackFontColor : #HEX
+    StackFontName : FontName
+    StackFontSize : 0..∞
+    StackFontStyle : FontStyle
+    StackStereotypeFontColor : #HEX
+    StackStereotypeFontName : FontName
+    StackStereotypeFontSize : 0..∞
+    StackStereotypeFontStyle : FontStyle
+}
+}
+
+' ============================================================
+' Layout
+' ============================================================
+
+Activity -[hidden]right- ActorsNodes
+ActorsNodes -[hidden]right- Structural
+Structural -[hidden]right- OtherElements
+
+Activity -[hidden]down- Sequence
+ActorsNodes -[hidden]down- TextConfig
+Structural -[hidden]down- Documentation
+OtherElements -[hidden]down- Global
+
+Sequence -[hidden]right- TextConfig
+TextConfig -[hidden]right- Documentation
+
+Global -[hidden]right- Icons
+Icons -[hidden]right- Requirement
+Requirement -[hidden]right- Misc
+
+@enduml

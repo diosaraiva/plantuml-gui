@@ -1,0 +1,64 @@
+@startuml
+!pragma layout smetana
+!include <archimate/Archimate>
+
+title PlantUML — Offline Capabilities
+
+skinparam shadowing false
+skinparam defaultTextAlignment left
+
+legend
+
+|= Native PlantUML |= Diagram Type |
+| sequence | Sequence Diagram |
+| usecase | Use Case Diagram |
+| class | Class Diagram |
+| object | Object Diagram |
+| activity | Activity Diagram |
+| component | Component Diagram |
+| deployment | Deployment Diagram |
+| state | State Diagram |
+| timing | Timing Diagram |
+| json | JSON Diagram |
+| yaml | YAML Diagram |
+| salt | Salt UI Diagram |
+| gantt | Gantt Diagram |
+| mindmap | Mind Map |
+| wbs | Work Breakdown Structure |
+| chronology | Chronology Diagram |
+| regex | Regular Expression Diagram |
+| ebnf | EBNF Diagram |
+| er | Entity Relationship Diagram |
+| ie | Information Engineering Diagram |
+| chart | Chart |
+| files | File / Directory Diagram |
+| ditaa | ASCII-to-Diagram |
+| wireframe | Wireframe / UI Mockup |
+
+|= Standard Library — Architecture |= Library |
+| ArchiMate | ArchiMate Modeling |
+| C4 | C4 Architecture |
+| AWS | AWS Architecture / Icons |
+| Azure | Azure Architecture / Icons |
+| Kubernetes | Kubernetes Architecture / Icons |
+| Cloudinsight | Cloud Infrastructure |
+| Elastic | Elastic Architecture / Icons |
+
+|= Standard Library — Icons |= Library |
+| Material | Material Icons |
+| MaterialDesign | Material Design Icons |
+| FontAwesome | Font Awesome Icons |
+| Bootstrap | Bootstrap Icons |
+| Devicons | Developer Icons |
+| Office | Microsoft Office Icons |
+| Logos | Technology Logos |
+| OpenIconic | OpenIconic Icons |
+| Tupadr3 | Icon Libraries |
+
+|= Standard Library — Modeling / Other |= Library |
+| DomainStory | Domain Story Modeling |
+| Oreilly | O'Reilly Icons |
+
+endlegend
+
+@enduml

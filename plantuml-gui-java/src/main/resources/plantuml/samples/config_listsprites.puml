@@ -1,0 +1,153 @@
+@startuml
+!pragma layout smetana
+!include <archimate/Archimate>
+
+title ArchiMate Sprite / Image Map
+
+skinparam shadowing false
+skinparam defaultTextAlignment left
+
+legend
+|= Sprite |= Rendered Image |
+| access | <$archimate/access> |
+| activity | <$archimate/activity> |
+| actor | <$archimate/actor> |
+| aggregation | <$archimate/aggregation> |
+| application-collaboration | <$archimate/application-collaboration> |
+| application-component | <$archimate/application-component> |
+| application-data-object | <$archimate/application-data-object> |
+| application-dataobject | <$archimate/application-dataobject> |
+| application-event | <$archimate/application-event> |
+| application-function | <$archimate/application-function> |
+| application-interaction | <$archimate/application-interaction> |
+| application-interface | <$archimate/application-interface> |
+| application-process | <$archimate/application-process> |
+| application-service | <$archimate/application-service> |
+| assessment-filled | <$archimate/assessment-filled> |
+| assessment | <$archimate/assessment> |
+| assignment | <$archimate/assignment> |
+| association-unidirect | <$archimate/association-unidirect> |
+| association | <$archimate/association> |
+| business-activity | <$archimate/business-activity> |
+| business-actor | <$archimate/business-actor> |
+| business-collaboration | <$archimate/business-collaboration> |
+| business-contract | <$archimate/business-contract> |
+| business-event | <$archimate/business-event> |
+| business-function | <$archimate/business-function> |
+| business-interaction | <$archimate/business-interaction> |
+| business-interface | <$archimate/business-interface> |
+| business-location | <$archimate/business-location> |
+| business-meaning | <$archimate/business-meaning> |
+| business-object | <$archimate/business-object> |
+| business-process | <$archimate/business-process> |
+| business-product | <$archimate/business-product> |
+| business-representation | <$archimate/business-representation> |
+| business-role | <$archimate/business-role> |
+| business-service | <$archimate/business-service> |
+| business-value | <$archimate/business-value> |
+| collaboration | <$archimate/collaboration> |
+| communication-path | <$archimate/communication-path> |
+| component | <$archimate/component> |
+| composition | <$archimate/composition> |
+| constraint-filled | <$archimate/constraint-filled> |
+| constraint | <$archimate/constraint> |
+| contract | <$archimate/contract> |
+| deliverable-filled | <$archimate/deliverable-filled> |
+| deliverable | <$archimate/deliverable> |
+| device | <$archimate/device> |
+| driver-filled | <$archimate/driver-filled> |
+| driver | <$archimate/driver> |
+| equipment | <$archimate/equipment> |
+| event | <$archimate/event> |
+| facility | <$archimate/facility> |
+| flow | <$archimate/flow> |
+| function | <$archimate/function> |
+| gap-filled | <$archimate/gap-filled> |
+| gap | <$archimate/gap> |
+| goal-filled | <$archimate/goal-filled> |
+| goal | <$archimate/goal> |
+| implementation-deliverable | <$archimate/implementation-deliverable> |
+| implementation-event | <$archimate/implementation-event> |
+| implementation-gap | <$archimate/implementation-gap> |
+| implementation-plateau | <$archimate/implementation-plateau> |
+| implementation-workpackage | <$archimate/implementation-workpackage> |
+| influence | <$archimate/influence> |
+| interaction | <$archimate/interaction> |
+| interface-required | <$archimate/interface-required> |
+| interface-symmetric | <$archimate/interface-symmetric> |
+| interface | <$archimate/interface> |
+| junction-and | <$archimate/junction-and> |
+| junction-or | <$archimate/junction-or> |
+| junction | <$archimate/junction> |
+| location | <$archimate/location> |
+| material | <$archimate/material> |
+| meaning | <$archimate/meaning> |
+| motivation-assessment | <$archimate/motivation-assessment> |
+| motivation-constraint | <$archimate/motivation-constraint> |
+| motivation-driver | <$archimate/motivation-driver> |
+| motivation-goal | <$archimate/motivation-goal> |
+| motivation-meaning | <$archimate/motivation-meaning> |
+| motivation-outcome | <$archimate/motivation-outcome> |
+| motivation-principle | <$archimate/motivation-principle> |
+| motivation-requirement | <$archimate/motivation-requirement> |
+| motivation-stakeholder | <$archimate/motivation-stakeholder> |
+| motivation-value | <$archimate/motivation-value> |
+| network | <$archimate/network> |
+| node | <$archimate/node> |
+| object | <$archimate/object> |
+| other-grouping | <$archimate/other-grouping> |
+| other-location | <$archimate/other-location> |
+| physical-equipment | <$archimate/physical-equipment> |
+| physical-facility | <$archimate/physical-facility> |
+| physical-material | <$archimate/physical-material> |
+| plateau | <$archimate/plateau> |
+| principle-filled | <$archimate/principle-filled> |
+| principle | <$archimate/principle> |
+| process | <$archimate/process> |
+| product | <$archimate/product> |
+| realisation | <$archimate/realisation> |
+| representation | <$archimate/representation> |
+| requirement-filled | <$archimate/requirement-filled> |
+| requirement | <$archimate/requirement> |
+| role | <$archimate/role> |
+| service | <$archimate/service> |
+| serving | <$archimate/serving> |
+| specialisation | <$archimate/specialisation> |
+| specialization | <$archimate/specialization> |
+| stakeholder-filled | <$archimate/stakeholder-filled> |
+| stakeholder | <$archimate/stakeholder> |
+| strategy-capability | <$archimate/strategy-capability> |
+| strategy-course-of-action | <$archimate/strategy-course-of-action> |
+| strategy-courseofaction | <$archimate/strategy-courseofaction> |
+| strategy-resource | <$archimate/strategy-resource> |
+| strategy-valuestream | <$archimate/strategy-valuestream> |
+| system-software | <$archimate/system-software> |
+| technology-artifact | <$archimate/technology-artifact> |
+| technology-collaboration | <$archimate/technology-collaboration> |
+| technology-communication-network | <$archimate/technology-communication-network> |
+| technology-communication-path | <$archimate/technology-communication-path> |
+| technology-communicationnetwork | <$archimate/technology-communicationnetwork> |
+| technology-device | <$archimate/technology-device> |
+| technology-distribution-network | <$archimate/technology-distribution-network> |
+| technology-distributionnetwork | <$archimate/technology-distributionnetwork> |
+| technology-equipment | <$archimate/technology-equipment> |
+| technology-event | <$archimate/technology-event> |
+| technology-facility | <$archimate/technology-facility> |
+| technology-function | <$archimate/technology-function> |
+| technology-interaction | <$archimate/technology-interaction> |
+| technology-interface | <$archimate/technology-interface> |
+| technology-material | <$archimate/technology-material> |
+| technology-node | <$archimate/technology-node> |
+| technology-path | <$archimate/technology-path> |
+| technology-process | <$archimate/technology-process> |
+| technology-service | <$archimate/technology-service> |
+| technology-system-software | <$archimate/technology-system-software> |
+| technology-systemsoftware | <$archimate/technology-systemsoftware> |
+| triggering | <$archimate/triggering> |
+| used-by | <$archimate/used-by> |
+| value | <$archimate/value> |
+| workpackage-filled | <$archimate/workpackage-filled> |
+| workpackage | <$archimate/workpackage> |
+endlegend
+
+@enduml

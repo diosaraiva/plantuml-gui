@@ -1,0 +1,629 @@
+@startuml
+!pragma layout smetana
+!include <archimate/Archimate>
+
+title PlantUML Color Dictionary
+
+skinparam shadowing false
+skinparam rectangle {
+    RoundCorner 0
+    BorderColor transparent
+    FontSize 10
+    Padding 3
+}
+
+left to right direction
+
+' ============================================================
+' COLOR KEY
+'
+' Each entry follows:
+'
+' rectangle "COLOR_NAME" as color_N #COLOR_NAME
+'
+' COLOR_NAME = semantic key
+' #COLOR_NAME = PlantUML rendered color value
+'
+' ============================================================
+
+
+' ============================================================
+' ROW 01
+' ============================================================
+
+rectangle "APPLICATION" as color_001 #APPLICATION
+rectangle "Crimson" as color_002 #Crimson
+rectangle "DeepPink" as color_003 #DeepPink
+rectangle "Indigo" as color_004 #Indigo
+rectangle "LightYellow" as color_005 #LightYellow
+rectangle "Navy" as color_006 #Navy
+rectangle "RoyalBlue" as color_007 #RoyalBlue
+rectangle "Turquoise" as color_008 #Turquoise
+
+color_001 -[hidden]- color_002
+color_002 -[hidden]- color_003
+color_003 -[hidden]- color_004
+color_004 -[hidden]- color_005
+color_005 -[hidden]- color_006
+color_006 -[hidden]- color_007
+color_007 -[hidden]- color_008
+
+
+' ============================================================
+' ROW 02
+' ============================================================
+
+rectangle "AliceBlue" as color_009 #AliceBlue
+rectangle "Cyan" as color_010 #Cyan
+rectangle "DeepSkyBlue" as color_011 #DeepSkyBlue
+rectangle "Ivory" as color_012 #Ivory
+rectangle "Lime" as color_013 #Lime
+rectangle "OldLace" as color_014 #OldLace
+rectangle "STRATEGY" as color_015 #STRATEGY
+rectangle "Violet" as color_016 #Violet
+
+color_009 -[hidden]- color_010
+color_010 -[hidden]- color_011
+color_011 -[hidden]- color_012
+color_012 -[hidden]- color_013
+color_013 -[hidden]- color_014
+color_014 -[hidden]- color_015
+color_015 -[hidden]- color_016
+
+color_001 -[hidden]down- color_009
+color_002 -[hidden]down- color_010
+color_003 -[hidden]down- color_011
+color_004 -[hidden]down- color_012
+color_005 -[hidden]down- color_013
+color_006 -[hidden]down- color_014
+color_007 -[hidden]down- color_015
+color_008 -[hidden]down- color_016
+
+
+' ============================================================
+' ROW 03
+' ============================================================
+
+rectangle "AntiqueWhite" as color_017 #AntiqueWhite
+rectangle "DarkBlue" as color_018 #DarkBlue
+rectangle "DimGray" as color_019 #DimGray
+rectangle "Khaki" as color_020 #Khaki
+rectangle "LimeGreen" as color_021 #LimeGreen
+rectangle "Olive" as color_022 #Olive
+rectangle "SaddleBrown" as color_023 #SaddleBrown
+rectangle "Wheat" as color_024 #Wheat
+
+color_017 -[hidden]- color_018
+color_018 -[hidden]- color_019
+color_019 -[hidden]- color_020
+color_020 -[hidden]- color_021
+color_021 -[hidden]- color_022
+color_022 -[hidden]- color_023
+color_023 -[hidden]- color_024
+
+color_009 -[hidden]down- color_017
+color_010 -[hidden]down- color_018
+color_011 -[hidden]down- color_019
+color_012 -[hidden]down- color_020
+color_013 -[hidden]down- color_021
+color_014 -[hidden]down- color_022
+color_015 -[hidden]down- color_023
+color_016 -[hidden]down- color_024
+
+
+' ============================================================
+' ROW 04
+' ============================================================
+
+rectangle "Aqua" as color_025 #Aqua
+rectangle "DarkCyan" as color_026 #DarkCyan
+rectangle "DimGrey" as color_027 #DimGrey
+rectangle "Lavender" as color_028 #Lavender
+rectangle "Linen" as color_029 #Linen
+rectangle "OliveDrab" as color_030 #OliveDrab
+rectangle "Salmon" as color_031 #Salmon
+rectangle "White" as color_032 #White
+
+color_025 -[hidden]- color_026
+color_026 -[hidden]- color_027
+color_027 -[hidden]- color_028
+color_028 -[hidden]- color_029
+color_029 -[hidden]- color_030
+color_030 -[hidden]- color_031
+color_031 -[hidden]- color_032
+
+color_017 -[hidden]down- color_025
+color_018 -[hidden]down- color_026
+color_019 -[hidden]down- color_027
+color_020 -[hidden]down- color_028
+color_021 -[hidden]down- color_029
+color_022 -[hidden]down- color_030
+color_023 -[hidden]down- color_031
+color_024 -[hidden]down- color_032
+
+
+' ============================================================
+' ROW 05
+' ============================================================
+
+rectangle "Aquamarine" as color_033 #Aquamarine
+rectangle "DarkGoldenRod" as color_034 #DarkGoldenRod
+rectangle "DodgerBlue" as color_035 #DodgerBlue
+rectangle "LavenderBlush" as color_036 #LavenderBlush
+rectangle "MOTIVATION" as color_037 #MOTIVATION
+rectangle "Orange" as color_038 #Orange
+rectangle "SandyBrown" as color_039 #SandyBrown
+rectangle "WhiteSmoke" as color_040 #WhiteSmoke
+
+color_033 -[hidden]- color_034
+color_034 -[hidden]- color_035
+color_035 -[hidden]- color_036
+color_036 -[hidden]- color_037
+color_037 -[hidden]- color_038
+color_038 -[hidden]- color_039
+color_039 -[hidden]- color_040
+
+color_025 -[hidden]down- color_033
+color_026 -[hidden]down- color_034
+color_027 -[hidden]down- color_035
+color_028 -[hidden]down- color_036
+color_029 -[hidden]down- color_037
+color_030 -[hidden]down- color_038
+color_031 -[hidden]down- color_039
+color_032 -[hidden]down- color_040
+
+
+' ============================================================
+' ROW 06
+' ============================================================
+
+rectangle "Azure" as color_041 #Azure
+rectangle "DarkGray" as color_042 #DarkGray
+rectangle "FireBrick" as color_043 #FireBrick
+rectangle "LawnGreen" as color_044 #LawnGreen
+rectangle "Magenta" as color_045 #Magenta
+rectangle "OrangeRed" as color_046 #OrangeRed
+rectangle "SeaGreen" as color_047 #SeaGreen
+rectangle "Yellow" as color_048 #Yellow
+
+color_041 -[hidden]- color_042
+color_042 -[hidden]- color_043
+color_043 -[hidden]- color_044
+color_044 -[hidden]- color_045
+color_045 -[hidden]- color_046
+color_046 -[hidden]- color_047
+color_047 -[hidden]- color_048
+
+color_033 -[hidden]down- color_041
+color_034 -[hidden]down- color_042
+color_035 -[hidden]down- color_043
+color_036 -[hidden]down- color_044
+color_037 -[hidden]down- color_045
+color_038 -[hidden]down- color_046
+color_039 -[hidden]down- color_047
+color_040 -[hidden]down- color_048
+
+
+' ============================================================
+' ROW 07
+' ============================================================
+
+rectangle "BUSINESS" as color_049 #BUSINESS
+rectangle "DarkGreen" as color_050 #DarkGreen
+rectangle "FloralWhite" as color_051 #FloralWhite
+rectangle "LemonChiffon" as color_052 #LemonChiffon
+rectangle "Maroon" as color_053 #Maroon
+rectangle "Orchid" as color_054 #Orchid
+rectangle "SeaShell" as color_055 #SeaShell
+rectangle "YellowGreen" as color_056 #YellowGreen
+
+color_049 -[hidden]- color_050
+color_050 -[hidden]- color_051
+color_051 -[hidden]- color_052
+color_052 -[hidden]- color_053
+color_053 -[hidden]- color_054
+color_054 -[hidden]- color_055
+color_055 -[hidden]- color_056
+
+color_041 -[hidden]down- color_049
+color_042 -[hidden]down- color_050
+color_043 -[hidden]down- color_051
+color_044 -[hidden]down- color_052
+color_045 -[hidden]down- color_053
+color_046 -[hidden]down- color_054
+color_047 -[hidden]down- color_055
+color_048 -[hidden]down- color_056
+
+
+' ============================================================
+' ROW 08
+' ============================================================
+
+rectangle "Beige" as color_057 #Beige
+rectangle "DarkGrey" as color_058 #DarkGrey
+rectangle "ForestGreen" as color_059 #ForestGreen
+rectangle "LightBlue" as color_060 #LightBlue
+rectangle "MediumAquaMarine" as color_061 #MediumAquaMarine
+rectangle "PHYSICAL" as color_062 #PHYSICAL
+rectangle "Sienna" as color_063 #Sienna
+
+color_057 -[hidden]- color_058
+color_058 -[hidden]- color_059
+color_059 -[hidden]- color_060
+color_060 -[hidden]- color_061
+color_061 -[hidden]- color_062
+color_062 -[hidden]- color_063
+
+color_049 -[hidden]down- color_057
+color_050 -[hidden]down- color_058
+color_051 -[hidden]down- color_059
+color_052 -[hidden]down- color_060
+color_053 -[hidden]down- color_061
+color_054 -[hidden]down- color_062
+color_055 -[hidden]down- color_063
+
+
+' ============================================================
+' ROW 09
+' ============================================================
+
+rectangle "Bisque" as color_064 #Bisque
+rectangle "DarkKhaki" as color_065 #DarkKhaki
+rectangle "Fuchsia" as color_066 #Fuchsia
+rectangle "LightCoral" as color_067 #LightCoral
+rectangle "MediumBlue" as color_068 #MediumBlue
+rectangle "PaleGoldenRod" as color_069 #PaleGoldenRod
+rectangle "Silver" as color_070 #Silver
+
+color_064 -[hidden]- color_065
+color_065 -[hidden]- color_066
+color_066 -[hidden]- color_067
+color_067 -[hidden]- color_068
+color_068 -[hidden]- color_069
+color_069 -[hidden]- color_070
+
+color_057 -[hidden]down- color_064
+color_058 -[hidden]down- color_065
+color_059 -[hidden]down- color_066
+color_060 -[hidden]down- color_067
+color_061 -[hidden]down- color_068
+color_062 -[hidden]down- color_069
+color_063 -[hidden]down- color_070
+
+
+' ============================================================
+' ROW 10
+' ============================================================
+
+rectangle "Black" as color_071 #Black
+rectangle "DarkMagenta" as color_072 #DarkMagenta
+rectangle "Gainsboro" as color_073 #Gainsboro
+rectangle "LightCyan" as color_074 #LightCyan
+rectangle "MediumOrchid" as color_075 #MediumOrchid
+rectangle "PaleGreen" as color_076 #PaleGreen
+rectangle "SkyBlue" as color_077 #SkyBlue
+
+color_071 -[hidden]- color_072
+color_072 -[hidden]- color_073
+color_073 -[hidden]- color_074
+color_074 -[hidden]- color_075
+color_075 -[hidden]- color_076
+color_076 -[hidden]- color_077
+
+color_064 -[hidden]down- color_071
+color_065 -[hidden]down- color_072
+color_066 -[hidden]down- color_073
+color_067 -[hidden]down- color_074
+color_068 -[hidden]down- color_075
+color_069 -[hidden]down- color_076
+color_070 -[hidden]down- color_077
+
+
+' ============================================================
+' ROW 11
+' ============================================================
+
+rectangle "BlanchedAlmond" as color_078 #BlanchedAlmond
+rectangle "DarkOliveGreen" as color_079 #DarkOliveGreen
+rectangle "GhostWhite" as color_080 #GhostWhite
+rectangle "LightGoldenRodYellow" as color_081 #LightGoldenRodYellow
+rectangle "MediumPurple" as color_082 #MediumPurple
+rectangle "PaleTurquoise" as color_083 #PaleTurquoise
+rectangle "SlateBlue" as color_084 #SlateBlue
+
+color_078 -[hidden]- color_079
+color_079 -[hidden]- color_080
+color_080 -[hidden]- color_081
+color_081 -[hidden]- color_082
+color_082 -[hidden]- color_083
+color_083 -[hidden]- color_084
+
+color_071 -[hidden]down- color_078
+color_072 -[hidden]down- color_079
+color_073 -[hidden]down- color_080
+color_074 -[hidden]down- color_081
+color_075 -[hidden]down- color_082
+color_076 -[hidden]down- color_083
+color_077 -[hidden]down- color_084
+
+
+' ============================================================
+' ROW 12
+' ============================================================
+
+rectangle "Blue" as color_085 #Blue
+rectangle "DarkOrchid" as color_086 #DarkOrchid
+rectangle "Gold" as color_087 #Gold
+rectangle "LightGray" as color_088 #LightGray
+rectangle "MediumSeaGreen" as color_089 #MediumSeaGreen
+rectangle "PaleVioletRed" as color_090 #PaleVioletRed
+rectangle "SlateGray" as color_091 #SlateGray
+
+color_085 -[hidden]- color_086
+color_086 -[hidden]- color_087
+color_087 -[hidden]- color_088
+color_088 -[hidden]- color_089
+color_089 -[hidden]- color_090
+color_090 -[hidden]- color_091
+
+color_078 -[hidden]down- color_085
+color_079 -[hidden]down- color_086
+color_080 -[hidden]down- color_087
+color_081 -[hidden]down- color_088
+color_082 -[hidden]down- color_089
+color_083 -[hidden]down- color_090
+color_084 -[hidden]down- color_091
+
+
+' ============================================================
+' ROW 13
+' ============================================================
+
+rectangle "BlueViolet" as color_092 #BlueViolet
+rectangle "DarkRed" as color_093 #DarkRed
+rectangle "GoldenRod" as color_094 #GoldenRod
+rectangle "LightGreen" as color_095 #LightGreen
+rectangle "MediumSlateBlue" as color_096 #MediumSlateBlue
+rectangle "PapayaWhip" as color_097 #PapayaWhip
+rectangle "SlateGrey" as color_098 #SlateGrey
+
+color_092 -[hidden]- color_093
+color_093 -[hidden]- color_094
+color_094 -[hidden]- color_095
+color_095 -[hidden]- color_096
+color_096 -[hidden]- color_097
+color_097 -[hidden]- color_098
+
+color_085 -[hidden]down- color_092
+color_086 -[hidden]down- color_093
+color_087 -[hidden]down- color_094
+color_088 -[hidden]down- color_095
+color_089 -[hidden]down- color_096
+color_090 -[hidden]down- color_097
+color_091 -[hidden]down- color_098
+
+
+' ============================================================
+' ROW 14
+' ============================================================
+
+rectangle "Brown" as color_099 #Brown
+rectangle "DarkSalmon" as color_100 #DarkSalmon
+rectangle "Gray" as color_101 #Gray
+rectangle "LightGrey" as color_102 #LightGrey
+rectangle "MediumSpringGreen" as color_103 #MediumSpringGreen
+rectangle "PeachPuff" as color_104 #PeachPuff
+rectangle "Snow" as color_105 #Snow
+
+color_099 -[hidden]- color_100
+color_100 -[hidden]- color_101
+color_101 -[hidden]- color_102
+color_102 -[hidden]- color_103
+color_103 -[hidden]- color_104
+color_104 -[hidden]- color_105
+
+color_092 -[hidden]down- color_099
+color_093 -[hidden]down- color_100
+color_094 -[hidden]down- color_101
+color_095 -[hidden]down- color_102
+color_096 -[hidden]down- color_103
+color_097 -[hidden]down- color_104
+color_098 -[hidden]down- color_105
+
+
+' ============================================================
+' ROW 15
+' ============================================================
+
+rectangle "BurlyWood" as color_106 #BurlyWood
+rectangle "DarkSeaGreen" as color_107 #DarkSeaGreen
+rectangle "Green" as color_108 #Green
+rectangle "LightPink" as color_109 #LightPink
+rectangle "MediumTurquoise" as color_110 #MediumTurquoise
+rectangle "Peru" as color_111 #Peru
+rectangle "SpringGreen" as color_112 #SpringGreen
+
+color_106 -[hidden]- color_107
+color_107 -[hidden]- color_108
+color_108 -[hidden]- color_109
+color_109 -[hidden]- color_110
+color_110 -[hidden]- color_111
+color_111 -[hidden]- color_112
+
+color_099 -[hidden]down- color_106
+color_100 -[hidden]down- color_107
+color_101 -[hidden]down- color_108
+color_102 -[hidden]down- color_109
+color_103 -[hidden]down- color_110
+color_104 -[hidden]down- color_111
+color_105 -[hidden]down- color_112
+
+
+' ============================================================
+' ROW 16
+' ============================================================
+
+rectangle "CadetBlue" as color_113 #CadetBlue
+rectangle "DarkSlateBlue" as color_114 #DarkSlateBlue
+rectangle "GreenYellow" as color_115 #GreenYellow
+rectangle "LightSalmon" as color_116 #LightSalmon
+rectangle "MediumVioletRed" as color_117 #MediumVioletRed
+rectangle "Pink" as color_118 #Pink
+rectangle "SteelBlue" as color_119 #SteelBlue
+
+color_113 -[hidden]- color_114
+color_114 -[hidden]- color_115
+color_115 -[hidden]- color_116
+color_116 -[hidden]- color_117
+color_117 -[hidden]- color_118
+color_118 -[hidden]- color_119
+
+color_106 -[hidden]down- color_113
+color_107 -[hidden]down- color_114
+color_108 -[hidden]down- color_115
+color_109 -[hidden]down- color_116
+color_110 -[hidden]down- color_117
+color_111 -[hidden]down- color_118
+color_112 -[hidden]down- color_119
+
+
+' ============================================================
+' ROW 17
+' ============================================================
+
+rectangle "Chartreuse" as color_120 #Chartreuse
+rectangle "DarkSlateGray" as color_121 #DarkSlateGray
+rectangle "Grey" as color_122 #Grey
+rectangle "LightSeaGreen" as color_123 #LightSeaGreen
+rectangle "MidnightBlue" as color_124 #MidnightBlue
+rectangle "Plum" as color_125 #Plum
+rectangle "TECHNOLOGY" as color_126 #TECHNOLOGY
+
+color_120 -[hidden]- color_121
+color_121 -[hidden]- color_122
+color_122 -[hidden]- color_123
+color_123 -[hidden]- color_124
+color_124 -[hidden]- color_125
+color_125 -[hidden]- color_126
+
+color_113 -[hidden]down- color_120
+color_114 -[hidden]down- color_121
+color_115 -[hidden]down- color_122
+color_116 -[hidden]down- color_123
+color_117 -[hidden]down- color_124
+color_118 -[hidden]down- color_125
+color_119 -[hidden]down- color_126
+
+
+' ============================================================
+' ROW 18
+' ============================================================
+
+rectangle "Chocolate" as color_127 #Chocolate
+rectangle "DarkSlateGrey" as color_128 #DarkSlateGrey
+rectangle "HoneyDew" as color_129 #HoneyDew
+rectangle "LightSkyBlue" as color_130 #LightSkyBlue
+rectangle "MintCream" as color_131 #MintCream
+rectangle "PowderBlue" as color_132 #PowderBlue
+rectangle "Tan" as color_133 #Tan
+
+color_127 -[hidden]- color_128
+color_128 -[hidden]- color_129
+color_129 -[hidden]- color_130
+color_130 -[hidden]- color_131
+color_131 -[hidden]- color_132
+color_132 -[hidden]- color_133
+
+color_120 -[hidden]down- color_127
+color_121 -[hidden]down- color_128
+color_122 -[hidden]down- color_129
+color_123 -[hidden]down- color_130
+color_124 -[hidden]down- color_131
+color_125 -[hidden]down- color_132
+color_126 -[hidden]down- color_133
+
+
+' ============================================================
+' ROW 19
+' ============================================================
+
+rectangle "Coral" as color_134 #Coral
+rectangle "DarkTurquoise" as color_135 #DarkTurquoise
+rectangle "HotPink" as color_136 #HotPink
+rectangle "LightSlateGray" as color_137 #LightSlateGray
+rectangle "MistyRose" as color_138 #MistyRose
+rectangle "Purple" as color_139 #Purple
+rectangle "Teal" as color_140 #Teal
+
+color_134 -[hidden]- color_135
+color_135 -[hidden]- color_136
+color_136 -[hidden]- color_137
+color_137 -[hidden]- color_138
+color_138 -[hidden]- color_139
+color_139 -[hidden]- color_140
+
+color_127 -[hidden]down- color_134
+color_128 -[hidden]down- color_135
+color_129 -[hidden]down- color_136
+color_130 -[hidden]down- color_137
+color_131 -[hidden]down- color_138
+color_132 -[hidden]down- color_139
+color_133 -[hidden]down- color_140
+
+
+' ============================================================
+' ROW 20
+' ============================================================
+
+rectangle "CornflowerBlue" as color_141 #CornflowerBlue
+rectangle "DarkViolet" as color_142 #DarkViolet
+rectangle "IMPLEMENTATION" as color_143 #IMPLEMENTATION
+rectangle "LightSlateGrey" as color_144 #LightSlateGrey
+rectangle "Moccasin" as color_145 #Moccasin
+rectangle "Red" as color_146 #Red
+rectangle "Thistle" as color_147 #Thistle
+
+color_141 -[hidden]- color_142
+color_142 -[hidden]- color_143
+color_143 -[hidden]- color_144
+color_144 -[hidden]- color_145
+color_145 -[hidden]- color_146
+color_146 -[hidden]- color_147
+
+color_134 -[hidden]down- color_141
+color_135 -[hidden]down- color_142
+color_136 -[hidden]down- color_143
+color_137 -[hidden]down- color_144
+color_138 -[hidden]down- color_145
+color_139 -[hidden]down- color_146
+color_140 -[hidden]down- color_147
+
+
+' ============================================================
+' ROW 21
+' ============================================================
+
+rectangle "Cornsilk" as color_148 #Cornsilk
+rectangle "DarkOrange" as color_149 #DarkOrange
+rectangle "IndianRed" as color_150 #IndianRed
+rectangle "LightSteelBlue" as color_151 #LightSteelBlue
+rectangle "NavajoWhite" as color_152 #NavajoWhite
+rectangle "RosyBrown" as color_153 #RosyBrown
+rectangle "Tomato" as color_154 #Tomato
+
+color_148 -[hidden]- color_149
+color_149 -[hidden]- color_150
+color_150 -[hidden]- color_151
+color_151 -[hidden]- color_152
+color_152 -[hidden]- color_153
+color_153 -[hidden]- color_154
+
+color_141 -[hidden]down- color_148
+color_142 -[hidden]down- color_149
+color_143 -[hidden]down- color_150
+color_144 -[hidden]down- color_151
+color_145 -[hidden]down- color_152
+color_146 -[hidden]down- color_153
+color_147 -[hidden]down- color_154
+
+@enduml
