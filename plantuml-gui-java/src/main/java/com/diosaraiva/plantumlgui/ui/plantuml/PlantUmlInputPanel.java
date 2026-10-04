@@ -246,16 +246,17 @@ public final class PlantUmlInputPanel extends JPanel {
     	WBS("Work Breakdown Structure", "wbs.puml"),
     	WIRE("Wire", "wire.puml"), // new
     	YAML("YAML", "yaml.puml"),
-    	CONFIG_COLORS("Config Colors", "config_colors.puml"), // new
-    	CONFIG_EMOJI26("Config Emoji 26", "config_emoji26.puml"), // new
-    	CONFIG_LISTOPENICONIC("Config List Open Iconic", "config_listopeniconic.puml"), // new
-    	CONFIG_LISTSPRITES("Config List Sprites", "config_listsprites.puml"), // new
-    	CONFIG_NESTING("Config Nesting", "config_nesting.puml"), // new
-    	CONFIG_SKINPARAMETERS("Config Skin Parameters", "config_skinparameters.puml"), // new
-    	CONFIG_SUPPORTEDFORMATS("Config Supported Formats", "config_supportedformats.puml"), // new
+    	CONFIG_COLORS("Config Colors", "config_colors.puml"),
+    	CONFIG_EMOJI26("Config Emoji 26", "config_emoji26.puml"),
+    	CONFIG_LISTOPENICONIC("Config List Open Iconic", "config_listopeniconic.puml"),
+    	CONFIG_LISTSPRITES("Config List Sprites", "config_listsprites.puml"),
+    	CONFIG_NESTING("Config Nesting", "config_nesting.puml"),
+    	CONFIG_SKINPARAMETERS("Config Skin Parameters", "config_skinparameters.puml"),
+    	CONFIG_STANDARLIBRARIES("Config Standard Libraries", "config_stdlib.puml"),
+    	CONFIG_SUPPORTEDFORMATS("Config Supported Formats", "config_supportedformats.puml"),
     	CUSTOM_ARCHIMATE("Custom Archimate", "custom_archimate.puml"),
     	CUSTOM_MODULAR("Custom Modular", "custom_modular.puml"),
-    	CUSTOM_MODULAR_REF("Custom Modular Reference", "custom_modular_ref.puml"), // new
+    	CUSTOM_MODULAR_REF("Custom Modular Reference", "custom_modular_ref.puml"),
     	UTILS_COLORS("List Available [colors]", "util_colors.puml"),
     	UTILS_EMOJI("List Available [emoji]", "util_emoji.puml"),
     	UTILS_OPENICONIC("List Available [icons]", "util_openiconic.puml"),

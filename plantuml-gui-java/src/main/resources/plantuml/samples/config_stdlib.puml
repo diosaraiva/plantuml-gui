@@ -1,0 +1,48 @@
+@startuml
+!pragma layout smetana
+!include <archimate/Archimate>
+
+title PlantUML Standard Library
+
+skinparam shadowing false
+skinparam defaultTextAlignment left
+
+legend
+|= Library |= Version |= Delivered by |
+| adaml | 0.1.2 | https://github.com/rocher/AdaML |
+| archimate | 3.2.2 | https://github.com/plantuml-stdlib/Archimate-PlantUML |
+| aws | 18.02.22 | https://github.com/milo-minderbinder/AWS-PlantUML |
+| awslib | 14.0.0 | https://github.com/awslabs/aws-icons-for-plantuml |
+| awslib10 | 10.0.0 | https://github.com/awslabs/aws-icons-for-plantuml |
+| awslib14 | 14.0.0 | https://github.com/awslabs/aws-icons-for-plantuml |
+| awslib20 | 20.0.0 | https://github.com/awslabs/aws-icons-for-plantuml |
+| azure | 2.2.0 | https://github.com/plantuml-stdlib/Azure-PlantUML |
+| bootstrap | 1.13.1 | https://github.com/twbs/icons |
+| bootstrap1.12.1 | 1.12.1 | https://github.com/twbs/icons |
+| bootstrap1.13.1 | 1.13.1 | https://github.com/twbs/icons |
+| c4 | 2.13.0 | https://github.com/plantuml-stdlib/C4-PlantUML |
+| classy | 1.0.2 | https://github.com/james-gadrow-kr/classy-plantuml |
+| classy-c4 | 1.0.3 | https://github.com/james-gadrow-kr/classy-c4 |
+| cloudinsight | 1.0.0 | https://github.com/plantuml-stdlib/cicon-plantuml-sprites |
+| cloudogu | 1.0.2 | https://github.com/cloudogu/plantuml-cloudogu-sprites |
+| domainstory | 0.4.0 | https://github.com/johthor/DomainStory-PlantUML |
+| edgy | 0.8.0 | https://github.com/boessu/plantuml-stdlib |
+| eip | 1.0.0 | https://github.com/plantuml-stdlib/EIP-PlantUML |
+| elastic | 0.0.1 | https://github.com/Crashedmind/PlantUML-Elastic-icons |
+| gcp | 6.0.0 | https://github.com/Crashedmind/PlantUML-icons-GCP |
+| ibm | 1.0.1 | https://github.com/XReyRobert/ibm-icons-for-plantuml |
+| k8s | 1.0.0 | https://github.com/dcasati/kubernetes-PlantUML |
+| kubernetes | 5.3.45 | https://github.com/plantuml-stdlib/plantuml-kubernetes-sprites |
+| logos | 1.1.0 | https://github.com/plantuml-stdlib/gilbarbara-plantuml-sprites |
+| material | 2.1.19 | https://github.com/Templarian/MaterialDesign |
+| material2 | 2.1.19 | https://github.com/Templarian/MaterialDesign |
+| material2.1.19 | 2.1.19 | https://github.com/Templarian/MaterialDesign |
+| material7 | 7.4.47 | https://github.com/Templarian/MaterialDesign-SVG/ |
+| material7.4.47 | 7.4.47 | https://github.com/Templarian/MaterialDesign-SVG/ |
+| office | 1.0.0 | https://github.com/Roemer/plantuml-office |
+| osa | 0.0.1 | https://github.com/Crashedmind/PlantUML-opensecurityarchitecture-icons |
+| osa2 | 0.0.1 | https://github.com/Crashedmind/PlantUML-opensecurityarchitecture2-icons |
+| tupadr3 | 3.0.0 | https://github.com/tupadr3/plantuml-icon-font-sprites |
+endlegend
+
+@enduml
