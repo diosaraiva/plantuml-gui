@@ -7,19 +7,25 @@
 
     <groupId>com.diosaraiva</groupId>
     <artifactId>plantuml-gui-java</artifactId>
-    <version>1.5.1</version>
+    <version>1.6.1</version>
     <packaging>jar</packaging>
     <name>PlantUML GUI</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- 17 is the lowest LTS that compiles this code (records, switch rules, pattern matching)
-             and it runs the bundled PlantUML JAR, whose classes require Java 11 or newer. -->
         <maven.compiler.release>17</maven.compiler.release>
     </properties>
+    
+    <dependencies>
+		<dependency>
+		    <groupId>net.sourceforge.plantuml</groupId>
+		    <artifactId>plantuml</artifactId>
+		    <version>1.2026.8</version>
+		    <scope>compile</scope>
+		</dependency>
+    </dependencies>
 
     <build>
-        <!-- The launchers derive every path from java_config.ini, so this name is mirrored there. -->
         <finalName>plantuml-gui-java</finalName>
         <plugins>
             <plugin>
@@ -34,11 +40,10 @@
                     </archive>
                 </configuration>
             </plugin>
-            <!-- The deliverable is release/plantuml-gui-java.zip: the JAR plus both user launchers. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.8.0</version>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
                     <outputDirectory>${project.basedir}/release</outputDirectory>
@@ -58,5 +63,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
