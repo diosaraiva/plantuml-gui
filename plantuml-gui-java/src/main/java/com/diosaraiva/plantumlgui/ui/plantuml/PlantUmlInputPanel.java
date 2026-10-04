@@ -211,29 +211,29 @@ public final class PlantUmlInputPanel extends JPanel {
     	ARCHIMATE_APPLICATION("Archimate Application", "archimate_application.puml"),
     	ARCHIMATE_BUSINESS("Archimate Business", "archimate_business.puml"),
     	ARCHIMATE_IMPLEMENTATION("Archimate Implementation", "archimate_implementation.puml"),
-    	ARCHIMATE_JUNCTIONS("Archimate Junctions", "archimate_junctions.puml"), // new
+    	ARCHIMATE_JUNCTIONS("Archimate Junctions", "archimate_junctions.puml"),
     	ARCHIMATE_LAYERED("Archimate Layered", "archimate_layered.puml"),
     	ARCHIMATE_MOTIVATION("Archimate Motivation", "archimate_motivation.puml"),
     	ARCHIMATE_PHYSICAL("Archimate Physical", "archimate_physical.puml"),
-    	ARCHIMATE_SEQUENCE("Archimate Sequence", "archimate_sequence.puml"), // new
+    	ARCHIMATE_SEQUENCE("Archimate Sequence", "archimate_sequence.puml"),
     	ARCHIMATE_STRATEGY("Archimate Strategy", "archimate_strategy.puml"),
     	ARCHIMATE_TECHNOLOGY("Archimate Technology", "archimate_technology.puml"),
-    	BOARD("Board", "board.puml"), // new
+    	BOARD("Board", "board.puml"),
     	C4_COMPONENT("C4 Component", "c4_component.puml"),
     	C4_CONTAINER("C4 Container", "c4_container.puml"),
     	C4_CONTEXT("C4 Context", "c4_context.puml"),
     	C4_DEPLOYMENT("C4 Deployment", "c4_deployment.puml"),
-    	CHART("Chart", "chart.puml"), // new
+    	CHART("Chart", "chart.puml"),
     	DITAA("Ditaa", "ditaa.puml"),
-    	EBNF("EBNF", "ebnf.puml"), // new
+    	EBNF("EBNF", "ebnf.puml"),
     	FILES("Files", "files.puml"),
     	GANTT("Gantt", "gantt.puml"),
     	JSON("JSON", "json.puml"),
     	MINDMAP("Mind Map", "mindmap.puml"),
-    	NWDIAG("Network Diagram (nwdiag)", "nwdiag.puml"), // new
-    	PACKETDIAG("Packet Diagram", "packetdiag.puml"), // new
-    	REGEX("Regex", "regex.puml"), // new
-    	SALT("Salt (Wireframe)", "salt.puml"), // new
+    	NWDIAG("Network Diagram (nwdiag)", "nwdiag.puml"),
+    	PACKETDIAG("Packet Diagram", "packetdiag.puml"),
+    	REGEX("Regex", "regex.puml"),
+    	SALT("Salt (Wireframe)", "salt.puml"),
     	TIMING("Timing", "timing.puml"),
     	UML_ACTIVITY("UML Activity", "uml_activity.puml"),
     	UML_CLASS("UML Class", "uml_class.puml"),
@@ -244,7 +244,7 @@ public final class PlantUmlInputPanel extends JPanel {
     	UML_STATE("UML State", "uml_state.puml"),
     	UML_USE_CASE("UML Use Case", "uml_usecase.puml"),
     	WBS("Work Breakdown Structure", "wbs.puml"),
-    	WIRE("Wire", "wire.puml"), // new
+    	WIRE("Wire", "wire.puml"),
     	YAML("YAML", "yaml.puml"),
     	CONFIG_COLORS("Config Colors", "config_colors.puml"),
     	CONFIG_EMOJI26("Config Emoji 26", "config_emoji26.puml"),
@@ -256,7 +256,7 @@ public final class PlantUmlInputPanel extends JPanel {
     	CONFIG_SUPPORTEDFORMATS("Config Supported Formats", "config_supportedformats.puml"),
     	CUSTOM_ARCHIMATE("Custom Archimate", "custom_archimate.puml"),
     	CUSTOM_MODULAR("Custom Modular", "custom_modular.puml"),
-    	CUSTOM_MODULAR_REF("Custom Modular Reference", "custom_modular_ref.puml"),
+    	//CUSTOM_MODULAR_REF("Custom Modular Reference", "custom_modular_ref.puml"),
     	UTILS_COLORS("List Available [colors]", "util_colors.puml"),
     	UTILS_EMOJI("List Available [emoji]", "util_emoji.puml"),
     	UTILS_OPENICONIC("List Available [icons]", "util_openiconic.puml"),
