@@ -21,7 +21,6 @@
 		    <groupId>net.sourceforge.plantuml</groupId>
 		    <artifactId>plantuml</artifactId>
 		    <version>1.2026.8</version>
-		    <scope>compile</scope>
 		</dependency>
     </dependencies>
 
@@ -29,6 +28,30 @@
         <finalName>plantuml-gui-java</finalName>
         <plugins>
             <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>copy-plantuml</id>
+                    <phase>generate-resources</phase>
+                    <goals>
+                        <goal>copy</goal>
+                    </goals>
+                    <configuration>
+                        <artifactItems>
+                            <artifactItem>
+                                <groupId>net.sourceforge.plantuml</groupId>
+                                <artifactId>plantuml</artifactId>
+                                <version>1.2026.8</version>
+                                <destFileName>plantuml-1.2026.8.jar</destFileName>
+                            </artifactItem>
+                        </artifactItems>
+                        <outputDirectory>${project.basedir}/src/main/resources/plantuml</outputDirectory>
+                    </configuration>
+                </execution>
+            </executions>
+	        </plugin>
+	        <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.2</version>
@@ -40,27 +63,27 @@
                     </archive>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <outputDirectory>${project.basedir}/release</outputDirectory>
-                    <descriptors>
-                        <descriptor>src/assembly/release.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>release-zip</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-assembly-plugin</artifactId>
+	            <version>3.8.0</version>
+	            <configuration>
+	                <appendAssemblyId>false</appendAssemblyId>
+	                <outputDirectory>${project.basedir}/release</outputDirectory>
+	                <descriptors>
+	                    <descriptor>src/assembly/release.xml</descriptor>
+	                </descriptors>
+	            </configuration>
+	            <executions>
+	                <execution>
+	                    <id>release-zip</id>
+	                    <phase>package</phase>
+	                    <goals>
+	                        <goal>single</goal>
+	                    </goals>
+	                </execution>
+	            </executions>
+	        </plugin>
         </plugins>
     </build>
 </project>

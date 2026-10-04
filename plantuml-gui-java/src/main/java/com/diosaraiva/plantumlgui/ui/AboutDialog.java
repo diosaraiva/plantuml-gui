@@ -22,7 +22,7 @@ import com.diosaraiva.plantumlgui.util.SwingUtils;
 public final class AboutDialog extends JDialog {
 
     private static final String REPO_URL = "https://github.com/diosaraiva/plantuml-gui";
-    private static final String VERSION = "1.5.1";
+    private static final String VERSION = "1.6.1";
 
     public AboutDialog(JFrame parent) {
         super(parent, I18n.get("about.title"), true);

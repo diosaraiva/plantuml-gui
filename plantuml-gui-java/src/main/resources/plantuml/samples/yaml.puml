@@ -2,7 +2,7 @@
 #highlight "domains" "master" "generators"
 project:
   name: PlantUML Demo
-  version: 1.2026.6
+  version: 1.2026.8
   active: true
   maintainers:
     - name: Alice

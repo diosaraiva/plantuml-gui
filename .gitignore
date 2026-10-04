@@ -37,3 +37,6 @@ plantuml-gui-java/release/java_config.ini
 # macOS
 .DS_Store
 ._*
+
+# Local run
+/java_config.ini
