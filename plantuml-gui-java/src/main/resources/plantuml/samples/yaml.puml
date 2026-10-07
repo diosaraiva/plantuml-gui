@@ -1,30 +1,30 @@
 @startyaml
-#highlight "domains" "master" "generators"
-project:
-  name: PlantUML Demo
-  version: 1.2026.8
-  active: true
-  maintainers:
-    - name: Alice
-      role: Lead
-    - name: Bob
-      role: Contributor
-  domains:
-    frontend:
-      language: TypeScript
-      frameworks:
-        - React
-        - Vite
-    backend:
-      language: Java
-      frameworks:
-        - Spring Boot
-  build:
-    tool: Gradle
-    tasks: [clean, compile, test, package]
-  master:
-    branch: main
-    protected: true
-  generators:
-    diagrams: [yaml, json, ditaa, wbs, files]
+
+Creole:
+  wave: ~~wave~~
+  bold: **bold**
+  italics: //italics//
+  monospaced: ""monospaced""
+  stricken-out: --stricken-out--
+  underlined: __underlined__
+  not-underlined: ~__not underlined__
+  wave-underlined: ~~wave-underlined~~
+HTML Creole:
+  bold: <b>bold
+  italics: <i>italics
+  monospaced: <font:monospaced>monospaced
+  stroked: <s>stroked
+  underlined: <u>underlined
+  waved: <w>waved
+  green-stroked: <s:green>stroked
+  red-underlined: <u:red>underlined
+  blue-waved: <w:#0000FF>waved
+  Blue: <color:blue>Blue
+  Orange: <back:orange>Orange background
+  big: <size:20>big
+Graphic:
+  OpenIconic: account-login <&account-login> 
+  Unicode: This is <U+221E> long
+  Emoji: <:calendar:> Calendar
+  
 @endyaml
