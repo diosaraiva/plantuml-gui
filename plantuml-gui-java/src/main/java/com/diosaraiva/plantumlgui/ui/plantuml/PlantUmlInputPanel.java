@@ -223,17 +223,20 @@ public final class PlantUmlInputPanel extends JPanel {
     	C4_CONTAINER("C4 Container", "c4_container.puml"),
     	C4_CONTEXT("C4 Context", "c4_context.puml"),
     	C4_DEPLOYMENT("C4 Deployment", "c4_deployment.puml"),
+    	CSS_STYLING("CSS Styling", "css_styling.puml"),
     	CHART("Chart", "chart.puml"),
     	DITAA("Ditaa", "ditaa.puml"),
     	EBNF("EBNF", "ebnf.puml"),
     	FILES("Files", "files.puml"),
     	GANTT("Gantt", "gantt.puml"),
+    	IE("Information Engineering", "ie.puml"),
     	JSON("JSON", "json.puml"),
     	MINDMAP("Mind Map", "mindmap.puml"),
     	NWDIAG("Network Diagram (nwdiag)", "nwdiag.puml"),
     	PACKETDIAG("Packet Diagram", "packetdiag.puml"),
     	REGEX("Regex", "regex.puml"),
     	SALT("Salt (Wireframe)", "salt.puml"),
+    	SUBDIAGRAM("Sub-Diagram", "subdiagram.puml"),
     	TIMING("Timing", "timing.puml"),
     	UML_ACTIVITY("UML Activity", "uml_activity.puml"),
     	UML_CLASS("UML Class", "uml_class.puml"),
@@ -261,7 +264,8 @@ public final class PlantUmlInputPanel extends JPanel {
     	UTILS_EMOJI("List Available [emoji]", "util_emoji.puml"),
     	UTILS_OPENICONIC("List Available [icons]", "util_openiconic.puml"),
     	UTILS_SKINPARAMS("List Available [skinparams]", "util_skinparams.puml"),
-    	UTILS_SPRITES("List Available [sprites]", "util_sprites.puml");
+    	UTILS_SPRITES("List Available [sprites]", "util_sprites.puml"),
+    	UTILS_THEMES("List Available [themes]", "util_themes.puml");
 
         private final String displayName;
         private final String fileName;

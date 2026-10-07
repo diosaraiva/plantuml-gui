@@ -2,14 +2,17 @@
 !pragma layout smetana
 !include <C4/C4_Context>
 
-title System Context Diagram
+title C4 System Context Diagram
 
+' ---- Elements ----
 Person(user, "User", "A user of the system.")
 System(system, "My System", "Does useful things.")
 System_Ext(email, "Email System", "Sends notifications.")
 System_Ext(ext, "External API", "Provides data.")
 
+' ---- Relations ----
 Rel(user, system, "Uses", "HTTPS")
 Rel(system, email, "Sends emails", "SMTP")
 Rel(system, ext, "Fetches data from", "REST")
+
 @enduml

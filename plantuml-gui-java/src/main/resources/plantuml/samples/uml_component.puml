@@ -1,7 +1,14 @@
 @startuml
 !pragma layout smetana
-title Component Diagram
 
+title UML Component Diagram
+
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 package "Frontend" {
   [Web UI] as UI
   [Mobile App] as Mobile
@@ -19,6 +26,7 @@ package "Data" {
   queue "RabbitMQ" as MQ
 }
 
+' ---- Relations ----
 UI --> GW
 Mobile --> GW
 GW --> Auth
@@ -26,4 +34,10 @@ GW --> Order
 Order --> DB
 Order --> MQ
 MQ --> Notif
+
+legend
+|= Info |= Description |
+| Reference | https://plantuml.com/component-diagram |
+endlegend
+
 @enduml

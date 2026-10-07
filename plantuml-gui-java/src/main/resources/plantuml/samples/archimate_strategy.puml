@@ -4,6 +4,12 @@
 
 title Archimate Strategy Layer
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 Strategy_Resource(res1, "Human Resources")
 Strategy_Resource(res2, "IT Budget")
 Strategy_Capability(cap1, "Digital Transformation")
@@ -12,10 +18,17 @@ Strategy_CourseOfAction(coa1, "Cloud Migration Plan")
 Strategy_CourseOfAction(coa2, "Data Platform Initiative")
 Strategy_ValueStream(vs1, "Customer Onboarding")
 
+' ---- Relations ----
 Rel_Composition(cap1, res1, "requires")
 Rel_Composition(cap2, res2, "requires")
 Rel_Realization(coa1, cap1, "realizes")
 Rel_Realization(coa2, cap2, "realizes")
 Rel_Association(vs1, cap1, "enabled by")
 Rel_Association(vs1, cap2, "enabled by")
+
+legend
+|= Info |= Description |
+| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
+endlegend
+
 @enduml

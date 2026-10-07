@@ -4,6 +4,12 @@
 
 title Archimate Motivation Layer
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 Motivation_Stakeholder(ceo, "CEO")
 Motivation_Stakeholder(cto, "CTO")
 Motivation_Stakeholder(customer, "Customer")
@@ -22,6 +28,7 @@ Motivation_Constraint(budget, "Budget Limit")
 Motivation_Meaning(trust, "Customer Trust")
 Motivation_Value(revenue, "Increased Revenue")
 
+' ---- Relations ----
 Rel_Association(ceo, growth, "concerned with")
 Rel_Association(cto, efficiency, "concerned with")
 Rel_Association(customer, satisfaction, "desires")
@@ -36,4 +43,10 @@ Rel_Association(security, compliance, "supports")
 Rel_Association(budget, digital, "constrains")
 Rel_Association(satisfaction, trust, "creates")
 Rel_Association(trust, revenue, "leads to")
+
+legend
+|= Info |= Description |
+| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
+endlegend
+
 @enduml

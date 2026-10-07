@@ -1,8 +1,14 @@
 @startuml
 !pragma layout smetana
 
-title Activity Diagram
+title UML Activity Diagram
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Activities ----
 start
 :Receive order;
 if (Payment valid?) then (yes)
@@ -18,4 +24,10 @@ else (no)
   :Cancel order;
 endif
 stop
+
+legend
+|= Info |= Description |
+| Reference | https://plantuml.com/activity-diagram-legacy\n https://plantuml.com/activity-diagram-beta |
+endlegend
+
 @enduml

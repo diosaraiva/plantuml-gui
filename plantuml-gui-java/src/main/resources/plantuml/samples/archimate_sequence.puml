@@ -2,9 +2,14 @@
 !global $ARCH_SEQUENCE_SUPPORT = %true()
 !include <archimate/Archimate>
 
-title Archi Print Usage
+title Archi Sequence View
 
-' Define Elements
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 $actor("Architect","architect")
 $applicationComponent("Archi","archi")
 $applicationFunction("Update\nModel","update")
@@ -12,7 +17,7 @@ $applicationFunction("Print\nView","print")
 $systemSoftware("Windows\nPrint\nService","windowsPrint")
 $equipment("Printer", "printer")
 
-' Define Sequence
+' ---- Sequence ----
 architect->archi ++
 archi->update ++ : Make changes
 note right update #FFFFA5: <&document> Not exactly correct!\nBut you get the idea.
@@ -23,5 +28,10 @@ print –> archi -–: Sent to printer
 windowsPrint -> printer ++
 return Complete
 archi –> architect --
+
+legend
+|= Info |= Description |
+| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
+endlegend
 
 @enduml

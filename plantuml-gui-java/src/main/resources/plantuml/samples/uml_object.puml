@@ -1,8 +1,14 @@
 @startuml
 !pragma layout smetana
 
-title Object Diagram
+title UML Object Diagram
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 object "john : User" as john {
   name = "John Doe"
   email = "john@example.com"
@@ -26,7 +32,14 @@ object "item1 : Product" as item1 {
   price = 29.99
 }
 
+' ---- Relations ----
 john --> order1
 john --> order2
 order1 --> item1
+
+legend
+|= Info |= Description |
+| Reference | https://plantuml.com/object-diagram |
+endlegend
+
 @enduml

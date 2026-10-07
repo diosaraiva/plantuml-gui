@@ -1,10 +1,16 @@
 @startuml
 !pragma layout smetana
 
-title Use Case Diagram
+title UML Use Case Diagram
+
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
 
 left to right direction
 
+' ---- Elements ----
 actor Customer
 actor Admin
 
@@ -16,9 +22,16 @@ rectangle "Online Store" {
   usecase "View Reports" as UC5
 }
 
+' ---- Relations ----
 Customer --> UC1
 Customer --> UC2
 UC2 --> UC3 : <<include>>
 Admin --> UC4
 Admin --> UC5
+
+legend
+|= Info |= Description |
+| Reference | https://plantuml.com/use-case-diagram |
+endlegend
+
 @enduml

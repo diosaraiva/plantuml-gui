@@ -2,8 +2,9 @@
 !pragma layout smetana
 !include <C4/C4_Deployment>
 
-title Deployment Diagram
+title C4 Deployment Diagram
 
+' ---- Elements ----
 Deployment_Node(cloud, "AWS", "Cloud") {
   Deployment_Node(web_tier, "Web Tier", "EC2") {
     Container(web, "Web App", "React", "Serves the UI.")
@@ -20,7 +21,9 @@ Deployment_Node(user_device, "User Device", "Browser") {
   Container(browser, "Browser", "Chrome/Firefox", "User interface.")
 }
 
+' ---- Relations ----
 Rel(browser, web, "Uses", "HTTPS")
 Rel(web, api, "Calls", "REST")
 Rel(api, db, "Reads/Writes", "JDBC")
+
 @enduml

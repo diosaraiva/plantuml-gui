@@ -1,17 +1,30 @@
 @startuml
 !pragma layout smetana
 
-title Sequence Diagram
+title UML Sequence Diagram
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 actor User
 participant "Web App" as App
 participant "API Server" as API
 database "Database" as DB
 
+' ---- Relations ----
 User -> App : Open page
 App -> API : GET /data
 API -> DB : SELECT * FROM items
 DB --> API : Result set
 API --> App : JSON response
 App --> User : Render page
+
+legend
+|= Info |= Description |
+| Reference | https://plantuml.com/sequence-diagram |
+endlegend
+
 @enduml

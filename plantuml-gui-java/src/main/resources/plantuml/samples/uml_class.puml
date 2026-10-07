@@ -1,7 +1,14 @@
 @startuml
 !pragma layout smetana
-title Class Diagram
 
+title UML Class Diagram
+
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 abstract class Animal {
   - name : String
   - age : int
@@ -23,6 +30,13 @@ interface Trainable {
   + train(command : String) : void
 }
 
+' ---- Relations ----
 Dog ..|> Trainable
 Animal "1" *-- "0..*" Animal : parent
+
+legend
+|= Info |= Description |
+| Reference | https://plantuml.com/class-diagram |
+endlegend
+
 @enduml

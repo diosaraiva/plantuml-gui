@@ -2,8 +2,9 @@
 !pragma layout smetana
 !include <C4/C4_Container>
 
-title Container Diagram
+title C4 Container Diagram
 
+' ---- Elements ----
 Person(user, "User", "A user of the system.")
 
 System_Boundary(sys, "My System") {
@@ -15,9 +16,11 @@ System_Boundary(sys, "My System") {
 
 System_Ext(ext, "External API", "Provides data.")
 
+' ---- Relations ----
 Rel(user, web, "Uses", "HTTPS")
 Rel(web, api, "Calls", "REST/JSON")
 Rel(api, db, "Reads/Writes", "JDBC")
 Rel(api, mq, "Publishes", "AMQP")
 Rel(api, ext, "Fetches data", "REST")
+
 @enduml

@@ -2,8 +2,14 @@
 !pragma layout smetana
 !include <archimate/Archimate>
 
-title Archimate Implementation & Migration
+title Archimate Implementation & Migration Layer
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 Implementation_Plateau(current, "Current State")
 Implementation_Plateau(transition, "Transition State")
 Implementation_Plateau(target, "Target State")
@@ -18,6 +24,7 @@ Implementation_Deliverable(docs, "Runbooks & Documentation")
 Implementation_Event(kickoff, "Project Kickoff")
 Implementation_Event(golive, "Go-Live Milestone")
 
+' ---- Relations ----
 Rel_Triggering(kickoff, wp1, "starts")
 Rel_Triggering(wp1, wp2, "followed by")
 Rel_Triggering(wp2, wp3, "followed by")
@@ -30,4 +37,10 @@ Rel_Association(transition, gap2, "has")
 Rel_Composition(transition, wp1, "includes")
 Rel_Composition(transition, wp2, "includes")
 Rel_Composition(target, wp3, "includes")
+
+legend
+|= Info |= Description |
+| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
+endlegend
+
 @enduml

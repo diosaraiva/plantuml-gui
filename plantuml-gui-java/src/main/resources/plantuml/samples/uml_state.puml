@@ -1,8 +1,14 @@
 @startuml
 !pragma layout smetana
 
-title State Diagram
+title UML State Diagram
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- States ----
 [*] --> Idle
 
 Idle --> Processing : Submit
@@ -17,4 +23,10 @@ state Processing {
   Validating --> Reviewing
   Reviewing --> [*]
 }
+
+legend
+|= Info |= Description |
+| Reference | https://plantuml.com/state-diagram |
+endlegend
+
 @enduml

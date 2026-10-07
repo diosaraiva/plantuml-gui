@@ -4,6 +4,12 @@
 
 title Archimate Business Layer
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 Business_Actor(customer, "Customer")
 Business_Actor(employee, "Employee")
 Business_Role(manager, "Account Manager")
@@ -19,6 +25,7 @@ Business_Contract(sla, "SLA Agreement")
 Business_Representation(report, "Monthly Report")
 Business_Product(product, "Enterprise Plan")
 
+' ---- Relations ----
 Rel_Assignment(manager, onboarding, "performs")
 Rel_Assignment(team, negotiation, "participates in")
 Rel_Composition(team, manager, "includes")
@@ -29,4 +36,10 @@ Rel_Realization(onboarding, svc, "realizes")
 Rel_Access(onboarding, contract, "creates")
 Rel_Association(product, svc, "includes")
 Rel_Serving(portal, customer, "accessed via")
+
+legend
+|= Info |= Description |
+| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
+endlegend
+
 @enduml

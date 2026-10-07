@@ -4,6 +4,12 @@
 
 title Archimate Application Layer
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 Application_Component(webapp, "Web Application")
 Application_Component(backend, "Backend API")
 Application_Component(auth, "Auth Service")
@@ -19,6 +25,7 @@ Application_Service(appSvc, "Application Service")
 Application_DataObject(userData, "User Data")
 Application_DataObject(auditLog, "Audit Log")
 
+' ---- Relations ----
 Rel_Composition(webapp, ui, "exposes")
 Rel_Composition(backend, restApi, "exposes")
 Rel_Serving(restApi, webapp, "serves")
@@ -32,4 +39,10 @@ Rel_Flow(etl, sync, "invokes")
 Rel_Serving(auth, backend, "authenticates")
 Rel_Association(integration, backend, "includes")
 Rel_Association(integration, auth, "includes")
+
+legend
+|= Info |= Description |
+| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
+endlegend
+
 @enduml

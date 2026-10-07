@@ -1,8 +1,14 @@
 @startuml
 !pragma layout smetana
 
-title Deployment Diagram
+title UML Deployment Diagram
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 node "Web Server" as web {
   artifact "webapp.war"
 }
@@ -20,8 +26,15 @@ cloud "CDN" as cdn
 
 actor User
 
+' ---- Relations ----
 User --> cdn : HTTPS
 cdn --> web
 web --> app : REST API
 app --> pg : JDBC
+
+legend
+|= Info |= Description |
+| Reference | https://plantuml.com/deployment-diagram |
+endlegend
+
 @enduml

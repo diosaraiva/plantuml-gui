@@ -4,6 +4,12 @@
 
 title Archimate Technology Layer
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 Technology_Node(cloud, "Cloud Platform")
 Technology_Node(appServer, "Application Server")
 Technology_Device(firewall, "Firewall Appliance")
@@ -21,6 +27,7 @@ Technology_Event(alert, "Health Alert")
 Technology_Service(hosting, "Hosting Service")
 Technology_Artifact(image, "Container Image")
 
+' ---- Relations ----
 Rel_Composition(cloud, appServer, "hosts")
 Rel_Composition(appServer, os, "runs")
 Rel_Composition(os, container, "runs")
@@ -34,4 +41,10 @@ Rel_Association(lan, firewall, "connects")
 Rel_Serving(loadBalancer, appServer, "routes to")
 Rel_Serving(https, loadBalancer, "exposes")
 Rel_Access(monitoring, alert, "generates")
+
+legend
+|= Info |= Description |
+| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
+endlegend
+
 @enduml

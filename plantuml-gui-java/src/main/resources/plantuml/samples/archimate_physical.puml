@@ -4,6 +4,12 @@
 
 title Archimate Physical Layer
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
+' ---- Elements ----
 Physical_Facility(dc1, "Primary Data Center")
 Physical_Facility(dc2, "Disaster Recovery Site")
 Physical_Equipment(rack1, "Server Rack A")
@@ -16,6 +22,7 @@ Technology_Node(server1, "Production Server")
 Technology_Node(server2, "DR Server")
 Technology_Device(switch1, "Network Switch")
 
+' ---- Relations ----
 Rel_Composition(dc1, rack1, "contains")
 Rel_Composition(dc1, rack2, "contains")
 Rel_Composition(dc2, storage, "contains")
@@ -26,4 +33,10 @@ Rel_Association(fiber, dc1, "connects")
 Rel_Association(fiber, dc2, "connects")
 Rel_Realization(storage, media, "stores on")
 Rel_Serving(server1, server2, "replicates to")
+
+legend
+|= Info |= Description |
+| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
+endlegend
+
 @enduml

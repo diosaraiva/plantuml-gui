@@ -4,6 +4,11 @@
 
 title Archimate Full Layered View
 
+' ---- Customizations ----
+skinparam legendBackgroundColor #white
+skinparam legendBorderColor #white
+skinparam legendFontSize 10
+
 ' ---- Motivation ----
 Motivation_Stakeholder(stakeholder, "Customer")
 Motivation_Goal(goal, "Seamless Experience")
@@ -60,4 +65,10 @@ Rel_Composition(dc, server, "contains")
 Rel_Assignment(server, cloud, "runs")
 Rel_Realization(wp, release, "produces")
 Rel_Realization(release, shop, "delivers")
+
+legend
+|= Info |= Description |
+| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
+endlegend
+
 @enduml
