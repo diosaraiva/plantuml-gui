@@ -264,6 +264,8 @@ public final class PlantUmlInputPanel extends JPanel {
     	UTILS_EMOJI("List Available [emoji]", "util_emoji.puml"),
     	UTILS_OPENICONIC("List Available [icons]", "util_openiconic.puml"),
     	UTILS_SKINPARAMS("List Available [skinparams]", "util_skinparams.puml"),
+    	UTILS_STDLIBS("List Available [standardlibraries]", "util_stdlib.puml"),
+    	UTILS_STDLIBSDET("List Available [standardlibraries-detailed]", "util_stdlibdet.puml"),
     	UTILS_SPRITES("List Available [sprites]", "util_sprites.puml"),
     	UTILS_THEMES("List Available [themes]", "util_themes.puml");
 
