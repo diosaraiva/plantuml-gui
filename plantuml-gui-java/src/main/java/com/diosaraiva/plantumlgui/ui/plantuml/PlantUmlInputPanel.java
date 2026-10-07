@@ -227,6 +227,7 @@ public final class PlantUmlInputPanel extends JPanel {
     	CSS_STYLING("CSS Styling", "css_styling.puml"),
     	CHART("Chart", "chart.puml"),
     	DITAA("Ditaa", "ditaa.puml"),
+    	DOMAINSTORY("Domain Story", "domainstory.puml"),
     	EBNF("EBNF", "ebnf.puml"),
     	FILES("Files", "files.puml"),
     	GANTT("Gantt", "gantt.puml"),
