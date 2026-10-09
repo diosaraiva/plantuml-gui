@@ -1,0 +1,74 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/architecture/reference-architectures/hybrid-networking/
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure Hybrid Connectivity - ExpressRoute with VPN Failover
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Networking/AzureVirtualNetwork>
+!include <azure/Networking/AzureExpressRoute>
+!include <azure/Networking/AzureVPNGateway>
+!include <azure/Networking/AzureDNS>
+!include <azure/Identity/AzureActiveDirectory>
+
+' ---- Elements ----
+rectangle "On-premises Datacenter" {
+  node "Edge Routers (BGP)" as edge
+  node "VPN Device" as vpnDev
+  node "AD DS + Entra Connect" as adds
+  node "DNS Servers" as onDns
+}
+
+rectangle "Connectivity Provider" {
+  node "Provider Edge (MSEE pair)" as msee
+}
+
+rectangle "Azure - vnet-hub-weu" {
+  AzureExpressRoute(er, "ER Gateway", "ErGw2AZ")
+  AzureVPNGateway(vpn, "VPN Gateway", "VpnGw2AZ, active-active")
+  AzureVirtualNetwork(hub, "vnet-hub-weu", "10.0.0.0/22")
+  AzureDNS(resolver, "DNS Private Resolver", "Inbound + outbound")
+  AzureActiveDirectory(entra, "Entra ID", "Hybrid identity")
+}
+
+edge <--> msee : primary circuit
+msee <--> er : Microsoft peering + private peering
+vpnDev <..> vpn : IPsec backup (BGP)
+er --> hub
+vpn --> hub
+onDns <--> resolver : conditional forwarding
+adds ..> entra : Entra Connect sync
+
+@enduml

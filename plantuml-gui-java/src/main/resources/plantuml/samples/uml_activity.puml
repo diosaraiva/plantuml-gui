@@ -1,33 +1,89 @@
 @startuml
-!pragma layout smetana
-
-title UML Activity Diagram
-
 ' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
 
-' ---- Activities ----
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/activity-diagram-beta
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Activity Diagram - Order Fulfilment
+
+' ---- Elements ----
+|Customer|
 start
-:Receive order;
-if (Payment valid?) then (yes)
-  :Process payment;
+:Submit order;
+
+|System|
+:Validate order;
+if (Valid?) then (yes)
+  :Reserve stock;
+else (no)
+  :Notify customer of error;
+  stop
+endif
+
+:Request payment;
+
+|Payment Gateway|
+:Authorize card;
+
+|System|
+if (Approved?) then (yes)
   fork
+    |Warehouse|
+    :Pick items;
     :Pack items;
   fork again
+    |System|
+    :Generate invoice;
     :Send confirmation email;
   end fork
-  :Ship order;
+
+  |Warehouse|
+  repeat
+    :Attempt delivery;
+  repeat while (Delivered?) is (no) not (yes)
+
+  |Customer|
+  :Receive order;
 else (no)
-  :Notify customer;
+  |System|
+  :Release stock;
   :Cancel order;
 endif
+
 stop
 
-legend
-|= Info |= Description |
-| Reference | https://plantuml.com/activity-diagram-legacy\n https://plantuml.com/activity-diagram-beta |
-endlegend
+note right
+  Swimlanes are activity partitions.
+  fork / end fork = fork and join nodes.
+end note
 
 @enduml

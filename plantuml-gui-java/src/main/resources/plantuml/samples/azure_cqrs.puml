@@ -1,0 +1,79 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/architecture/guide/architecture-styles/cqrs
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure Architecture Style - CQRS with Event Sourcing
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Web/AzureWebApp>
+!include <azure/Compute/AzureFunction>
+!include <azure/Databases/AzureCosmosDb>
+!include <azure/Databases/AzureSqlDatabase>
+!include <azure/Databases/AzureRedisCache>
+!include <azure/Integration/AzureServiceBusQueue>
+
+' ---- Elements ----
+actor "Client" as client
+
+rectangle "API Management\nRoute by verb" as apim
+
+rectangle "Command side (write)" {
+  AzureWebApp(cmd, "Command API", "Validates + applies")
+  AzureCosmosDb(store, "Event Store", "Cosmos DB, append-only")
+}
+
+rectangle "Event propagation" {
+  AzureServiceBusQueue(bus, "Service Bus Topic", "Domain events")
+  AzureFunction(proj, "Projector", "Change feed trigger")
+}
+
+rectangle "Query side (read)" {
+  AzureWebApp(qry, "Query API", "Read-only")
+  AzureSqlDatabase(read, "Read Model", "Denormalized views")
+  AzureRedisCache(cache, "Redis", "Hot queries")
+}
+
+client --> apim
+apim --> cmd : POST / PUT / DELETE
+apim --> qry : GET
+cmd --> store : append event
+store --> proj : change feed
+proj --> bus : publish
+bus --> proj : subscribe
+proj --> read : update projection
+qry --> cache
+qry --> read
+
+@enduml

@@ -1,34 +1,51 @@
 @startuml
-!pragma layout smetana
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title ArchiMate - Strategy Layer
+
+' ---- Includes ----
 !include <archimate/Archimate>
 
-title Archimate Strategy Layer
-
-' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
-
 ' ---- Elements ----
-Strategy_Resource(res1, "Human Resources")
-Strategy_Resource(res2, "IT Budget")
-Strategy_Capability(cap1, "Digital Transformation")
-Strategy_Capability(cap2, "Data Analytics")
-Strategy_CourseOfAction(coa1, "Cloud Migration Plan")
-Strategy_CourseOfAction(coa2, "Data Platform Initiative")
-Strategy_ValueStream(vs1, "Customer Onboarding")
+Strategy_Resource(res, "Customer Data")
+Strategy_Capability(cap, "Personalized Marketing")
+Strategy_ValueStream(vs, "Acquire Customer")
+Strategy_CourseOfAction(coa, "Grow Online Sales")
 
-' ---- Relations ----
-Rel_Composition(cap1, res1, "requires")
-Rel_Composition(cap2, res2, "requires")
-Rel_Realization(coa1, cap1, "realizes")
-Rel_Realization(coa2, cap2, "realizes")
-Rel_Association(vs1, cap1, "enabled by")
-Rel_Association(vs1, cap2, "enabled by")
-
-legend
-|= Info |= Description |
-| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
-endlegend
+Rel_Realization_Up(res, cap, "supports")
+Rel_Serving_Up(cap, vs, "enables")
+Rel_Realization_Up(coa, cap, "shapes")
 
 @enduml

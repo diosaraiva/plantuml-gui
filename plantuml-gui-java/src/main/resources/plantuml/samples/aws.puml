@@ -1,19 +1,75 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/awslabs/aws-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title AWS Diagram
+
+' ---- Includes ----
 !include <awslib/AWSCommon>
-!include <awslib/InternetOfThings/IoTRule>
-!include <awslib/Analytics/KinesisDataStreams>
-!include <awslib/ApplicationIntegration/SimpleQueueService>
+!include <awslib/General/Users>
+!include <awslib/Groups/AWSCloud>
+!include <awslib/Groups/VPC>
+!include <awslib/Groups/PublicSubnet>
+!include <awslib/Groups/PrivateSubnet>
+!include <awslib/NetworkingContentDelivery/VPCInternetGateway>
+!include <awslib/NetworkingContentDelivery/ElasticLoadBalancingApplicationLoadBalancer>
+!include <awslib/Compute/EC2>
+!include <awslib/Database/RDS>
+!include <awslib/Storage/SimpleStorageService>
 
-left to right direction
+' ---- Elements ----
+Users(users, "Internet Users", "HTTPS")
 
-agent "Published Event" as event #fff
+AWSCloudGroup(cloud) {
+  SimpleStorageService(s3, "S3 Bucket", "Static assets")
 
-IoTRule(iotRule, "Action Error Rule", "error if Kinesis fails")
-KinesisDataStreams(eventStream, "IoT Events", "2 shards")
-SimpleQueueService(errorQueue, "Rule Error Queue", "failed Rule actions")
+  VPCGroup(vpc) {
+    PublicSubnetGroup(pub, "Public Subnet") {
+      VPCInternetGateway(igw, "Internet Gateway", "")
+      ElasticLoadBalancingApplicationLoadBalancer(alb, "ALB", "HTTP/HTTPS")
+    }
+    PrivateSubnetGroup(priv, "Private Subnet") {
+      EC2(ec2, "Web Server", "t3.micro")
+      RDS(db, "Database", "MySQL")
+    }
+  }
+}
 
-event --> iotRule : JSON message
-iotRule --> eventStream : messages
-iotRule --> errorQueue : Failed action message
+users --> igw
+igw --> alb
+alb --> ec2
+ec2 --> db
+ec2 ..> s3
 
 @enduml

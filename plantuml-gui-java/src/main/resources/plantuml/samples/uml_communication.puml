@@ -1,0 +1,54 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/object-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Communication Diagram - Place Order (approximated)
+
+' ---- Elements ----
+object "cust : Customer" as cust <<actor>>
+object "ui : WebUI" as ui
+object "ctrl : OrderController" as ctrl
+object "order : Order" as order
+object "stock : Inventory" as stock
+object "pay : PaymentClient" as pay
+
+cust --> ui : 1: submit()
+ui --> ctrl : 1.1: placeOrder(cart)
+ctrl --> order : 1.1.1: create(cart)
+ctrl --> stock : 1.1.2: reserve(items)
+ctrl --> pay : 1.1.3: charge(total)
+ctrl --> order : 1.1.4: markPaid()
+ctrl --> ui : 1.2: confirmation
+
+@enduml

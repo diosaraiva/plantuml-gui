@@ -1,0 +1,62 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/activity-diagram-beta
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Interaction Overview Diagram - Checkout Flow (approximated)
+
+' ---- Elements ----
+start
+
+:ref sd Authenticate;
+
+if (Authenticated?) then (yes)
+  :ref sd Build Cart;
+  :ref sd Fraud Check;
+  if (Risk level?) then (low)
+    fork
+      :ref sd Charge Card;
+    fork again
+      :ref sd Reserve Stock;
+    end fork
+    :ref sd Send Confirmation;
+  else (high)
+    :ref sd Manual Review;
+  endif
+else (no)
+  :ref sd Show Login Error;
+endif
+
+stop
+
+@enduml

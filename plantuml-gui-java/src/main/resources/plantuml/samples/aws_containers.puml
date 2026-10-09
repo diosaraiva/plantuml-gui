@@ -1,0 +1,74 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/awslabs/aws-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title AWS Container View - ECS Fargate and EKS
+
+' ---- Includes ----
+!include <awslib/AWSCommon>
+!include <awslib/General/Users>
+!include <awslib/Groups/AWSCloud>
+!include <awslib/Groups/VPC>
+!include <awslib/NetworkingContentDelivery/ElasticLoadBalancingApplicationLoadBalancer>
+!include <awslib/Containers/ElasticContainerRegistry>
+!include <awslib/Containers/ElasticContainerService>
+!include <awslib/Containers/Fargate>
+!include <awslib/Containers/ElasticKubernetesService>
+!include <awslib/Database/RDS>
+
+' ---- Elements ----
+Users(users, "Internet Users", "HTTPS")
+
+AWSCloudGroup(cloud) {
+  ElasticContainerRegistry(ecr, "ECR", "Images")
+
+  VPCGroup(vpc) {
+    ElasticLoadBalancingApplicationLoadBalancer(alb, "ALB", "Path routing")
+    ElasticContainerService(ecs, "ECS Cluster", "Services")
+    Fargate(task, "Fargate Tasks", "api, worker")
+    ElasticKubernetesService(eks, "EKS Cluster", "Pods")
+    RDS(db, "RDS", "PostgreSQL")
+  }
+}
+
+users --> alb
+alb --> task : /api
+alb --> eks : /app
+ecs --> task : runs
+ecr ..> task : pull image
+ecr ..> eks : pull image
+task --> db
+eks --> db
+
+@enduml

@@ -1,0 +1,72 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/class-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Profile Diagram - Persistence Profile (approximated)
+
+' ---- Elements ----
+package "PersistenceProfile" <<profile>> {
+  class Entity <<stereotype>> {
+    + tableName : String
+    + cacheable : Boolean = false
+  }
+
+  class Id <<stereotype>> {
+    + generated : Boolean = true
+  }
+
+  class Transient <<stereotype>>
+
+  class Service <<stereotype>> {
+    + transactional : Boolean = true
+  }
+}
+
+package "UML Metamodel" <<metamodel>> {
+  class Class <<metaclass>>
+  class Property <<metaclass>>
+  class Component <<metaclass>>
+}
+
+Entity --|> Class : <<extension>>
+Id --|> Property : <<extension>>
+Transient --|> Property : <<extension>>
+Service --|> Component : <<extension>>
+
+note bottom of Entity
+  Applied as <<Entity>> on a model Class,
+  with tagged value tableName = "orders"
+end note
+
+@enduml

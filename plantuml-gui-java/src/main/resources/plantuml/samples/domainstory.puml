@@ -1,12 +1,45 @@
 @startuml
-!include <DomainStory/domainStory>
-
-Boundary(Party) {
-    Person(Alice)
-    Conversation(weather)
-    Person(Bob)
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
 }
 
-activity(1, Alice, talks about the, weather, with, Bob)
+header {
+  HorizontalAlignment center
+  FontSize 12
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/johthor/DomainStory-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Domain Story - Booking Cinema Tickets
+
+' ---- Includes ----
+!include <DomainStory/domainStory>
+
+' ---- Elements ----
+Boundary(Cinema) {
+    Person(Customer)
+    Conversation(request)
+    Person(Cashier)
+    Conversation(offer)
+}
+
+activity(1, Customer, asks for, request, with, Cashier)
+activity(2, Cashier, recommends, offer, to, Customer)
+activity(3, Customer, confirms, offer, with, Cashier)
 
 @enduml

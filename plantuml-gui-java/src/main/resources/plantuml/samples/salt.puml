@@ -1,13 +1,90 @@
 @startsalt
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/salt
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Salt Wireframe - Image Viewer Preferences
+
+' ---- Elements ----
 {+
-{* File | Edit | Source | Refactor }
+{* File | Edit | Source | Refactor | Help }
 {/ General | Fullscreen | Behavior | Saving }
 {
-{ Open image in: | ^Smart Mode^ }
-[X] Smooth images when zoomed
-[X] Confirm image deletion
-[ ] Show hidden images
+  {+
+    <b>Display
+    ..
+    Open image in: | ^Smart Mode^
+    Background: | ^Dark^
+    Zoom step: | "25      " | %
+    Default view: | () Fit to window | . | . 
+    . | () Actual size | . | .
+    . | () Fill screen | . | .
+  }
+  {+
+    <b>Options
+    ..
+    [X] Smooth images when zoomed
+    [X] Confirm image deletion
+    [ ] Show hidden images
+    [ ] Show EXIF overlay
+    [X] Remember last folder
+  }
+  {+
+    <b>Recent folders
+    ..
+    {T
+      + Pictures
+      ++ Holidays
+      +++ 2025
+      +++ 2026
+      ++ Screenshots
+      + Downloads
+    }
+  }
+  {+
+    <b>Shortcuts
+    ..
+    {#
+      Action | Key
+      Next image | <&arrow-right>
+      Previous image | <&arrow-left>
+      Delete | Del
+      Fullscreen | F11
+    }
+  }
 }
-[Close]
+{
+  [Restore defaults] | . | . | [Cancel] | [Apply] | [Close]
+}
 }
 @endsalt

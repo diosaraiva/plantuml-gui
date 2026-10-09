@@ -1,52 +1,63 @@
 @startuml
-!pragma layout smetana
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title ArchiMate - Motivation Layer
+
+' ---- Includes ----
 !include <archimate/Archimate>
 
-title Archimate Motivation Layer
-
-' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
-
 ' ---- Elements ----
-Motivation_Stakeholder(ceo, "CEO")
-Motivation_Stakeholder(cto, "CTO")
-Motivation_Stakeholder(customer, "Customer")
-Motivation_Driver(growth, "Market Growth")
-Motivation_Driver(efficiency, "Operational Efficiency")
-Motivation_Assessment(gap, "Legacy System Gap")
-Motivation_Assessment(risk, "Security Risk")
-Motivation_Goal(digital, "Digital Transformation")
-Motivation_Goal(reliability, "99.9% Uptime")
-Motivation_Outcome(satisfaction, "Customer Satisfaction")
-Motivation_Outcome(savings, "Cost Savings")
-Motivation_Principle(security, "Security by Design")
-Motivation_Principle(agile, "Agile Delivery")
-Motivation_Requirement(compliance, "GDPR Compliance")
-Motivation_Constraint(budget, "Budget Limit")
-Motivation_Meaning(trust, "Customer Trust")
-Motivation_Value(revenue, "Increased Revenue")
+Motivation_Stakeholder(cio, "CIO")
+Motivation_Driver(cost, "Rising Infrastructure Cost")
+Motivation_Assessment(review, "Cloud Cost Review")
+Motivation_Goal(reduce, "Reduce IT Cost")
+Motivation_Outcome(saving, "20% Lower Run Cost")
+Motivation_Principle(cloud, "Cloud First")
+Motivation_Requirement(autoscale, "Autoscale Workloads")
+Motivation_Constraint(budget, "Fixed Annual Budget")
+Motivation_Meaning(meaning, "Cost Efficiency")
+Motivation_Value(value, "Business Agility")
 
-' ---- Relations ----
-Rel_Association(ceo, growth, "concerned with")
-Rel_Association(cto, efficiency, "concerned with")
-Rel_Association(customer, satisfaction, "desires")
-Rel_Influence(growth, digital, "motivates")
-Rel_Influence(efficiency, reliability, "motivates")
-Rel_Influence(gap, digital, "identified by")
-Rel_Influence(risk, security, "drives")
-Rel_Realization(digital, satisfaction, "achieves")
-Rel_Realization(reliability, savings, "achieves")
-Rel_Aggregation(digital, compliance, "includes")
-Rel_Association(security, compliance, "supports")
-Rel_Association(budget, digital, "constrains")
-Rel_Association(satisfaction, trust, "creates")
-Rel_Association(trust, revenue, "leads to")
-
-legend
-|= Info |= Description |
-| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
-endlegend
+Rel_Association(cio, cost, "concerned with")
+Rel_Influence(cost, review, "drives")
+Rel_Influence(review, reduce, "informs")
+Rel_Realization(saving, reduce, "realizes")
+Rel_Realization(cloud, reduce, "supports")
+Rel_Realization(autoscale, cloud, "realizes")
+Rel_Influence(budget, autoscale, "limits")
+Rel_Association(meaning, saving, "")
+Rel_Association(value, reduce, "")
 
 @enduml

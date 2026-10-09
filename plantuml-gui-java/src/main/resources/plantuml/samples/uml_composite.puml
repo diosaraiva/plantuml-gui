@@ -1,0 +1,62 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/component-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Composite Structure Diagram - Car (approximated)
+
+' ---- Elements ----
+component "Car" as car <<classifier>> {
+  portin "fuel" as fuelPort
+  portout "drive" as drivePort
+
+  component "engine : Engine" as engine {
+    portin "fuelIn" as engFuel
+    portout "torque" as engTorque
+  }
+
+  component "gearbox : Gearbox" as gearbox {
+    portin "torqueIn" as gbIn
+    portout "torqueOut" as gbOut
+  }
+
+  component "ecu : ECU" as ecu
+}
+
+fuelPort --> engFuel : delegate
+engTorque --> gbIn : torque
+gbOut --> drivePort : delegate
+ecu ..> engine : controls
+ecu ..> gearbox : controls
+
+@enduml

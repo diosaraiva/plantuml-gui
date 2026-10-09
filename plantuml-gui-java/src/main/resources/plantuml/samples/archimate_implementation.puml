@@ -1,46 +1,56 @@
 @startuml
-!pragma layout smetana
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title ArchiMate - Implementation and Migration Layer
+
+' ---- Includes ----
 !include <archimate/Archimate>
 
-title Archimate Implementation & Migration Layer
-
-' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
-
 ' ---- Elements ----
-Implementation_Plateau(current, "Current State")
-Implementation_Plateau(transition, "Transition State")
-Implementation_Plateau(target, "Target State")
-Implementation_Gap(gap1, "Gap: Legacy Decommission")
-Implementation_Gap(gap2, "Gap: Cloud Readiness")
-Implementation_WorkPackage(wp1, "Phase 1: Assessment")
-Implementation_WorkPackage(wp2, "Phase 2: Migration")
-Implementation_WorkPackage(wp3, "Phase 3: Optimization")
-Implementation_Deliverable(report, "Assessment Report")
-Implementation_Deliverable(infra, "Cloud Infrastructure")
-Implementation_Deliverable(docs, "Runbooks & Documentation")
-Implementation_Event(kickoff, "Project Kickoff")
-Implementation_Event(golive, "Go-Live Milestone")
+Implementation_Plateau(baseline, "Baseline: On-Premises")
+Implementation_Plateau(target, "Target: Cloud Native")
+Implementation_Gap(gap, "Missing Container Platform")
+Implementation_WorkPackage(migrate, "Migrate Workloads")
+Implementation_Deliverable(runbook, "Cloud Runbook")
+Implementation_Event(go, "Go-Live")
 
-' ---- Relations ----
-Rel_Triggering(kickoff, wp1, "starts")
-Rel_Triggering(wp1, wp2, "followed by")
-Rel_Triggering(wp2, wp3, "followed by")
-Rel_Triggering(wp3, golive, "completes at")
-Rel_Realization(wp1, report, "produces")
-Rel_Realization(wp2, infra, "produces")
-Rel_Realization(wp3, docs, "produces")
-Rel_Association(current, gap1, "has")
-Rel_Association(transition, gap2, "has")
-Rel_Composition(transition, wp1, "includes")
-Rel_Composition(transition, wp2, "includes")
-Rel_Composition(target, wp3, "includes")
-
-legend
-|= Info |= Description |
-| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
-endlegend
+Rel_Triggering(baseline, target, "migrates to")
+Rel_Association(gap, baseline, "")
+Rel_Association(gap, target, "")
+Rel_Realization(migrate, runbook, "produces")
+Rel_Realization(runbook, target, "realizes")
+Rel_Triggering(migrate, go, "ends with")
 
 @enduml

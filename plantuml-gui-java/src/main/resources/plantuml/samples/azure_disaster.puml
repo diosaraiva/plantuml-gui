@@ -1,0 +1,77 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/reliability/reliability-guidance-overview
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure Disaster Recovery - Paired Regions
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Databases/AzureSqlDatabase>
+
+' ---- Elements ----
+actor "Users" as users
+
+rectangle "Front Door\nHealth probes, priority routing" as fd
+
+rectangle "Primary: Brazil South" {
+  rectangle "Availability Zones 1-3" {
+    rectangle "lb-app-brs\nZone redundant" as lb1
+    rectangle "vm-app-brs\nActive" as vm1
+    AzureSqlDatabase(sql1, "sql-primary", "Business Critical, zone redundant")
+    rectangle "stappbrs\nGZRS" as sa1
+  }
+}
+
+rectangle "Secondary: South Central US" {
+  rectangle "lb-app-scus\nStandby" as lb2
+  rectangle "vm-app-scus\nASR target, stopped" as vm2
+  AzureSqlDatabase(sql2, "sql-secondary", "Readable replica")
+  rectangle "stappscus\nRA-GZRS read" as sa2
+}
+
+rectangle "Site Recovery\nRPO 5 min, recovery plan" as asr
+
+users --> fd
+fd --> lb1 : priority 1
+fd ..> lb2 : priority 2 (failover)
+lb1 --> vm1
+lb2 --> vm2
+vm1 --> sql1
+vm2 --> sql2
+sql1 --> sql2 : auto-failover group
+sa1 --> sa2 : geo-replication
+vm1 ..> asr : replicate
+asr ..> vm2 : failover
+
+@enduml

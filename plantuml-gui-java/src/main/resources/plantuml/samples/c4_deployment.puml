@@ -1,29 +1,63 @@
 @startuml
-!pragma layout smetana
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/C4-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title C4 Deployment Diagram - Production
+
+' ---- Includes ----
 !include <C4/C4_Deployment>
 
-title C4 Deployment Diagram
-
 ' ---- Elements ----
-Deployment_Node(cloud, "AWS", "Cloud") {
-  Deployment_Node(web_tier, "Web Tier", "EC2") {
-    Container(web, "Web App", "React", "Serves the UI.")
+Person(customer, "Customer", "Buys products online")
+
+Deployment_Node(browser, "Customer's Browser", "Chrome, Firefox") {
+  Container(spa, "Web Application", "React", "Storefront UI")
+}
+
+Deployment_Node(cloud, "Cloud Provider", "AWS") {
+  Deployment_Node(app, "Application Server", "Ubuntu 22.04, Docker") {
+    Container(api, "API Application", "Java, Spring Boot", "Business logic")
   }
-  Deployment_Node(app_tier, "App Tier", "ECS") {
-    Container(api, "API Server", "Java/Spring", "Business logic.")
-  }
-  Deployment_Node(data_tier, "Data Tier", "RDS") {
-    ContainerDb(db, "Database", "PostgreSQL", "Stores data.")
+  Deployment_Node(dbnode, "Database Server", "Managed RDS") {
+    ContainerDb(db, "Database", "PostgreSQL", "Stores orders")
   }
 }
 
-Deployment_Node(user_device, "User Device", "Browser") {
-  Container(browser, "Browser", "Chrome/Firefox", "User interface.")
-}
+Rel(customer, spa, "Uses", "HTTPS")
+Rel(spa, api, "Calls", "JSON/HTTPS")
+Rel(api, db, "Reads from and writes to", "JDBC")
 
-' ---- Relations ----
-Rel(browser, web, "Uses", "HTTPS")
-Rel(web, api, "Calls", "REST")
-Rel(api, db, "Reads/Writes", "JDBC")
+SHOW_LEGEND()
 
 @enduml

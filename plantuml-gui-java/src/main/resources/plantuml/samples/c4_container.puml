@@ -1,26 +1,61 @@
 @startuml
-!pragma layout smetana
-!include <C4/C4_Container>
-
-title C4 Container Diagram
-
-' ---- Elements ----
-Person(user, "User", "A user of the system.")
-
-System_Boundary(sys, "My System") {
-  Container(web, "Web App", "React", "Delivers the UI.")
-  Container(api, "API Server", "Java/Spring", "Handles business logic.")
-  ContainerDb(db, "Database", "PostgreSQL", "Stores data.")
-  Container(mq, "Message Queue", "RabbitMQ", "Async messaging.")
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
 }
 
-System_Ext(ext, "External API", "Provides data.")
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
 
-' ---- Relations ----
-Rel(user, web, "Uses", "HTTPS")
-Rel(web, api, "Calls", "REST/JSON")
-Rel(api, db, "Reads/Writes", "JDBC")
-Rel(api, mq, "Publishes", "AMQP")
-Rel(api, ext, "Fetches data", "REST")
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/C4-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title C4 Level 2 - Container Diagram
+
+' ---- Includes ----
+!include <C4/C4_Container>
+
+' ---- Elements ----
+Person(customer, "Customer", "Buys products online")
+
+System_Boundary(shop, "Online Shop") {
+  Container(web, "Web Application", "React", "Serves the storefront UI")
+  Container(api, "API Application", "Java, Spring Boot", "Exposes business logic over JSON/HTTPS")
+  ContainerDb(db, "Database", "PostgreSQL", "Stores customers, products and orders")
+  ContainerQueue(queue, "Message Queue", "RabbitMQ", "Order events")
+}
+
+System_Ext(payment, "Payment Gateway", "Processes card payments")
+
+Rel(customer, web, "Browses and orders", "HTTPS")
+Rel(web, api, "Calls", "JSON/HTTPS")
+Rel(api, db, "Reads from and writes to", "JDBC")
+Rel(api, queue, "Publishes order events", "AMQP")
+Rel(api, payment, "Charges cards", "HTTPS")
+
+SHOW_LEGEND()
 
 @enduml

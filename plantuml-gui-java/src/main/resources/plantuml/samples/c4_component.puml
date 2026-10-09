@@ -1,25 +1,62 @@
 @startuml
-!pragma layout smetana
-!include <C4/C4_Component>
-
-title C4 Component Diagram
-
-' ---- Elements ----
-Container_Boundary(api, "API Server") {
-  Component(ctrl, "Controller", "Spring MVC", "Handles HTTP requests.")
-  Component(svc, "Service Layer", "Spring", "Business logic.")
-  Component(repo, "Repository", "Spring Data", "Data access.")
-  Component(auth, "Auth Module", "Spring Security", "Authentication.")
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
 }
 
-ContainerDb(db, "Database", "PostgreSQL", "Stores data.")
-Container(web, "Web App", "React", "Frontend UI.")
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
 
-' ---- Relations ----
-Rel(web, ctrl, "Calls", "REST/JSON")
-Rel(ctrl, auth, "Validates tokens")
-Rel(ctrl, svc, "Delegates to")
-Rel(svc, repo, "Uses")
-Rel(repo, db, "Reads/Writes", "JDBC")
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/C4-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title C4 Level 3 - Component Diagram
+
+' ---- Includes ----
+!include <C4/C4_Component>
+
+' ---- Elements ----
+Container(web, "Web Application", "React", "Serves the storefront UI")
+ContainerDb(db, "Database", "PostgreSQL", "Stores customers, products and orders")
+System_Ext(payment, "Payment Gateway", "Processes card payments")
+
+Container_Boundary(api, "API Application") {
+  Component(orderCtrl, "Order Controller", "Spring MVC REST Controller", "Handles order requests")
+  Component(orderSvc, "Order Service", "Spring Bean", "Order business logic")
+  Component(paymentCli, "Payment Client", "Spring Bean", "Talks to the payment gateway")
+  ComponentDb(orderRepo, "Order Repository", "Spring Data JPA", "Persists orders")
+}
+
+Rel(web, orderCtrl, "Calls", "JSON/HTTPS")
+Rel(orderCtrl, orderSvc, "Uses")
+Rel(orderSvc, paymentCli, "Uses")
+Rel(orderSvc, orderRepo, "Uses")
+Rel(orderRepo, db, "Reads from and writes to", "JDBC")
+Rel(paymentCli, payment, "Charges cards", "HTTPS")
+
+SHOW_LEGEND()
 
 @enduml

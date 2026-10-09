@@ -1,0 +1,78 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/devops-teams-topologies
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure DevOps - CI/CD with Environments
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Web/AzureWebApp>
+
+' ---- Elements ----
+actor "Developers" as dev
+
+rectangle "Azure DevOps Organization" {
+  rectangle "Azure Repos\nmain + PR policies" as repo
+  rectangle "CI Pipeline\nBuild, test, scan" as ci
+  rectangle "Azure Artifacts\nFeed" as pkg
+  rectangle "Test Plans\nManual + load" as tests
+  rectangle "CD Pipeline\nMulti-stage YAML" as cd
+}
+
+rectangle "sub-nonprod" {
+  AzureWebApp(dev1, "app-dev", "Slot: dev")
+  AzureWebApp(stg, "app-stg", "Slot: staging")
+}
+
+rectangle "sub-prod" {
+  AzureWebApp(prod, "app-prod", "Slot swap")
+  rectangle "kv-prod\nRelease secrets" as kv
+  rectangle "Application Insights\nHealth gates" as ai
+}
+
+rectangle "ACR\nImage registry" as acr
+
+dev --> repo : pull request
+repo --> ci : trigger
+ci --> pkg : publish
+ci --> acr : push image
+ci --> cd : artifact
+cd --> dev1 : auto deploy
+cd --> stg : deploy
+stg --> tests
+cd --> prod : manual approval
+cd ..> kv : service connection (OIDC)
+ai ..> cd : gate / rollback
+
+@enduml

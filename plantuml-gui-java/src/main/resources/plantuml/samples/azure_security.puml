@@ -1,0 +1,94 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/security/zero-trust/azure-infrastructure-overview
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Azure Security - Zero Trust Layers
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Identity/AzureActiveDirectory>
+!include <azure/Networking/AzureFrontDoor>
+!include <azure/Networking/AzureFirewall>
+!include <azure/Compute/AzureAppService>
+!include <azure/Databases/AzureSqlDatabase>
+!include <azure/Security/AzureKeyVault>
+!include <azure/Security/AzureSecurityCenter>
+!include <azure/Security/AzureSentinel>
+!include <azure/Management/AzureMonitor>
+!include <azure/Management/AzurePolicy>
+
+' ---- Elements ----
+actor "User + Device" as user
+
+rectangle "1. Identity" {
+  AzureActiveDirectory(entra, "Entra ID", "MFA, Conditional Access, PIM")
+}
+
+rectangle "2. Network" {
+  AzureFrontDoor(fd, "Front Door", "WAF, TLS 1.2+")
+  AzureFirewall(fw, "Azure Firewall", "Premium, IDPS")
+}
+
+rectangle "3. Application" {
+  AzureAppService(app, "App Service", "Managed Identity, VNet integration")
+}
+
+rectangle "4. Data" {
+  AzureSqlDatabase(db, "Azure SQL", "Private Endpoint, TDE, Entra-only auth")
+  AzureKeyVault(kv, "Key Vault", "RBAC, soft delete, purge protection")
+}
+
+rectangle "5. Governance and visibility" {
+  AzurePolicy(pol, "Azure Policy", "Initiatives at mg level")
+  AzureSecurityCenter(mdc, "Defender for Cloud", "CSPM + CWP")
+  AzureMonitor(law, "Log Analytics", "Diagnostic settings")
+  AzureSentinel(siem, "Sentinel", "SIEM + SOAR")
+}
+
+user --> entra : verify explicitly
+user --> fd
+fd --> fw
+fw --> app
+app ..> entra : OIDC
+app ..> kv : MI, least privilege
+app --> db : Private Link
+pol ..> app : enforce
+pol ..> db : enforce
+mdc ..> app : assess
+app ..> law
+db ..> law
+law --> siem
+mdc --> siem : alerts
+
+@enduml

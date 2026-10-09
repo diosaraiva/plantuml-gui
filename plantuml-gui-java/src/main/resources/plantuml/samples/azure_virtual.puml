@@ -1,0 +1,74 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/virtual-wan/virtual-wan-about
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure Network Topology - Virtual WAN
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Networking/AzureVirtualWAN>
+!include <azure/Networking/AzureVirtualNetwork>
+!include <azure/Networking/AzureFirewall>
+!include <azure/Networking/AzureExpressRoute>
+!include <azure/Networking/AzureVPNGateway>
+
+' ---- Elements ----
+AzureVirtualWAN(wan, "vwan-global", "Standard")
+
+rectangle "Hub: West Europe" {
+  AzureFirewall(fwWeu, "Secured Hub FW", "Firewall Manager")
+  AzureExpressRoute(erWeu, "ER Gateway", "10 Gbps")
+  AzureVPNGateway(vpnWeu, "S2S Gateway", "2 scale units")
+}
+
+rectangle "Hub: Brazil South" {
+  AzureFirewall(fwBrs, "Secured Hub FW", "Firewall Manager")
+  AzureVPNGateway(vpnBrs, "S2S Gateway", "1 scale unit")
+}
+
+AzureVirtualNetwork(vnet1, "vnet-app-weu", "10.1.0.0/24")
+AzureVirtualNetwork(vnet2, "vnet-app-brs", "10.2.0.0/24")
+
+cloud "HQ Datacenter" as hq
+cloud "Branch Office" as branch
+
+wan --> fwWeu
+wan --> fwBrs
+fwWeu <--> fwBrs : hub-to-hub
+vnet1 --> fwWeu : connection
+vnet2 --> fwBrs : connection
+hq <--> erWeu : ExpressRoute
+branch <--> vpnBrs : S2S VPN
+
+@enduml

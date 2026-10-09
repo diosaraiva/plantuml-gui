@@ -1,0 +1,55 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/C4-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title C4 Dynamic Diagram - Place an Order
+
+' ---- Includes ----
+!include <C4/C4_Dynamic>
+
+' ---- Elements ----
+Person(customer, "Customer", "Buys products online")
+Container(web, "Web Application", "React", "Serves the storefront UI")
+Container(api, "API Application", "Java, Spring Boot", "Business logic")
+ContainerDb(db, "Database", "PostgreSQL", "Stores orders")
+System_Ext(payment, "Payment Gateway", "Processes card payments")
+
+RelIndex(1, customer, web, "Submits order")
+RelIndex(2, web, api, "POST /orders", "JSON/HTTPS")
+RelIndex(3, api, payment, "Charges card", "HTTPS")
+RelIndex(4, api, db, "Saves order", "JDBC")
+
+SHOW_LEGEND()
+
+@enduml

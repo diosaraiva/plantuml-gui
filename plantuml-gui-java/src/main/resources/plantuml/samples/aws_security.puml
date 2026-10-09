@@ -1,0 +1,86 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/security/zero-trust/azure-infrastructure-overview
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure Security - Zero Trust Layers
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Web/AzureWebApp>
+!include <azure/Databases/AzureSqlDatabase>
+
+' ---- Elements ----
+actor "User + Device" as user
+
+rectangle "1. Identity" {
+  rectangle "Entra ID\nMFA, Conditional Access, PIM" as entra
+}
+
+rectangle "2. Network" {
+  rectangle "Front Door\nWAF, TLS 1.2+" as fd
+  rectangle "Azure Firewall\nPremium, IDPS" as fw
+}
+
+rectangle "3. Application" {
+  AzureWebApp(app, "App Service", "Managed Identity, VNet integration")
+}
+
+rectangle "4. Data" {
+  AzureSqlDatabase(db, "Azure SQL", "Private Endpoint, TDE, Entra-only auth")
+  rectangle "Key Vault\nRBAC, soft delete, purge protection" as kv
+}
+
+rectangle "5. Governance and visibility" {
+  rectangle "Azure Policy\nInitiatives at mg level" as pol
+  rectangle "Defender for Cloud\nCSPM + CWP" as mdc
+  rectangle "Log Analytics\nDiagnostic settings" as law
+  rectangle "Sentinel\nSIEM + SOAR" as siem
+}
+
+user --> entra : verify explicitly
+user --> fd
+fd --> fw
+fw --> app
+app ..> entra : OIDC
+app ..> kv : MI, least privilege
+app --> db : Private Link
+pol ..> app : enforce
+pol ..> db : enforce
+mdc ..> app : assess
+app ..> law
+db ..> law
+law --> siem
+mdc --> siem : alerts
+
+@enduml

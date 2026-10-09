@@ -1,18 +1,57 @@
 @startuml
-!pragma layout smetana
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/C4-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title C4 Level 1 - System Context Diagram
+
+' ---- Includes ----
 !include <C4/C4_Context>
 
-title C4 System Context Diagram
-
 ' ---- Elements ----
-Person(user, "User", "A user of the system.")
-System(system, "My System", "Does useful things.")
-System_Ext(email, "Email System", "Sends notifications.")
-System_Ext(ext, "External API", "Provides data.")
+Person(customer, "Customer", "Buys products online")
+Person_Ext(admin, "Administrator", "Manages the catalog")
 
-' ---- Relations ----
-Rel(user, system, "Uses", "HTTPS")
-Rel(system, email, "Sends emails", "SMTP")
-Rel(system, ext, "Fetches data from", "REST")
+System(shop, "Online Shop", "Lets customers browse and order products")
+
+System_Ext(payment, "Payment Gateway", "Processes card payments")
+System_Ext(email, "Email System", "Sends order confirmations")
+
+Rel(customer, shop, "Browses and orders using", "HTTPS")
+Rel(admin, shop, "Manages products using", "HTTPS")
+Rel(shop, payment, "Charges cards using", "HTTPS")
+Rel(shop, email, "Sends emails using", "SMTP")
+
+SHOW_LEGEND()
 
 @enduml

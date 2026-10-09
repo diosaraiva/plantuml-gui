@@ -1,0 +1,83 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/architecture/networking/architecture/hub-spoke
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure Network Topology - Hub and Spoke
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Networking/AzureVirtualNetwork>
+!include <azure/Networking/AzureFirewall>
+!include <azure/Networking/AzureBastion>
+!include <azure/Networking/AzureVPNGateway>
+!include <azure/Networking/AzureDNS>
+!include <azure/Compute/AzureVirtualMachine>
+
+' ---- Elements ----
+rectangle "Hub - sub-connectivity" {
+  rectangle "vnet-hub-weu 10.0.0.0/22" {
+    AzureFirewall(fw, "afw-hub", "AzureFirewallSubnet")
+    AzureBastion(bas, "bas-hub", "AzureBastionSubnet")
+    AzureVPNGateway(gw, "vgw-hub", "GatewaySubnet")
+    AzureDNS(dns, "Private DNS Zones", "privatelink.*")
+  }
+}
+
+rectangle "Spoke 1 - sub-corp-erp" {
+  rectangle "vnet-erp-weu 10.1.0.0/24" {
+    rectangle "snet-app" {
+      AzureVirtualMachine(vm1, "vm-erp-01", "NSG: nsg-app")
+    }
+  }
+}
+
+rectangle "Spoke 2 - sub-corp-hr" {
+  rectangle "vnet-hr-weu 10.2.0.0/24" {
+    rectangle "snet-app " {
+      AzureVirtualMachine(vm2, "vm-hr-01", "NSG: nsg-app")
+    }
+  }
+}
+
+cloud "On-premises" as onprem
+
+onprem <--> gw : S2S VPN
+fw <--> vm1 : peering + UDR
+fw <--> vm2 : peering + UDR
+bas ..> vm1 : RDP/SSH
+bas ..> vm2 : RDP/SSH
+dns ..> vm1 : link
+dns ..> vm2 : link
+
+@enduml

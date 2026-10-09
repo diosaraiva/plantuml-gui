@@ -1,0 +1,86 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/architecture/guide/architecture-styles/big-data
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure Architecture Style - Big Data (Medallion Lakehouse)
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Databases/AzureSqlDatabase>
+!include <azure/Databases/AzureDataFactory>
+!include <azure/Analytics/AzureEventHub>
+!include <azure/Analytics/AzureDatabricks>
+
+' ---- Elements ----
+actor "Analysts" as analyst
+
+rectangle "Sources" {
+  AzureSqlDatabase(oltp, "Azure SQL", "Operational")
+  AzureEventHub(stream, "Event Hubs", "Streaming")
+  node "SaaS / Files" as saas
+}
+
+rectangle "Ingest" {
+  AzureDataFactory(adf, "Data Factory", "Batch pipelines")
+}
+
+rectangle "Data Lake (ADLS Gen2)" {
+  rectangle "Bronze\nRaw, immutable" as bronze
+  rectangle "Silver\nCleansed, Delta" as silver
+  rectangle "Gold\nCurated, Delta" as gold
+}
+
+rectangle "Process and serve" {
+  AzureDatabricks(dbx, "Databricks", "Spark + Delta Live Tables")
+  rectangle "Synapse\nServerless SQL pool" as syn
+}
+
+rectangle "Microsoft Purview\nCatalog + lineage" as gov
+node "Power BI" as pbi
+
+oltp --> adf : copy
+saas --> adf : copy
+stream --> bronze : Capture
+adf --> bronze
+bronze --> dbx
+dbx --> silver
+silver --> dbx
+dbx --> gold
+gold --> syn
+syn --> pbi : DirectQuery
+analyst --> pbi
+gov ..> bronze : scan
+gov ..> gold : scan
+
+@enduml

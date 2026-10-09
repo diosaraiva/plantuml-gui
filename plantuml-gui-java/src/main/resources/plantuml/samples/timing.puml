@@ -1,24 +1,73 @@
 @startuml
-!pragma layout smetana
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
 
-title Timing Diagram
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
 
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/timing-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Timing Diagram - Request Handling
+
+' ---- Elements ----
+clock "Clock" as CLK with period 50
+concise "Client" as C
 robust "Web Server" as WS
-concise "User" as User
+binary "DB Connection" as DBC
 
 @0
+C is Idle
 WS is Idle
-User is Idle
+DBC is low
 
 @100
-User is Requesting
+C is Waiting
+C -> WS : request
 WS is Processing
 
-@300
-WS is Sending
-User is Waiting
+@150
+WS -> DBC : query
+DBC is high
 
-@500
+@250
+DBC is low
+WS is Responding
+
+@300
+WS -> C : response
+C is Rendering
 WS is Idle
-User is Received
+
+@400
+C is Idle
+
+WS@100 <-> @300 : {200 ms}
+DBC@150 <-> @250 : {100 ms}
+
 @enduml

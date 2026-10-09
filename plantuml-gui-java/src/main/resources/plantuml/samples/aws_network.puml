@@ -1,0 +1,95 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/awslabs/aws-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title AWS Network View - Multi-AZ VPC
+
+' ---- Includes ----
+!include <awslib/AWSCommon>
+!include <awslib/General/Users>
+!include <awslib/Groups/AWSCloud>
+!include <awslib/Groups/Region>
+!include <awslib/Groups/VPC>
+!include <awslib/Groups/AvailabilityZone>
+!include <awslib/Groups/PublicSubnet>
+!include <awslib/Groups/PrivateSubnet>
+!include <awslib/NetworkingContentDelivery/Route53>
+!include <awslib/NetworkingContentDelivery/VPCInternetGateway>
+!include <awslib/NetworkingContentDelivery/VPCNATGateway>
+!include <awslib/NetworkingContentDelivery/ElasticLoadBalancingApplicationLoadBalancer>
+!include <awslib/Compute/EC2>
+
+' ---- Elements ----
+Users(users, "Internet Users", "HTTPS")
+
+AWSCloudGroup(cloud) {
+  Route53(dns, "Route 53", "app.example.com")
+
+  RegionGroup(region) {
+    VPCGroup(vpc) {
+      VPCInternetGateway(igw, "Internet Gateway", "")
+      ElasticLoadBalancingApplicationLoadBalancer(alb, "ALB", "Cross-AZ")
+
+      AvailabilityZoneGroup(az1, "AZ A") {
+        PublicSubnetGroup(pub1, "Public 10.0.1.0/24") {
+          VPCNATGateway(nat1, "NAT GW A", "")
+        }
+        PrivateSubnetGroup(priv1, "Private 10.0.11.0/24") {
+          EC2(ec2a, "App A", "t3.small")
+        }
+      }
+
+      AvailabilityZoneGroup(az2, "AZ B") {
+        PublicSubnetGroup(pub2, "Public 10.0.2.0/24") {
+          VPCNATGateway(nat2, "NAT GW B", "")
+        }
+        PrivateSubnetGroup(priv2, "Private 10.0.12.0/24") {
+          EC2(ec2b, "App B", "t3.small")
+        }
+      }
+    }
+  }
+}
+
+users --> dns
+users --> igw
+igw --> alb
+alb --> ec2a
+alb --> ec2b
+ec2a --> nat1 : outbound
+ec2b --> nat2 : outbound
+nat1 --> igw
+nat2 --> igw
+
+@enduml

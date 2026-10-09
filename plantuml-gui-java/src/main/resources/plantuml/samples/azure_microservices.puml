@@ -1,0 +1,91 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/architecture/guide/architecture-styles/microservices
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure Architecture Style - Microservices on AKS
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Networking/AzureApplicationGateway>
+!include <azure/Containers/AzureKubernetesService>
+!include <azure/Containers/AzureContainerRegistry>
+!include <azure/Integration/AzureServiceBus>
+!include <azure/Databases/AzureCosmosDb>
+!include <azure/Databases/AzureSqlDatabase>
+!include <azure/Databases/AzureRedisCache>
+!include <azure/Security/AzureKeyVault>
+!include <azure/Management/AzureMonitor>
+
+' ---- Elements ----
+actor "Clients" as clients
+
+AzureApplicationGateway(agw, "App Gateway", "AGIC, WAF")
+rectangle "API Management\nGateway offloading" as apim
+AzureContainerRegistry(acr, "ACR", "Signed images")
+
+rectangle "AKS Cluster (aks-shop-weu)" {
+  AzureKubernetesService(ingress, "Ingress", "NGINX / AGIC")
+  rectangle "ns-catalog" {
+    component "catalog-svc" as catalog
+  }
+  rectangle "ns-orders" {
+    component "orders-svc" as orders
+  }
+  rectangle "ns-payments" {
+    component "payments-svc" as payments
+  }
+}
+
+AzureServiceBus(bus, "Service Bus", "Domain events")
+AzureCosmosDb(catDb, "Cosmos DB", "catalog")
+AzureSqlDatabase(ordDb, "Azure SQL", "orders")
+AzureRedisCache(cache, "Redis", "cart")
+AzureKeyVault(kv, "Key Vault", "CSI driver")
+AzureMonitor(mon, "Container Insights", "Prometheus + Grafana")
+
+clients --> agw
+agw --> apim
+apim --> ingress
+ingress --> catalog
+ingress --> orders
+catalog --> catDb : database per service
+orders --> ordDb : database per service
+orders --> cache
+orders --> bus : OrderPlaced
+bus --> payments : subscribe
+acr ..> ingress : pull
+payments ..> kv : workload identity
+ingress ..> mon : telemetry
+
+@enduml

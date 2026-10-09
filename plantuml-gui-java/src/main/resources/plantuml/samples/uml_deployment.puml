@@ -1,40 +1,63 @@
 @startuml
-!pragma layout smetana
-
-title UML Deployment Diagram
-
 ' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/deployment-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Deployment Diagram - Production
 
 ' ---- Elements ----
-node "Web Server" as web {
-  artifact "webapp.war"
+node "Client Device" <<device>> as client {
+  node "Browser" <<execution environment>> as browser {
+    artifact "shop-spa.js" as spa
+  }
 }
 
-node "App Server" as app {
-  artifact "api.jar"
-  artifact "worker.jar"
+node "App Server" <<device>> as app {
+  node "JVM" <<execution environment>> as jvm {
+    artifact "shop.war" as war
+    artifact "application.yml" as cfg
+  }
 }
 
-node "Database Server" as db {
+node "DB Server" <<device>> as dbsrv {
   database "PostgreSQL" as pg
 }
 
-cloud "CDN" as cdn
+cloud "Payment Gateway" as pay
 
-actor User
-
-' ---- Relations ----
-User --> cdn : HTTPS
-cdn --> web
-web --> app : REST API
-app --> pg : JDBC
-
-legend
-|= Info |= Description |
-| Reference | https://plantuml.com/deployment-diagram |
-endlegend
+war ..> cfg : <<manifest>>
+spa --> war : HTTPS / JSON
+war --> pg : JDBC
+war --> pay : HTTPS
 
 @enduml

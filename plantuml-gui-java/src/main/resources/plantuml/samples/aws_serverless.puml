@@ -1,0 +1,72 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/awslabs/aws-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title AWS Serverless View - REST API
+
+' ---- Includes ----
+!include <awslib/AWSCommon>
+!include <awslib/General/Users>
+!include <awslib/Groups/AWSCloud>
+!include <awslib/NetworkingContentDelivery/CloudFront>
+!include <awslib/ApplicationIntegration/APIGateway>
+!include <awslib/SecurityIdentityCompliance/Cognito>
+!include <awslib/Compute/Lambda>
+!include <awslib/Database/DynamoDB>
+!include <awslib/Storage/SimpleStorageService>
+
+' ---- Elements ----
+Users(users, "Mobile / Web Users", "HTTPS")
+
+AWSCloudGroup(cloud) {
+  CloudFront(cdn, "CloudFront", "Static site")
+  SimpleStorageService(site, "S3 Website", "SPA assets")
+  Cognito(auth, "Cognito", "User pool")
+  APIGateway(api, "API Gateway", "REST")
+  Lambda(getFn, "GetItems", "Python")
+  Lambda(putFn, "PutItem", "Python")
+  DynamoDB(table, "DynamoDB", "Items table")
+}
+
+users --> cdn
+cdn --> site
+users --> auth : sign in
+users --> api : JWT
+api ..> auth : authorize
+api --> getFn
+api --> putFn
+getFn --> table : Query
+putFn --> table : PutItem
+
+@enduml

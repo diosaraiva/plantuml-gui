@@ -1,0 +1,120 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure Landing Zone - CAF Management Group Hierarchy
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Networking/AzureVirtualNetwork>
+!include <azure/Networking/AzureFirewall>
+!include <azure/Security/AzureKeyVault>
+!include <azure/Management/AzureMonitor>
+!include <azure/Identity/AzureActiveDirectory>
+!include <azure/Compute/AzureVirtualMachine>
+
+' ---- Elements ----
+rectangle "Entra ID Tenant" {
+  AzureActiveDirectory(entra, "Entra ID", "Identity + PIM")
+
+  rectangle "Tenant Root Group" {
+    rectangle "mg-contoso (Intermediate Root)" {
+
+      rectangle "mg-platform" as mgPlatform {
+        rectangle "sub-connectivity" {
+          rectangle "rg-hub-network-weu" {
+            AzureVirtualNetwork(hub, "vnet-hub-weu", "10.0.0.0/22")
+            AzureFirewall(fw, "afw-hub-weu", "Premium")
+          }
+        }
+        rectangle "sub-management" {
+          rectangle "rg-monitoring-weu" {
+            AzureMonitor(law, "law-platform-weu", "Log Analytics")
+          }
+        }
+        rectangle "sub-identity" {
+          rectangle "rg-identity-weu" {
+            AzureVirtualMachine(dc, "vm-dc-weu-01", "Domain Controller")
+          }
+        }
+      }
+
+      rectangle "mg-landingzones" as mgLz {
+        rectangle "mg-corp" {
+          rectangle "sub-corp-erp-prod" {
+            rectangle "rg-erp-prod-weu" {
+              AzureVirtualNetwork(spoke1, "vnet-erp-prod-weu", "10.1.0.0/24")
+              AzureVirtualMachine(erp, "vm-erp-prod-01", "App tier")
+              AzureKeyVault(kv, "kv-erp-prod-weu", "Secrets")
+            }
+          }
+        }
+        rectangle "mg-online" {
+          rectangle "sub-online-web-prod" {
+            rectangle "rg-web-prod-weu" {
+              AzureVirtualNetwork(spoke2, "vnet-web-prod-weu", "10.2.0.0/24")
+            }
+          }
+        }
+      }
+
+      rectangle "mg-sandbox" {
+        rectangle "sub-sandbox-01"
+      }
+
+      rectangle "mg-decommissioned" {
+        rectangle "sub-retired-01"
+      }
+    }
+  }
+}
+
+note right of mgPlatform
+  Azure Policy: DeployIfNotExists
+  diagnostics to law-platform-weu
+end note
+
+note right of mgLz
+  Azure Policy: deny public IPs,
+  enforce allowed regions and tags
+end note
+
+hub <--> spoke1 : VNet peering
+hub <--> spoke2 : VNet peering
+spoke1 --> fw : UDR 0.0.0.0/0
+spoke2 --> fw : UDR 0.0.0.0/0
+erp ..> kv : Managed Identity
+entra ..> dc : hybrid sync
+
+@enduml

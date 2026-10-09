@@ -1,0 +1,80 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/architecture/guide/architecture-styles/web-queue-worker
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Azure Architecture Style - Web-Queue-Worker
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Networking/AzureFrontDoor>
+!include <azure/Compute/AzureAppService>
+!include <azure/Compute/AzureFunction>
+!include <azure/Integration/AzureServiceBus>
+!include <azure/Databases/AzureCosmosDb>
+!include <azure/Databases/AzureRedisCache>
+!include <azure/Storage/AzureBlobStorage>
+
+' ---- Elements ----
+actor "Users" as users
+
+AzureFrontDoor(fd, "Front Door", "CDN + WAF")
+
+rectangle "Web front end" {
+  AzureAppService(web, "App Service", "Web App, autoscale")
+}
+
+rectangle "Queue" {
+  AzureServiceBus(queue, "Service Bus Queue", "Long-running jobs")
+}
+
+rectangle "Worker" {
+  AzureFunction(worker, "Function App", "Queue trigger")
+}
+
+rectangle "Data" {
+  AzureCosmosDb(db, "Cosmos DB", "Orders")
+  AzureRedisCache(cache, "Azure Cache for Redis", "Session + hot reads")
+  AzureBlobStorage(blob, "Blob Storage", "Reports")
+}
+
+users --> fd
+fd --> web
+web --> cache
+web --> db : read
+web --> queue : enqueue job
+queue --> worker : trigger
+worker --> db : write
+worker --> blob : store result
+
+@enduml

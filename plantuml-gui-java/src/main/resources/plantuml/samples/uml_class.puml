@@ -1,42 +1,117 @@
 @startuml
-!pragma layout smetana
-
-title UML Class Diagram
-
 ' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/class-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Class Diagram - Order Domain
 
 ' ---- Elements ----
-abstract class Animal {
-  - name : String
-  - age : int
-  + getName() : String
-  + makeSound() : void
+package "Domain" {
+  abstract class Person {
+    - id : UUID
+    # name : String
+    + {abstract} getRole() : String
+  }
+
+  class Customer {
+    - email : String
+    + placeOrder(cart : Cart) : Order
+  }
+
+  class Employee {
+    - department : String
+    + getRole() : String
+  }
+
+  class Order {
+    - number : int
+    - status : OrderStatus
+    + {static} nextNumber() : int
+    + total() : Money
+    + cancel() : void
+  }
+
+  class OrderLine {
+    - quantity : int
+    + subtotal() : Money
+  }
+
+  class Product {
+    - sku : String
+    - price : Money
+  }
+
+  class Catalog
+
+  class Review {
+    - rating : int
+    - comment : String
+  }
+
+  enum OrderStatus {
+    NEW
+    PAID
+    SHIPPED
+    CANCELLED
+  }
+
+  interface Payable <<interface>> {
+    + pay(amount : Money) : boolean
+  }
 }
 
-class Dog extends Animal {
-  + fetch() : void
-  + makeSound() : void
+package "Infrastructure" {
+  class Repository<T> {
+    + findById(id : UUID) : T
+    + save(entity : T) : void
+  }
+  class OrderRepository
+  class OrderService <<service>>
 }
 
-class Cat extends Animal {
-  + purr() : void
-  + makeSound() : void
-}
+Person <|-- Customer
+Person <|-- Employee
+Customer "1" -- "0..*" Order : places >
+Order "1" *-- "1..*" OrderLine : contains
+OrderLine "0..*" --> "1" Product : refers to
+Catalog "1" o-- "0..*" Product : lists
+Order ..|> Payable
+Order --> OrderStatus
+Repository <|.. OrderRepository : <<bind>> T->Order
+OrderService ..> OrderRepository : <<use>>
+OrderService ..> Order : <<use>>
+(Customer, Product) .. Review
 
-interface Trainable {
-  + train(command : String) : void
-}
-
-' ---- Relations ----
-Dog ..|> Trainable
-Animal "1" *-- "0..*" Animal : parent
-
-legend
-|= Info |= Description |
-| Reference | https://plantuml.com/class-diagram |
-endlegend
+note right of Order : Aggregate root
 
 @enduml

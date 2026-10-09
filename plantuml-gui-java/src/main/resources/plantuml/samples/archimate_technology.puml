@@ -1,50 +1,69 @@
 @startuml
-!pragma layout smetana
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title ArchiMate - Technology Layer
+
+' ---- Includes ----
 !include <archimate/Archimate>
 
-title Archimate Technology Layer
-
-' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
-
 ' ---- Elements ----
-Technology_Node(cloud, "Cloud Platform")
-Technology_Node(appServer, "Application Server")
-Technology_Device(firewall, "Firewall Appliance")
-Technology_Device(loadBalancer, "Load Balancer")
-Technology_SystemSoftware(os, "Linux OS")
-Technology_SystemSoftware(container, "Docker Engine")
-Technology_Collaboration(cluster, "K8s Cluster")
-Technology_Interface(https, "HTTPS Endpoint")
-Technology_Path(vpn, "VPN Tunnel")
-Technology_CommunicationNetwork(lan, "Internal LAN")
-Technology_Function(monitoring, "Monitoring")
-Technology_Process(deploy, "CI/CD Pipeline")
-Technology_Interaction(failover, "Failover Procedure")
-Technology_Event(alert, "Health Alert")
-Technology_Service(hosting, "Hosting Service")
-Technology_Artifact(image, "Container Image")
+Technology_Node(cluster, "Application Cluster") {
+  Technology_Device(server, "Linux Server")
+  Technology_SystemSoftware(os, "Ubuntu 22.04")
+  Technology_SystemSoftware(docker, "Docker Engine")
+}
+Technology_Node(dbNode, "Database Node")
+Technology_CommunicationNetwork(lan, "Data Center LAN")
+Technology_Path(link, "Replication Link")
+Technology_Interface(jdbc, "JDBC Endpoint")
+Technology_Collaboration(ha, "HA Pair")
+Technology_Service(hosting, "Container Hosting Service")
+Technology_Function(sched, "Schedule Containers")
+Technology_Process(deploy, "Deploy Release")
+Technology_Interaction(failover, "Failover")
+Technology_Event(down, "Node Down")
+Technology_Artifact(jar, "shop.jar")
 
-' ---- Relations ----
-Rel_Composition(cloud, appServer, "hosts")
-Rel_Composition(appServer, os, "runs")
-Rel_Composition(os, container, "runs")
-Rel_Assignment(cluster, container, "orchestrates")
-Rel_Serving(hosting, cloud, "provides")
-Rel_Realization(container, image, "deploys")
-Rel_Triggering(alert, failover, "triggers")
-Rel_Flow(deploy, image, "produces")
-Rel_Association(lan, appServer, "connects")
-Rel_Association(lan, firewall, "connects")
-Rel_Serving(loadBalancer, appServer, "routes to")
-Rel_Serving(https, loadBalancer, "exposes")
-Rel_Access(monitoring, alert, "generates")
-
-legend
-|= Info |= Description |
-| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
-endlegend
+Rel_Realization(docker, hosting, "realizes")
+Rel_Assignment(docker, sched, "performs")
+Rel_Triggering(down, failover, "triggers")
+Rel_Assignment(jar, deploy, "deployed by")
+Rel_Association(cluster, lan, "connected to")
+Rel_Association(dbNode, lan, "connected to")
+Rel_Composition(dbNode, jdbc, "exposes")
+Rel_Association(link, ha, "")
+Rel_Realization(jar, docker, "runs on")
 
 @enduml

@@ -1,0 +1,84 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/architecture/guide/architecture-styles/event-driven
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Azure Architecture Style - Event-driven
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Analytics/AzureEventHub>
+!include <azure/Analytics/AzureStreamAnalyticsJob>
+!include <azure/Integration/AzureEventGrid>
+!include <azure/Integration/AzureServiceBus>
+!include <azure/Integration/AzureLogicApps>
+!include <azure/Compute/AzureFunction>
+!include <azure/Databases/AzureCosmosDb>
+!include <azure/Storage/AzureBlobStorage>
+
+' ---- Elements ----
+rectangle "Event producers" {
+  node "IoT Devices" as iot
+  node "Order API" as api
+  node "Blob uploads" as upload
+}
+
+rectangle "Event ingestion" {
+  AzureEventHub(hub, "Event Hubs", "Telemetry, partitioned")
+  AzureEventGrid(grid, "Event Grid", "Discrete events")
+  AzureServiceBus(sb, "Service Bus Topic", "Commands, ordered")
+}
+
+rectangle "Event consumers" {
+  AzureStreamAnalyticsJob(asa, "Stream Analytics", "Anomaly detection")
+  AzureFunction(fn, "Function App", "Event handlers")
+  AzureLogicApps(logic, "Logic App", "Approval workflow")
+}
+
+rectangle "Sinks" {
+  AzureCosmosDb(cosmos, "Cosmos DB", "Read models")
+  AzureBlobStorage(blob, "Blob Storage", "Capture, archive")
+}
+
+iot --> hub : AMQP / MQTT
+api --> sb : publish
+upload --> grid : BlobCreated
+hub --> asa
+hub ..> blob : Capture
+grid --> fn : webhook
+sb --> fn : subscription
+sb --> logic : subscription
+asa --> cosmos
+fn --> cosmos
+
+@enduml

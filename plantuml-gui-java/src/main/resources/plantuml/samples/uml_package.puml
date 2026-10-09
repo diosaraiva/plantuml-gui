@@ -1,0 +1,75 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/class-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Package Diagram - Layered Architecture
+
+' ---- Elements ----
+package "com.shop.web" as web <<layer>> {
+  class OrderController
+  class CustomerController
+}
+
+package "com.shop.service" as service <<layer>> {
+  class OrderService
+  class PaymentService
+}
+
+package "com.shop.domain" as domain <<layer>> {
+  class Order
+  class Customer
+}
+
+package "com.shop.persistence" as persistence <<layer>> {
+  class OrderRepository
+}
+
+package "com.shop.common" as common <<utility>> {
+  class Money
+  class Result
+}
+
+package "com.shop.legacy" as legacy {
+  class LegacyOrder
+}
+
+web ..> service : <<import>>
+service ..> domain : <<import>>
+service ..> persistence : <<import>>
+persistence ..> domain : <<import>>
+domain ..> common : <<access>>
+service ..> common : <<access>>
+domain ..> legacy : <<merge>>
+
+@enduml

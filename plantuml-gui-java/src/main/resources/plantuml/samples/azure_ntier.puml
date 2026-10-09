@@ -1,0 +1,86 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://learn.microsoft.com/azure/architecture/guide/architecture-styles/n-tier
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title Azure Architecture Style - N-tier
+
+' ---- Includes ----
+!include <azure/AzureCommon>
+!include <azure/Networking/AzureApplicationGateway>
+!include <azure/Networking/AzureLoadBalancer>
+!include <azure/Networking/AzureFirewall>
+!include <azure/Compute/AzureVirtualMachine>
+!include <azure/Databases/AzureSqlDatabase>
+!include <azure/Storage/AzureStorage>
+
+' ---- Elements ----
+actor "Internet Users" as users
+
+rectangle "vnet-app-weu 10.1.0.0/16" {
+  rectangle "snet-agw (NSG)" {
+    AzureApplicationGateway(agw, "agw-app", "WAF v2")
+  }
+  rectangle "snet-web (NSG)" {
+    AzureVirtualMachine(web1, "vm-web-01", "Zone 1")
+    AzureVirtualMachine(web2, "vm-web-02", "Zone 2")
+  }
+  rectangle "snet-biz (NSG)" {
+    AzureLoadBalancer(ilb, "ilb-biz", "Internal Standard")
+    AzureVirtualMachine(biz1, "vm-biz-01", "Zone 1")
+    AzureVirtualMachine(biz2, "vm-biz-02", "Zone 2")
+  }
+  rectangle "snet-data (NSG)" {
+    AzureSqlDatabase(sql, "sqlmi-app", "Managed Instance, Business Critical")
+  }
+  rectangle "snet-mgmt" {
+    AzureFirewall(fw, "afw-app", "Egress control")
+  }
+}
+
+AzureStorage(sa, "stappweu", "Backups, ZRS")
+
+users --> agw : HTTPS
+agw --> web1
+agw --> web2
+web1 --> ilb
+web2 --> ilb
+ilb --> biz1
+ilb --> biz2
+biz1 --> sql : 1433
+biz2 --> sql : 1433
+sql ..> sa : backups
+web1 ..> fw : egress
+biz1 ..> fw : egress
+
+@enduml

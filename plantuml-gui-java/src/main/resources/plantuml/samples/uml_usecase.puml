@@ -1,37 +1,76 @@
 @startuml
-!pragma layout smetana
-
-title UML Use Case Diagram
-
 ' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
-
-left to right direction
-
-' ---- Elements ----
-actor Customer
-actor Admin
-
-rectangle "Online Store" {
-  usecase "Browse Products" as UC1
-  usecase "Place Order" as UC2
-  usecase "Make Payment" as UC3
-  usecase "Manage Inventory" as UC4
-  usecase "View Reports" as UC5
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
 }
 
-' ---- Relations ----
-Customer --> UC1
-Customer --> UC2
-UC2 --> UC3 : <<include>>
-Admin --> UC4
-Admin --> UC5
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
 
-legend
-|= Info |= Description |
-| Reference | https://plantuml.com/use-case-diagram |
-endlegend
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/use-case-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Use Case Diagram - Online Shop
+
+' ---- Elements ----
+left to right direction
+
+actor Customer
+actor "Registered Customer" as RegCustomer
+actor Administrator
+actor "Payment Gateway" as Gateway <<system>>
+
+rectangle "Online Shop" {
+  usecase "Browse Catalog" as UC1
+  usecase "Place Order" as UC2
+  usecase "Pay" as UC3
+  usecase "Authenticate" as UC4
+  usecase "Apply Coupon" as UC5
+  usecase "Track Order" as UC6
+  usecase "Manage Products" as UC7
+  usecase "Issue Refund" as UC8
+}
+
+Customer <|-- RegCustomer
+
+Customer --> UC1
+RegCustomer --> UC2
+RegCustomer --> UC6
+Administrator --> UC7
+Administrator --> UC8
+UC3 --> Gateway
+
+UC2 .> UC3 : <<include>>
+UC2 .> UC4 : <<include>>
+UC5 .> UC2 : <<extend>>
+UC8 .> UC3 : <<include>>
+
+note right of UC5
+  Extension point: checkout
+  Condition: coupon code entered
+end note
 
 @enduml

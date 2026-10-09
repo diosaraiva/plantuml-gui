@@ -1,0 +1,79 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/awslabs/aws-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title AWS Data View - Data Lake and Analytics
+
+' ---- Includes ----
+!include <awslib/AWSCommon>
+!include <awslib/General/Users>
+!include <awslib/Groups/AWSCloud>
+!include <awslib/Database/RDS>
+!include <awslib/Database/DynamoDB>
+!include <awslib/Analytics/Kinesis>
+!include <awslib/Analytics/Glue>
+!include <awslib/Analytics/Athena>
+!include <awslib/Analytics/Redshift>
+!include <awslib/Analytics/QuickSight>
+!include <awslib/Storage/SimpleStorageService>
+
+' ---- Elements ----
+AWSCloudGroup(cloud) {
+  RDS(oltp, "RDS", "Transactional source")
+  DynamoDB(events, "DynamoDB", "Event source")
+  Kinesis(stream, "Kinesis Data Firehose", "Streaming ingest")
+
+  SimpleStorageService(raw, "S3 Raw", "Landing zone")
+  Glue(etl, "Glue", "ETL jobs + Data Catalog")
+  SimpleStorageService(curated, "S3 Curated", "Parquet")
+
+  Athena(athena, "Athena", "Ad hoc SQL")
+  Redshift(dw, "Redshift", "Data warehouse")
+  QuickSight(bi, "QuickSight", "Dashboards")
+}
+
+Users(analyst, "Analysts", "BI")
+
+oltp --> raw : DMS / export
+events --> stream
+stream --> raw
+raw --> etl
+etl --> curated
+curated --> athena
+curated --> dw : COPY
+athena --> bi
+dw --> bi
+analyst --> bi
+
+@enduml

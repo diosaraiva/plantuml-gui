@@ -1,45 +1,81 @@
 @startuml
-!pragma layout smetana
-
-title UML Object Diagram
-
 ' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/object-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Object Diagram - Order Snapshot
 
 ' ---- Elements ----
-object "john : User" as john {
-  name = "John Doe"
-  email = "john@example.com"
-  role = "Admin"
+object "alice : Customer" as alice {
+  id = "c-001"
+  name = "Alice"
+  email = "alice@example.com"
 }
 
-object "order1 : Order" as order1 {
-  id = 1001
-  status = "Shipped"
-  total = 59.99
+object "order1001 : Order" as order {
+  number = 1001
+  status = PAID
 }
 
-object "order2 : Order" as order2 {
-  id = 1002
-  status = "Pending"
-  total = 24.50
+object "line1 : OrderLine" as line1 {
+  quantity = 2
 }
 
-object "item1 : Product" as item1 {
-  name = "Widget"
-  price = 29.99
+object "line2 : OrderLine" as line2 {
+  quantity = 1
 }
 
-' ---- Relations ----
-john --> order1
-john --> order2
-order1 --> item1
+object "keyboard : Product" as kb {
+  sku = "KB-01"
+  price = 49.90
+}
 
-legend
-|= Info |= Description |
-| Reference | https://plantuml.com/object-diagram |
-endlegend
+object "mouse : Product" as ms {
+  sku = "MS-07"
+  price = 19.90
+}
+
+map "payment : Payment" as pay {
+  method => CARD
+  amount => 119.70
+  currency => BRL
+}
+
+alice --> order : places
+order *-- line1
+order *-- line2
+line1 --> kb
+line2 --> ms
+order --> pay : paidBy
 
 @enduml

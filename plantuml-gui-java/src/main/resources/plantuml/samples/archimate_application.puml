@@ -1,48 +1,63 @@
 @startuml
-!pragma layout smetana
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title ArchiMate - Application Layer
+
+' ---- Includes ----
 !include <archimate/Archimate>
 
-title Archimate Application Layer
-
-' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
-
 ' ---- Elements ----
-Application_Component(webapp, "Web Application")
-Application_Component(backend, "Backend API")
-Application_Component(auth, "Auth Service")
-Application_Collaboration(integration, "System Integration")
-Application_Interface(restApi, "REST API")
-Application_Interface(ui, "Web UI")
-Application_Function(userMgmt, "User Management")
-Application_Function(reporting, "Reporting")
-Application_Interaction(sync, "Data Synchronization")
-Application_Process(etl, "ETL Process")
-Application_Event(webhook, "Webhook Event")
-Application_Service(appSvc, "Application Service")
-Application_DataObject(userData, "User Data")
-Application_DataObject(auditLog, "Audit Log")
+Application_Component(shop, "Shop Application")
+Application_Component(billing, "Billing Application")
+Application_Collaboration(commerce, "Commerce Platform")
+Application_Interface(api, "REST API")
+Application_Service(orderSvc, "Order Management Service")
+Application_Function(calc, "Calculate Totals")
+Application_Process(checkout, "Checkout Process")
+Application_Interaction(sync, "Sync Orders")
+Application_Event(placed, "Order Placed")
+Application_DataObject(orderData, "Order Data")
 
-' ---- Relations ----
-Rel_Composition(webapp, ui, "exposes")
-Rel_Composition(backend, restApi, "exposes")
-Rel_Serving(restApi, webapp, "serves")
-Rel_Assignment(backend, userMgmt, "performs")
-Rel_Assignment(backend, reporting, "performs")
-Rel_Realization(userMgmt, appSvc, "realizes")
-Rel_Access(userMgmt, userData, "reads/writes")
-Rel_Access(reporting, auditLog, "reads")
-Rel_Triggering(webhook, etl, "triggers")
-Rel_Flow(etl, sync, "invokes")
-Rel_Serving(auth, backend, "authenticates")
-Rel_Association(integration, backend, "includes")
-Rel_Association(integration, auth, "includes")
-
-legend
-|= Info |= Description |
-| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
-endlegend
+Rel_Composition(shop, api, "exposes")
+Rel_Realization(shop, orderSvc, "realizes")
+Rel_Assignment(shop, calc, "performs")
+Rel_Triggering(placed, checkout, "triggers")
+Rel_Flow(shop, billing, "sends order")
+Rel_Access_rw(checkout, orderData, "reads/writes")
+Rel_Aggregation(commerce, shop, "includes")
+Rel_Aggregation(commerce, billing, "includes")
+Rel_Assignment(commerce, sync, "performs")
 
 @enduml

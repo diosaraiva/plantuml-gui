@@ -1,32 +1,75 @@
 @startuml
-!pragma layout smetana
-
-title UML State Diagram
-
 ' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
-
-' ---- States ----
-[*] --> Idle
-
-Idle --> Processing : Submit
-Processing --> Approved : Approve
-Processing --> Rejected : Reject
-Approved --> Completed : Finalize
-Rejected --> Idle : Resubmit
-Completed --> [*]
-
-state Processing {
-  [*] --> Validating
-  Validating --> Reviewing
-  Reviewing --> [*]
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
 }
 
-legend
-|= Info |= Description |
-| Reference | https://plantuml.com/state-diagram |
-endlegend
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/state-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML State Machine Diagram - Order Lifecycle
+
+' ---- Elements ----
+[*] --> Created
+
+state Created : entry / validate()
+state Created : exit / audit()
+
+state stockCheck <<choice>>
+
+state Fulfilment {
+  [*] --> Picking
+  Picking --> Packing : items picked
+  Packing --> Packed
+  --
+  [*] --> Invoicing
+  Invoicing --> Invoiced : invoice sent
+}
+
+Created --> Paid : paymentReceived / emitPaid()
+Created --> Cancelled : cancel [not paid]
+
+Paid --> stockCheck
+stockCheck --> Fulfilment : [stock available]
+stockCheck --> Backordered : [no stock]
+
+Backordered --> stockCheck : restocked
+
+Fulfilment --> OnHold : hold
+OnHold --> Fulfilment[H] : resume
+
+Fulfilment --> Shipped : shipped after(2d)
+Shipped --> Delivered : delivered
+Shipped --> Returned : return requested
+
+Delivered --> [*]
+Returned --> [*]
+Cancelled --> [*]
 
 @enduml

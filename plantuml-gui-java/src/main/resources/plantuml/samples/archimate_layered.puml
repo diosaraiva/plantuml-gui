@@ -1,8 +1,44 @@
 @startuml
-!pragma layout smetana
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title ArchiMate - Cross-Layer Example
+
+' ---- Includes ----
 !include <archimate/Archimate>
 
-title Archimate Full Layered View
+' ---- Elements ----
 
 ' ---- Customizations ----
 skinparam legendBackgroundColor #white
@@ -65,10 +101,5 @@ Rel_Composition(dc, server, "contains")
 Rel_Assignment(server, cloud, "runs")
 Rel_Realization(wp, release, "produces")
 Rel_Realization(release, shop, "delivers")
-
-legend
-|= Info |= Description |
-| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
-endlegend
 
 @enduml

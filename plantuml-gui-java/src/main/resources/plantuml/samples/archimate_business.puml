@@ -1,45 +1,62 @@
 @startuml
-!pragma layout smetana
-!include <archimate/Archimate>
-
-title Archimate Business Layer
-
 ' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title ArchiMate - Business Layer
+
+' ---- Includes ----
+!include <archimate/Archimate>
 
 ' ---- Elements ----
 Business_Actor(customer, "Customer")
-Business_Actor(employee, "Employee")
-Business_Role(manager, "Account Manager")
-Business_Collaboration(team, "Sales Team")
-Business_Interface(portal, "Customer Portal")
-Business_Process(onboarding, "Customer Onboarding")
-Business_Function(crm, "CRM Management")
-Business_Interaction(negotiation, "Contract Negotiation")
-Business_Event(order, "Order Received")
-Business_Service(svc, "Account Service")
-Business_Object(contract, "Contract")
-Business_Contract(sla, "SLA Agreement")
-Business_Representation(report, "Monthly Report")
-Business_Product(product, "Enterprise Plan")
+Business_Role(buyer, "Buyer")
+Business_Interface(web, "Web Storefront")
+Business_Service(orderSvc, "Order Service")
+Business_Process(orderProc, "Handle Order")
+Business_Function(sales, "Sales")
+Business_Event(received, "Order Received")
+Business_Object(order, "Order")
+Business_Contract(terms, "Terms of Sale")
+Business_Product(product, "Online Subscription")
 
-' ---- Relations ----
-Rel_Assignment(manager, onboarding, "performs")
-Rel_Assignment(team, negotiation, "participates in")
-Rel_Composition(team, manager, "includes")
-Rel_Serving(svc, customer, "serves")
-Rel_Triggering(order, onboarding, "triggers")
-Rel_Flow(onboarding, negotiation, "leads to")
-Rel_Realization(onboarding, svc, "realizes")
-Rel_Access(onboarding, contract, "creates")
-Rel_Association(product, svc, "includes")
-Rel_Serving(portal, customer, "accessed via")
-
-legend
-|= Info |= Description |
-| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
-endlegend
+Rel_Assignment(customer, buyer, "plays")
+Rel_Assignment(buyer, web, "uses")
+Rel_Serving(orderSvc, buyer, "serves")
+Rel_Realization(orderProc, orderSvc, "realizes")
+Rel_Triggering(received, orderProc, "triggers")
+Rel_Assignment(sales, orderProc, "performs")
+Rel_Access_rw(orderProc, order, "reads/writes")
+Rel_Aggregation(product, terms, "includes")
 
 @enduml

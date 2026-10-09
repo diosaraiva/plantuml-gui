@@ -1,43 +1,71 @@
 @startuml
-!pragma layout smetana
-
-title UML Component Diagram
-
 ' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/component-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title UML Component Diagram - Shop Platform
 
 ' ---- Elements ----
-package "Frontend" {
-  [Web UI] as UI
-  [Mobile App] as Mobile
+package "Shop Platform" {
+  component "Web UI" as ui <<UI>>
+
+  component "Order Service" as orders <<service>> {
+    portin "http" as ordersIn
+    portout "db" as ordersDb
+  }
+
+  component "Billing Service" as billing <<service>>
+  component "Notification Service" as notif <<service>>
+
+  interface "IOrder" as iorder
+  interface "IBilling" as ibilling
+  interface "INotify" as inotify
 }
 
-package "Backend" {
-  [API Gateway] as GW
-  [Auth Service] as Auth
-  [Order Service] as Order
-  [Notification Service] as Notif
-}
+database "Orders DB" as db
+cloud "Payment Gateway" as gateway
 
-package "Data" {
-  database "PostgreSQL" as DB
-  queue "RabbitMQ" as MQ
-}
+' provided interfaces (lollipop)
+ordersIn -() iorder
+billing -() ibilling
+notif -() inotify
 
-' ---- Relations ----
-UI --> GW
-Mobile --> GW
-GW --> Auth
-GW --> Order
-Order --> DB
-Order --> MQ
-MQ --> Notif
+' required interfaces (socket)
+ui ..> iorder : uses
+orders ..> ibilling : uses
+orders ..> inotify : uses
 
-legend
-|= Info |= Description |
-| Reference | https://plantuml.com/component-diagram |
-endlegend
+ordersDb --> db : JDBC
+billing --> gateway : HTTPS
 
 @enduml

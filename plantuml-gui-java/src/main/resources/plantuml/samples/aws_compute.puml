@@ -1,0 +1,80 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/awslabs/aws-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title AWS Compute View - EC2 Auto Scaling
+
+' ---- Includes ----
+!include <awslib/AWSCommon>
+!include <awslib/General/Users>
+!include <awslib/Groups/AWSCloud>
+!include <awslib/Groups/AutoScalingGroup>
+!include <awslib/NetworkingContentDelivery/ElasticLoadBalancingApplicationLoadBalancer>
+!include <awslib/Compute/EC2>
+!include <awslib/Compute/EC2AutoScaling>
+!include <awslib/Database/RDS>
+!include <awslib/Database/ElastiCache>
+!include <awslib/ManagementGovernance/CloudWatch>
+
+' ---- Elements ----
+Users(users, "Internet Users", "HTTPS")
+
+AWSCloudGroup(cloud) {
+  ElasticLoadBalancingApplicationLoadBalancer(alb, "ALB", "Target group")
+
+  AutoScalingGroupGroup(asg, "Auto Scaling Group (2-6)") {
+    EC2(web1, "Web 1", "t3.medium")
+    EC2(web2, "Web 2", "t3.medium")
+    EC2(web3, "Web 3", "scaled out")
+  }
+
+  EC2AutoScaling(policy, "Scaling Policy", "CPU > 60%")
+  CloudWatch(cw, "CloudWatch", "Alarms")
+  ElastiCache(cache, "ElastiCache", "Redis")
+  RDS(db, "RDS", "Multi-AZ")
+}
+
+users --> alb
+alb --> web1
+alb --> web2
+alb --> web3
+web1 --> cache
+web2 --> cache
+web1 --> db
+web2 --> db
+cw --> policy : alarm
+policy ..> asg : scale in/out
+web1 ..> cw : metrics
+
+@enduml

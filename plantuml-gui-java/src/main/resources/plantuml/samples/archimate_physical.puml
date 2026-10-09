@@ -1,42 +1,54 @@
 @startuml
-!pragma layout smetana
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+
+title ArchiMate - Physical Layer
+
+' ---- Includes ----
 !include <archimate/Archimate>
 
-title Archimate Physical Layer
-
-' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
-
 ' ---- Elements ----
-Physical_Facility(dc1, "Primary Data Center")
-Physical_Facility(dc2, "Disaster Recovery Site")
-Physical_Equipment(rack1, "Server Rack A")
-Physical_Equipment(rack2, "Server Rack B")
-Physical_Equipment(storage, "SAN Storage")
-Physical_DistributionNetwork(fiber, "Fiber Backbone")
-Physical_Material(media, "Backup Tapes")
+Physical_Facility(dc, "Data Center")
+Physical_Equipment(rack, "Server Rack")
+Physical_Equipment(sorter, "Parcel Sorter")
+Physical_Material(parcel, "Customer Parcel")
+Physical_DistributionNetwork(logistics, "Delivery Network")
+Technology_Device(server, "Rack Server")
 
-Technology_Node(server1, "Production Server")
-Technology_Node(server2, "DR Server")
-Technology_Device(switch1, "Network Switch")
-
-' ---- Relations ----
-Rel_Composition(dc1, rack1, "contains")
-Rel_Composition(dc1, rack2, "contains")
-Rel_Composition(dc2, storage, "contains")
-Rel_Assignment(rack1, server1, "hosts")
-Rel_Assignment(rack2, switch1, "hosts")
-Rel_Assignment(dc2, server2, "hosts")
-Rel_Association(fiber, dc1, "connects")
-Rel_Association(fiber, dc2, "connects")
-Rel_Realization(storage, media, "stores on")
-Rel_Serving(server1, server2, "replicates to")
-
-legend
-|= Info |= Description |
-| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
-endlegend
+Rel_Composition(dc, rack, "contains")
+Rel_Realization(server, rack, "hosted on")
+Rel_Access_rw(sorter, parcel, "handles")
+Rel_Association(logistics, sorter, "uses")
 
 @enduml
