@@ -1,37 +1,71 @@
+
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+sequenceDiagram {
+  ArrowColor #405A75
+  LifeLineBorderColor #8294A8
+  LifeLineBackgroundColor #F4F7FA
+  ParticipantBorderColor #405A75
+  ParticipantBackgroundColor #E8EFF7
+  ParticipantFontColor #20354A
+  ActorBorderColor #405A75
+  NoteBackgroundColor #FFFFA5
+  NoteBorderColor #C7B85A
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+title ArchiMate - Sequence Diagram
+
+' ---- Includes ----
 !global $ARCH_SEQUENCE_SUPPORT = %true()
 !include <archimate/Archimate>
 
-title Archi Sequence View
-
-' ---- Customizations ----
-skinparam legendBackgroundColor #white
-skinparam legendBorderColor #white
-skinparam legendFontSize 10
+hide footbox
+autonumber "<b>[000]"
 
 ' ---- Elements ----
-$actor("Architect","architect")
-$applicationComponent("Archi","archi")
-$applicationFunction("Update\nModel","update")
-$applicationFunction("Print\nView","print")
-$systemSoftware("Windows\nPrint\nService","windowsPrint")
-$equipment("Printer", "printer")
+$actor("User","user")
+$applicationComponent("Web App","app")
+$applicationComponent("Identity Provider","idp")
+$applicationFunction("Validate\nCredentials","validate")
 
 ' ---- Sequence ----
-architect->archi ++
-archi->update ++ : Make changes
-note right update #FFFFA5: <&document> Not exactly correct!\nBut you get the idea.
-return Updated Model
-archi ->print ++ : Click print
-print -\windowsPrint ++
-print –> archi -–: Sent to printer
-windowsPrint -> printer ++
-return Complete
-archi –> architect --
+== Authentication ==
 
-legend
-|= Info |= Description |
-| Reference | https://github.com/plantuml-stdlib/Archimate-PlantUML |
-endlegend
+user -> app ++ : Enter credentials
+app -> idp ++ : Request authentication
+idp -> validate ++ : Validate credentials
+validate --> idp -- : Validation result
+
+alt Authentication successful
+  idp --> app : Access token
+  app --> user : Show dashboard
+else Authentication failed
+  idp --> app : Authentication error
+  app --> user : Show login error
+end
+
+note right of idp
+  Authentication may include
+  MFA and access policies.
+end note
 
 @enduml
