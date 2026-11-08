@@ -1,0 +1,78 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/Templarian/MaterialDesign
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Material Design Icons - Order Journey
+
+' ---- Includes ----
+!include <material/common>
+' Sprite files are included without the ma_ prefix; macros are MA_<NAME>.
+!include <material/account>
+!include <material/cellphone>
+!include <material/cart>
+!include <material/credit_card>
+!include <material/server>
+!include <material/database>
+!include <material/email>
+!include <material/truck>
+!include <material/chart_line>
+
+left to right direction
+
+' ---- Elements ----
+' MA_<NAME>(color, scale, alias, shape, label)
+MA_ACCOUNT(Black, 1.5, customer, actor, "Customer")
+MA_CELLPHONE(SteelBlue, 1.5, app, rectangle, "Shop App")
+MA_CART(DarkOrange, 1.5, cart, rectangle, "Cart")
+MA_CREDIT_CARD(Purple, 1.5, payment, rectangle, "Payment")
+MA_SERVER(DimGray, 1.5, backend, node, "Order Service")
+MA_DATABASE(SeaGreen, 1.5, db, database, "Orders DB")
+MA_EMAIL(Crimson, 1.5, mail, rectangle, "Confirmation")
+MA_TRUCK(SaddleBrown, 1.5, shipping, rectangle, "Shipping")
+MA_CHART_LINE(Teal, 1.5, stats, rectangle, "Sales Dashboard")
+
+customer --> app
+app --> cart
+cart --> payment
+payment --> backend
+backend --> db
+backend --> mail
+backend --> shipping
+db ..> stats
+
+' A sprite can also be placed inline in any label.
+note bottom of backend : Inline sprite: <$ma_server{scale=0.6}>
+
+@enduml

@@ -1,0 +1,66 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/twbs/icons
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Bootstrap Icons - Sprites, Scale and Colour
+
+' ---- Includes ----
+!include <bootstrap/bootstrap>
+
+skinparam defaultTextAlignment center
+
+' Icons are sprites named bi-<icon>; options go in braces.
+rectangle "<$bi-person-circle{scale=2}>\nCustomer" as customer
+rectangle "<$bi-phone{scale=2}>\nMobile App" as app
+rectangle "<$bi-cloud-fill{scale=2,color=#0d6efd}>\nAPI" as api
+rectangle "<$bi-database-fill{scale=2,color=#198754}>\nDatabase" as db
+rectangle "<$bi-bell-fill{scale=2,color=#ffc107}>\nNotifications" as notify
+rectangle "<$bi-shield-lock-fill{scale=2,color=#dc3545}>\nAuth" as auth
+
+customer --> app
+app --> auth
+app --> api
+api --> db
+api --> notify
+notify ..> customer
+
+legend right
+  |= Icon |= Name |
+  | <$bi-bootstrap-fill> | bi-bootstrap-fill |
+  | <$bi-globe> | bi-globe |
+  | <$bi-globe{scale=1.5}> | bi-globe{scale=1.5} |
+endlegend
+
+@enduml

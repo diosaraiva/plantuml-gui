@@ -1,0 +1,79 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/james-gadrow-kr/classy-c4
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Classy-C4 - C4 Elements as Objects
+
+' ---- Includes ----
+' Classy-C4 wraps the C4 macros in Classy classes: build objects, then render them.
+!include <classy-c4/person>
+!include <classy-c4/system>
+!include <classy-c4/container>
+
+' ---- Objects ----
+!$customer = $new('Person')
+!$_ = $call($customer, 'setName', 'Customer')
+!$_ = $call($customer, 'setDescription', 'Orders products online')
+
+!$web = $new('Container')
+!$_ = $call($web, 'setName', 'Web App')
+!$_ = $call($web, 'setDescription', 'Product catalogue and checkout')
+!$_ = $call($web, 'setTechnology', 'React')
+
+!$api = $new('Container')
+!$_ = $call($api, 'setName', 'Orders API')
+!$_ = $call($api, 'setDescription', 'Creates and tracks orders')
+!$_ = $call($api, 'setTechnology', 'Java, Spring Boot')
+
+!$payments = $new('System')
+!$_ = $call($payments, 'setName', 'Payment Provider')
+!$_ = $call($payments, 'setDescription', 'Card processing')
+!$_ = $call($payments, 'setExternal')
+
+' ---- Rendering ----
+' render() draws the element once and returns its alias for relationships.
+' Prefer descriptive variable names: short ones such as $c can clash with Classy internals.
+!$customerAlias = $call($customer, 'render')
+!$webAlias = $call($web, 'render')
+!$apiAlias = $call($api, 'render')
+!$paymentsAlias = $call($payments, 'render')
+
+Rel($customerAlias, $webAlias, "Browses and orders", "HTTPS")
+Rel($webAlias, $apiAlias, "Calls", "JSON/HTTPS")
+Rel($apiAlias, $paymentsAlias, "Charges card", "REST")
+
+SHOW_LEGEND()
+
+@enduml

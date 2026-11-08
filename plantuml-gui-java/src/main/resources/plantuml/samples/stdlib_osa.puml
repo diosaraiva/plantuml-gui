@@ -1,0 +1,90 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/Crashedmind/PlantUML-opensecurityarchitecture-icons
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Open Security Architecture - Office Network
+
+' ---- Includes ----
+' Each OSA icon is a sprite named after its last path segment, used as <$name>.
+!include <osa/user/green/developer/developer>
+!include <osa/user/blue/sysadmin/sysadmin>
+!include <osa/user/black/hat/hat-sprite>
+!include <osa/laptop/laptop>
+!include <osa/desktop/desktop>
+!include <osa/mobile/pda/pda>
+!include <osa/device_wireless_router/device_wireless_router>
+!include <osa/hub/hub>
+!include <osa/firewall/firewall>
+!include <osa/vpn/vpn>
+!include <osa/database/database>
+!include <osa/padlock/padlock>
+!include <osa/printer/printer>
+!include <osa/site_branch/site_branch>
+
+skinparam defaultTextAlignment center
+
+' ---- Elements ----
+rectangle "<$developer>\nDeveloper" as dev
+rectangle "<$sysadmin>\nSysadmin" as admin
+rectangle "<$hat>\nAttacker" as attacker #MistyRose
+
+rectangle "Office LAN" {
+  rectangle "<$laptop>\nLaptop" as laptop
+  rectangle "<$desktop>\nWorkstation" as desktop
+  rectangle "<$pda>\nPhone" as phone
+  rectangle "<$printer>\nPrinter" as printer
+  rectangle "<$device_wireless_router>\nWi-Fi" as wifi
+  rectangle "<$hub>\nSwitch" as hub
+  rectangle "<$database>\nFile Server\n<$padlock>" as files
+}
+
+rectangle "<$firewall>\nFirewall" as fw
+rectangle "<$vpn>\nVPN" as vpn
+rectangle "<$site_branch>\nBranch Office" as branch
+
+dev --> laptop
+admin --> desktop
+phone --> wifi
+laptop --> wifi
+wifi --> hub
+desktop --> hub
+printer --> hub
+hub --> files
+hub --> fw
+fw --> vpn
+vpn --> branch
+attacker ..> fw : blocked
+
+@enduml

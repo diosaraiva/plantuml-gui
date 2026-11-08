@@ -1,0 +1,93 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/XReyRobert/ibm-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title IBM Cloud - Hybrid AI Application
+
+' ---- Includes ----
+!include <ibm/IBMCommon>
+!include <ibm/Carbon/user>
+!include <ibm/Carbon/mobilephone>
+!include <ibm/Carbon/firewall>
+!include <ibm/Carbon/loadbalancer>
+!include <ibm/Carbon/api>
+!include <ibm/Carbon/kubernetes>
+!include <ibm/Carbon/serverless>
+!include <ibm/Carbon/database>
+!include <ibm/Carbon/cloudobjectstorage>
+!include <ibm/Carbon/watsonxai>
+!include <ibm/Carbon/security>
+!include <ibm/Carbon/datacenters>
+!include <ibm/Groups/GenericBlue>
+!include <ibm/Groups/GenericGreen>
+
+left to right direction
+
+' Use the 4-argument form name(alias, label, technology, description):
+' the 3-argument form of this library version emits an unterminated label.
+
+' ---- Elements ----
+user(customer, "Customer", "", "browser")
+mobilephone(app, "Mobile App", "", "iOS / Android")
+
+GenericBlueGroup(cloud, "IBM Cloud") {
+  firewall(fw, "Edge Firewall", "", "WAF")
+  loadbalancer(lb, "Load Balancer", "", "public")
+  api(gateway, "API Connect", "", "REST")
+  kubernetes(iks, "Kubernetes Service", "", "microservices")
+  serverless(fn, "Code Engine", "", "event jobs")
+  watsonxai(ai, "watsonx.ai", "", "foundation models")
+  database(db, "Databases", "", "PostgreSQL")
+  cloudobjectstorage(cos, "Object Storage", "", "documents")
+  security(sec, "Security & Compliance", "", "posture")
+}
+
+GenericGreenGroup(onprem, "On-premises") {
+  datacenters(dc, "Data Center", "", "core banking")
+}
+
+customer --> lb
+app --> fw
+fw --> lb
+lb --> gateway
+gateway --> iks
+iks --> db
+iks --> ai : inference
+iks --> fn
+fn --> cos
+iks --> dc : private link
+sec ..> iks
+
+@enduml

@@ -1,0 +1,86 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/plantuml-stdlib/plantuml-kubernetes-sprites
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Kubernetes Sprites - Control Plane and Workloads
+
+' ---- Includes ----
+!include <kubernetes/k8s-sprites-labeled-25pct>
+
+' Sprites are used directly as <$name> inside any element; <color:...> tints them.
+skinparam defaultTextAlignment center
+
+package "Control Plane" {
+  component "<color:#326CE5><$api></color>" as api
+  component "<color:#326CE5><$sched></color>" as sched
+  component "<color:#326CE5><$c_m></color>" as cm
+  database "<color:#326CE5><$etcd></color>" as etcd
+}
+
+package "Worker Node" {
+  component "<color:#326CE5><$kubelet></color>" as kubelet
+  component "<color:#326CE5><$k_proxy></color>" as proxy
+}
+
+package "Namespace: shop" {
+  component "<color:#326CE5><$ing></color>" as ing
+  component "<color:#326CE5><$svc></color>" as svc
+  component "<color:#326CE5><$deploy></color>" as deploy
+  component "<color:#326CE5><$rs></color>" as rs
+  component "<color:#326CE5><$pod></color>" as pod
+  component "<color:#326CE5><$hpa></color>" as hpa
+  component "<color:#326CE5><$cm></color>" as config
+  component "<color:#326CE5><$secret></color>" as secret
+  component "<color:#326CE5><$pvc></color>" as pvc
+  component "<color:#326CE5><$pv></color>" as pv
+}
+
+api --> etcd
+sched --> api
+cm --> api
+kubelet --> api
+ing --> svc
+svc --> pod
+hpa --> deploy
+deploy --> rs
+rs --> pod
+pod ..> config
+pod ..> secret
+pod --> pvc
+pvc --> pv
+kubelet ..> pod : runs
+proxy ..> svc
+
+@enduml

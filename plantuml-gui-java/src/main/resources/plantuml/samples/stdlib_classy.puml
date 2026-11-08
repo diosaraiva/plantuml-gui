@@ -1,0 +1,100 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/james-gadrow-kr/classy-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Classy - Object-Oriented Preprocessor Code
+
+' ---- Includes ----
+!include <classy/core>
+
+' Classy adds classes, instances and method calls to the PlantUML preprocessor.
+' Method arguments arrive as an array; pop() takes the single value.
+' Assign results with !$_ = ... so return values are not printed into the diagram.
+
+' ---- Class definition ----
+$class(Service)
+  $classVar(name, string)
+  $classVar(port, string, '80')
+
+  $classMethod(setName)
+    !function Service__setName($this, $args)
+      $setInstanceVar($this, 'name', $call($args, 'pop'))
+      !return $this
+    !endfunction
+  $endclassMethod(setName)
+
+  $classMethod(setPort)
+    !function Service__setPort($this, $args)
+      $setInstanceVar($this, 'port', $call($args, 'pop'))
+      !return $this
+    !endfunction
+  $endclassMethod(setPort)
+
+  $classMethod(label)
+    !function Service__label($this)
+      !return $getInstanceVar($this, 'name') + '\n:' + $getInstanceVar($this, 'port')
+    !endfunction
+  $endclassMethod(label)
+$endclass(Service)
+
+' ---- Instances ----
+!$gateway = $call($call($new('Service'), 'setName', 'API Gateway'), 'setPort', '443')
+!$orders = $call($new('Service'), 'setName', 'Orders')
+!$billing = $call($call($new('Service'), 'setName', 'Billing'), 'setPort', '8081')
+
+' A Classy array holds the downstream services.
+!$downstream = $new('array')
+!$_ = $call($downstream, 'push', $orders)
+!$_ = $call($downstream, 'push', $billing)
+
+' ---- Rendering ----
+!$gatewayLabel = $call($gateway, 'label')
+component "$gatewayLabel" as gateway
+
+!$i = 0
+!while $i < $call($downstream, 'size')
+  !$service = $call($downstream, 'get', $i)
+  !$label = $call($service, 'label')
+  component "$label" as svc$i
+  gateway --> svc$i
+  !$i = $i + 1
+!endwhile
+
+note right of gateway
+  Port defaults to 80 when
+  setPort is never called.
+end note
+
+@enduml

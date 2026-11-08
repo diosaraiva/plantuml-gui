@@ -1,0 +1,104 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/awslabs/aws-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title AWS Security View - Defense in Depth
+
+' ---- Includes ----
+!include <awslib/AWSCommon>
+!include <awslib/General/Users>
+!include <awslib/Groups/AWSCloud>
+!include <awslib/NetworkingContentDelivery/CloudFront>
+!include <awslib/SecurityIdentityCompliance/Shield>
+!include <awslib/SecurityIdentityCompliance/WAF>
+!include <awslib/SecurityIdentityCompliance/Cognito>
+!include <awslib/SecurityIdentityCompliance/CertificateManager>
+!include <awslib/SecurityIdentityCompliance/IdentityandAccessManagement>
+!include <awslib/SecurityIdentityCompliance/KeyManagementService>
+!include <awslib/SecurityIdentityCompliance/SecretsManager>
+!include <awslib/SecurityIdentityCompliance/GuardDuty>
+!include <awslib/SecurityIdentityCompliance/SecurityHub>
+!include <awslib/ApplicationIntegration/APIGateway>
+!include <awslib/Compute/Lambda>
+!include <awslib/Database/DynamoDB>
+!include <awslib/ManagementGovernance/CloudTrail>
+
+' ---- Elements ----
+Users(users, "Users", "HTTPS")
+
+AWSCloudGroup(cloud) {
+  package "Edge" {
+    Shield(shield, "Shield", "DDoS protection")
+    CloudFront(cdn, "CloudFront", "TLS termination")
+    WAF(waf, "WAF", "managed rules")
+    CertificateManager(acm, "ACM", "certificates")
+  }
+  package "Identity" {
+    Cognito(cognito, "Cognito", "user pool")
+    IdentityandAccessManagement(iam, "IAM", "least privilege roles")
+  }
+  package "Workload" {
+    APIGateway(api, "API Gateway", "JWT authorizer")
+    Lambda(fn, "Lambda", "business logic")
+    DynamoDB(db, "DynamoDB", "encrypted at rest")
+  }
+  package "Data Protection" {
+    KeyManagementService(kms, "KMS", "customer keys")
+    SecretsManager(secrets, "Secrets Manager", "rotation")
+  }
+  package "Detection" {
+    CloudTrail(trail, "CloudTrail", "audit log")
+    GuardDuty(gd, "GuardDuty", "threat detection")
+    SecurityHub(hub, "Security Hub", "findings")
+  }
+}
+
+users --> shield
+shield --> cdn
+cdn --> waf
+acm ..> cdn
+waf --> api
+users ..> cognito : sign in
+cognito ..> api : token
+api --> fn
+iam ..> fn : execution role
+fn --> db
+fn ..> secrets
+kms ..> db
+kms ..> secrets
+trail --> gd
+gd --> hub
+
+@enduml

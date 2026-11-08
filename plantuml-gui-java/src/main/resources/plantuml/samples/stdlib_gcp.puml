@@ -1,0 +1,97 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/Crashedmind/PlantUML-icons-GCP
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Google Cloud - Serverless Web and Analytics
+
+' ---- Includes ----
+!include <gcp/GCPCommon>
+!include <gcp/Networking/Cloud_Load_Balancing>
+!include <gcp/Networking/Cloud_CDN>
+!include <gcp/Networking/Cloud_Armor>
+!include <gcp/Compute/Cloud_Run>
+!include <gcp/Compute/Kubernetes_Engine>
+!include <gcp/Databases/Cloud_SQL>
+!include <gcp/Databases/Cloud_Firestore>
+!include <gcp/Data_Analytics/Cloud_PubSub>
+!include <gcp/Data_Analytics/Cloud_Dataflow>
+!include <gcp/Data_Analytics/BigQuery>
+!include <gcp/Storage/Cloud_Storage>
+!include <gcp/Security/Cloud_IAM>
+!include <gcp/Management_Tools/Monitoring>
+
+left to right direction
+
+' ---- Elements ----
+actor "Users" as users
+
+package "Edge" {
+  Cloud_Armor(armor, "Cloud Armor", "WAF")
+  Cloud_Load_Balancing(lb, "Load Balancer", "global HTTPS")
+  Cloud_CDN(cdn, "Cloud CDN", "static assets")
+}
+
+package "Application" {
+  Cloud_Run(web, "Web API", "Cloud Run")
+  Kubernetes_Engine(gke, "Workers", "GKE")
+  Cloud_SQL(sql, "Orders", "Cloud SQL")
+  Cloud_Firestore(fs, "Sessions", "Firestore")
+}
+
+package "Analytics" {
+  Cloud_PubSub(pubsub, "Events", "Pub/Sub")
+  Cloud_Dataflow(dataflow, "Streaming ETL", "Dataflow")
+  BigQuery(bq, "Warehouse", "BigQuery")
+  Cloud_Storage(gcs, "Data Lake", "Cloud Storage")
+}
+
+Cloud_IAM(iam, "IAM", "service accounts")
+Monitoring(mon, "Monitoring", "SLOs")
+
+users --> armor
+armor --> lb
+lb --> cdn
+lb --> web
+web --> sql
+web --> fs
+web --> pubsub
+pubsub --> gke
+pubsub --> dataflow
+dataflow --> bq
+dataflow --> gcs
+iam ..> web
+web ..> mon
+
+@enduml

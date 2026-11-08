@@ -1,0 +1,69 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/awslabs/aws-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title AWS Icons v20 - Pinning a Library Version
+
+' <awslib> follows the default bundled release; <awslib10>, <awslib14> and <awslib20>
+' pin a specific icon set so the diagram keeps its look across PlantUML upgrades.
+' Paths can move between versions: API Gateway is under NetworkingContentDelivery in v20.
+
+' ---- Includes ----
+!include <awslib20/AWSCommon>
+!include <awslib20/General/Users>
+!include <awslib20/Groups/AWSCloud>
+!include <awslib20/NetworkingContentDelivery/APIGateway>
+!include <awslib20/Compute/Lambda>
+!include <awslib20/Database/DynamoDB>
+!include <awslib20/ArtificialIntelligence/Bedrock>
+
+left to right direction
+
+' ---- Elements ----
+Users(users, "Users", "chat UI")
+
+AWSCloudGroup(cloud) {
+  APIGateway(api, "API Gateway", "WebSocket")
+  Lambda(orchestrator, "Orchestrator", "Lambda")
+  Bedrock(llm, "Bedrock", "foundation model")
+  DynamoDB(history, "Chat History", "DynamoDB")
+}
+
+users --> api
+api --> orchestrator
+orchestrator --> llm : prompt
+orchestrator --> history
+
+@enduml

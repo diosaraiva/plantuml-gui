@@ -1,0 +1,78 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/boessu/plantuml-stdlib
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title EDGY (edgy2 styling) - Product Launch
+
+' ---- Includes ----
+' <edgy/edgy2> is the alternative styling of the same EDGY vocabulary as <edgy/edgy>.
+!include <edgy/edgy2>
+
+' ---- Elements ----
+$identityFacet(Identity, identity) {
+  $purpose("Make healthy food easy", purpose)
+}
+
+$experienceFacet(Experience, experience) {
+  $journey("Order a meal kit", journey)
+  $channel("Mobile app", app)
+}
+
+$architectureFacet(Architecture, architecture) {
+  $capability("Meal planning", planning)
+  $asset("Recipe catalogue", recipes)
+}
+
+$organisationFacet(Organisation, org) {
+  $organisation("Kitchen Co.", company)
+}
+
+$productFacet(Product) {
+  $product("Weekly box", box)
+}
+
+$brandFacet(Brand) {
+  $brand("FreshBox", brand)
+}
+
+$flow(company, purpose, "pursues")
+$flow(company, box, "makes")
+$flow(box, journey, "serves")
+$link(journey, app, "uses")
+$link(planning, recipes, "requires")
+$flow(company, planning, "performs")
+$flowLeft(box, brand, "embodies")
+
+@enduml

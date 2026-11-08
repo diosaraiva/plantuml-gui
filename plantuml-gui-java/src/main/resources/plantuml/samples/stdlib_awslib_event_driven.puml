@@ -1,0 +1,84 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/awslabs/aws-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title AWS Event-Driven View - Order Processing
+
+' ---- Includes ----
+!include <awslib/AWSCommon>
+!include <awslib/General/Users>
+!include <awslib/Groups/AWSCloud>
+!include <awslib/ApplicationIntegration/APIGateway>
+!include <awslib/ApplicationIntegration/EventBridge>
+!include <awslib/ApplicationIntegration/SimpleQueueService>
+!include <awslib/ApplicationIntegration/SimpleNotificationService>
+!include <awslib/ApplicationIntegration/StepFunctions>
+!include <awslib/Compute/Lambda>
+!include <awslib/Database/DynamoDB>
+!include <awslib/Storage/SimpleStorageService>
+
+left to right direction
+
+' ---- Elements ----
+Users(clients, "Clients", "REST")
+
+AWSCloudGroup(cloud) {
+  APIGateway(api, "API Gateway", "POST /orders")
+  Lambda(ingest, "Order API", "Lambda")
+  EventBridge(bus, "EventBridge", "orders bus")
+
+  package "Consumers" {
+    SimpleQueueService(payq, "Payment Queue", "SQS + DLQ")
+    Lambda(pay, "Payment", "Lambda")
+    StepFunctions(flow, "Fulfilment", "Step Functions")
+    SimpleNotificationService(notify, "Notifications", "SNS")
+  }
+
+  DynamoDB(orders, "Orders", "DynamoDB")
+  SimpleStorageService(archive, "Event Archive", "S3")
+}
+
+clients --> api
+api --> ingest
+ingest --> orders
+ingest --> bus : OrderPlaced
+bus --> payq : rule: payment
+payq --> pay
+bus --> flow : rule: fulfilment
+bus --> notify : rule: notify
+bus ..> archive : archive
+pay --> bus : PaymentCompleted
+
+@enduml

@@ -1,0 +1,67 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/plantuml-stdlib/EIP-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Enterprise Integration Patterns - Order Routing
+
+' ---- Includes ----
+!include <eip/EIP-PlantUML>
+
+' ---- Elements ----
+MessageEndpoint(shop, "Web Shop")
+MsgChannel(incoming, "New Orders")
+ContentBasedRouter(router, "By Order Type")
+MsgChannel(retail, "Retail Orders")
+MsgChannel(wholesale, "Wholesale Orders")
+Splitter(splitter, "Split Line Items")
+MessageTranslator(translator, "To ERP Format")
+Aggregator(aggregator, "Collect Items")
+PubSubChannel(events, "Order Events")
+DeadLetterChannel(dlq, "Dead Letters")
+ServiceActivator(erp, "ERP Service")
+
+Send(shop, incoming)
+Send(incoming, router)
+Send(router, retail)
+Send(router, wholesale)
+Send(wholesale, splitter)
+Send(splitter, translator)
+Send(translator, aggregator)
+Send(retail, erp)
+Send(aggregator, erp)
+Send(erp, events)
+router ..> dlq : unroutable
+
+@enduml

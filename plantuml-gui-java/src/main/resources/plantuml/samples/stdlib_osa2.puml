@@ -1,0 +1,82 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/Crashedmind/PlantUML-opensecurityarchitecture2-icons
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Open Security Architecture 2 - Small Business
+
+' ---- Includes ----
+' OSA2 macros build on the ArchiMate relationships, so include both.
+!include <archimate/Archimate>
+!include <osa2/Common>
+!include <osa2/User/all>
+!include <osa2/Hardware/all>
+!include <osa2/Misc/all>
+!include <osa2/Server/all>
+!include <osa2/Site/all>
+
+hide stereotype
+
+' ---- Elements ----
+together {
+  osa_user_green_developer(dev, "Ana", "Product team", "Developer")
+  osa_user_green_operations(ops, "Ravi", "IT team", "Server Admin")
+  osa_user_green_business_manager(mgr, "Lee", "Finance", "Manager")
+}
+
+together {
+  osa_desktop(pc, "10.0.0.10", "Windows 11", "PC")
+  osa_laptop(mac, "10.0.0.12", "macOS", "Laptop")
+  osa_iPhone(phone, "DHCP", "iOS", "Phone")
+  osa_server(server, "10.0.0.100", "Ubuntu 24.04", "Server")
+}
+
+osa_device_wireless_router(wifi, "10.0.0.1", "Network")
+osa_hub(hub, "Office switch", "Hub")
+osa_firewall(fw, "203.0.113.7", "Network")
+osa_cloud(internet, "Internet", "Network")
+
+Rel_Serving(dev, pc, "source code")
+Rel_Serving(mgr, mac, "reports")
+Rel_Serving(mgr, phone, "email")
+Rel_Serving(ops, server, "configuration")
+Rel_Serving(phone, wifi)
+Rel_Serving(wifi, hub)
+Rel_Serving(pc, hub)
+Rel_Serving(mac, hub)
+Rel_Serving(server, hub)
+Rel_Serving(hub, fw)
+Rel_Serving(fw, internet)
+
+@enduml

@@ -1,0 +1,67 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/milo-minderbinder/AWS-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title AWS (legacy aws library) - Static Website
+
+' The legacy <aws> library may be deprecated; prefer <awslib> for new diagrams.
+
+' ---- Includes ----
+!include <aws/common>
+!include <aws/General/users/users>
+!include <aws/NetworkingContentDelivery/AmazonRoute53/AmazonRoute53>
+!include <aws/NetworkingContentDelivery/AmazonCloudFront/AmazonCloudFront>
+!include <aws/Storage/AmazonS3/AmazonS3>
+!include <aws/Storage/AmazonS3/bucket/bucket>
+!include <aws/Compute/AWSLambda/AWSLambda>
+!include <aws/Database/AmazonDynamoDB/AmazonDynamoDB>
+
+left to right direction
+
+' ---- Elements ----
+USERS(visitors, "Visitors")
+AMAZONROUTE53(dns, "Route 53")
+AMAZONCLOUDFRONT(cdn, "CloudFront")
+AMAZONS3(site, "Website bucket")
+AWSLAMBDA(fn, "Contact form")
+AMAZONDYNAMODB(db, "Messages")
+
+visitors --> dns
+dns --> cdn
+cdn --> site
+cdn --> fn : /api
+fn --> db
+
+@enduml

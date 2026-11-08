@@ -102,7 +102,14 @@ Run this on every touched file:
 
 ---
 
-## 8. Configuration rules
+## 8. Sample rules
+
+- Samples live in `plantuml-gui-java/src/main/resources/plantuml/samples` and are named `<group>_<topic>.puml`, lower case with underscores. Groups, in gallery order: `uml`, `diagram`, `math`, `stdlib_<library>`, `preprocessing`, `style`, `custom`, `reference`, `list`.
+- Each gallery entry is a `DiagramSample` constant whose lower-cased name is the file name; only the display name (`<Group> - <Topic>`) is written out. A sample file with no constant is a bug, except a file that another sample `!include`s.
+- Samples must render offline with the bundled PlantUML JAR: use `!include <stdlib>` paths, never `!includeurl`.
+- Every library in the bundled stdlib keeps at least one sample. After a PlantUML upgrade, render every sample and fix what breaks.
+
+## 9. Configuration rules
 
 - Adding a setting means: a constant in `AppSettings` (or a load in both launchers), a key in `src/main/resources/java_config.ini`, and a row in the README table.
 - The bundled INI is the template — it defines both defaults and key order, and its comments are preserved on write.
@@ -115,7 +122,7 @@ Run this on every touched file:
 
 ---
 
-## 9. Launcher rules
+## 10. Launcher rules
 
 There are two pairs of scripts, and they must not blur into each other.
 
@@ -139,7 +146,7 @@ Verify shell scripts with `bash -n`, and check batch files for undefined labels 
 
 ---
 
-## 10. Definition of done
+## 11. Definition of done
 
 A change is complete only when **all** of the following hold:
 
@@ -154,7 +161,7 @@ A change is complete only when **all** of the following hold:
 
 ---
 
-## 11. Verification commands
+## 12. Verification commands
 
 ```bash
 cd plantuml-gui-java

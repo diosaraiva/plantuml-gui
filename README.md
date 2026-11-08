@@ -54,7 +54,7 @@ Everything lives side by side in that one folder:
 ## What the app does
 
 - **Write diagrams** in an editor with line numbers and unlimited undo/redo.
-- **Start from a sample** — Activity, Class, Sequence, State, C4, ArchiMate, Gantt, Mindmap, WBS, JSON/YAML and more.
+- **Start from a sample** — 118 ready-made diagrams: every UML type, Gantt, Mind Map, WBS, JSON/YAML, math, preprocessing, and at least one working example for every library in the [PlantUML standard library](https://plantuml.com/stdlib) (ArchiMate, AWS, Azure, C4, GCP, IBM, Kubernetes, Material, OSA and more). All of them render offline.
 - **See it live** — the preview refreshes while you type, or only when you ask.
 - **Zoom** in, out, fit to window, back to 100%, or `Ctrl`/`⌘` + scroll.
 - **Export** to PNG, SVG, PUML or ArchiMate Model Exchange XML.
@@ -74,7 +74,7 @@ Everything lives side by side in that one folder:
 Type in the **Code** tab. With **Auto Preview** on, the picture updates after a short pause; with it off, click **Preview**.
 
 **Load a sample**
-Open **Samples** and click an entry. It replaces what is in the editor.
+Open **Samples** and click an entry. It replaces what is in the editor. Entries are grouped by prefix: **UML**, **Diagram**, **Math**, **Stdlib**, **Preprocessing**, **Style**, **Custom**, **Reference** (lookup tables) and **List** (live listings such as all sprites or themes).
 
 **Zoom**
 `+` and `−` to zoom, **Fit** to fill the window, **1:1** for 100%, or hold `Ctrl`/`⌘` and scroll.

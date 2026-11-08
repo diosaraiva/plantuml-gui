@@ -1,0 +1,81 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/awslabs/aws-icons-for-plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title AWS DevOps View - CI/CD Pipeline
+
+' ---- Includes ----
+!include <awslib/AWSCommon>
+!include <awslib/General/Users>
+!include <awslib/Groups/AWSCloud>
+!include <awslib/DeveloperTools/CodeCommit>
+!include <awslib/DeveloperTools/CodePipeline>
+!include <awslib/DeveloperTools/CodeBuild>
+!include <awslib/DeveloperTools/CodeDeploy>
+!include <awslib/Containers/ElasticContainerRegistry>
+!include <awslib/Containers/ElasticContainerService>
+!include <awslib/ManagementGovernance/CloudFormation>
+!include <awslib/ManagementGovernance/CloudWatch>
+!include <awslib/ApplicationIntegration/SimpleNotificationService>
+
+left to right direction
+
+' ---- Elements ----
+Users(devs, "Developers", "git push")
+
+AWSCloudGroup(cloud) {
+  CodeCommit(repo, "Repository", "main branch")
+  CodePipeline(pipeline, "Pipeline", "source > build > deploy")
+  CodeBuild(build, "Build & Test", "unit + image")
+  ElasticContainerRegistry(ecr, "ECR", "image registry")
+  CloudFormation(iac, "CloudFormation", "infrastructure")
+  CodeDeploy(deploy, "CodeDeploy", "blue/green")
+  ElasticContainerService(ecs, "ECS Service", "production")
+  CloudWatch(cw, "CloudWatch", "alarms")
+  SimpleNotificationService(sns, "SNS", "team alerts")
+}
+
+devs --> repo
+repo --> pipeline : trigger
+pipeline --> build
+build --> ecr : push image
+pipeline --> iac : stack update
+pipeline --> deploy
+deploy --> ecs
+ecs ..> cw : metrics
+cw ..> deploy : rollback on alarm
+cw --> sns
+
+@enduml

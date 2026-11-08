@@ -1,0 +1,66 @@
+@startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+
+header Reference: https://github.com/rocher/AdaML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title AdaML - Ada Package Structure
+
+' ---- Includes ----
+!include <AdaML/AdaML>
+
+' ---- Elements ----
+actor Operator
+agent Sensor_Bus
+agent Display
+
+begin_package_spec("Traffic_Control")
+
+  subprogram("Main")
+
+  package("Scheduler")
+  package("Signal_Logic")
+  package("Sensor_Input")
+  package("Status_Display")
+
+  depends("Main", "Scheduler", "starts >")
+  depends("Operator", "Scheduler", "configures >")
+  depends("Scheduler", "Signal_Logic", "ticks")
+  depends("Signal_Logic", "Sensor_Input", "reads")
+  depends("Sensor_Input", "Sensor_Bus", "polls >")
+  depends("Signal_Logic", "Status_Display", "publishes")
+  depends("Status_Display", "Display", "output >")
+
+end()
+
+@enduml

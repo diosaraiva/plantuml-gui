@@ -1,39 +1,29 @@
 @startuml
-footer Kubernetes Plant-UML
+header Reference: https://github.com/dcasati/kubernetes-PlantUML
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+title Kubernetes on Azure - AKS Reference
 scale max 1024 width
 skinparam linetype polyline
 skinparam nodesep 10
 skinparam ranksep 10
 
 ' Azure
-!define AzurePuml https://raw.githubusercontent.com/RicardoNiepel/Azure-PlantUML/release/2-1/dist
-
-!includeurl AzurePuml/AzureCommon.puml
-!includeurl AzurePuml/AzureSimplified.puml
-
-!includeurl AzurePuml/Compute/AzureAppService.puml
-!includeurl AzurePuml/Compute/AzureBatch.puml
-!includeurl AzurePuml/Containers/AzureContainerRegistry.puml
-!includeurl AzurePuml/Containers/AzureKubernetesService.puml
-!includeurl AzurePuml/Databases/AzureDatabaseForPostgreSQL.puml
-!includeurl AzurePuml/Databases/AzureCosmosDb.puml
-!includeurl AzurePuml/Databases/AzureSqlDatabase.puml
-!includeurl AzurePuml/DevOps/AzurePipelines.puml
-!includeurl AzurePuml/Identity/AzureActiveDirectory.puml
-!includeurl AzurePuml/Networking/AzureLoadBalancer.puml
-!includeurl AzurePuml/Security/AzureKeyVault.puml
-!includeurl AzurePuml/Storage/AzureBlobStorage.puml
-!includeurl AzurePuml/Storage/AzureStorage.puml
+!include <azure/AzureCommon>
+!include <azure/AzureSimplified>
+!include <azure/Containers/AzureContainerRegistry>
+!include <azure/Databases/AzureCosmosDb>
+!include <azure/Databases/AzureSqlDatabase>
+!include <azure/DevOps/AzurePipelines>
+!include <azure/Identity/AzureActiveDirectory>
+!include <azure/Networking/AzureLoadBalancer>
+!include <azure/Security/AzureKeyVault>
 
 ' Kubernetes
-!define KubernetesPuml https://raw.githubusercontent.com/dcasati/kubernetes-PlantUML/master/dist
-
-!includeurl KubernetesPuml/kubernetes_Context.puml
-!includeurl KubernetesPuml/kubernetes_Simplified.puml
-
-!includeurl KubernetesPuml/OSS/KubernetesApi.puml
-!includeurl KubernetesPuml/OSS/KubernetesIng.puml
-!includeurl KubernetesPuml/OSS/KubernetesPod.puml
+!include <k8s/Common>
+!include <k8s/Simplified>
+!include <k8s/OSS/KubernetesApi>
+!include <k8s/OSS/KubernetesIng>
+!include <k8s/OSS/KubernetesPod>
 
 actor "DevOps" as devopsAlias
 collections "Client Apps" as clientalias
@@ -64,7 +54,7 @@ Cluster_Boundary(cluster, "Kubernetes Cluster") {
         KubernetesPod(KubernetesBE3, "", "")
     }
 
-    Namespace_Boundary(nsUtil, "Utiliy Services") {
+    Namespace_Boundary(nsUtil, "Utility Services") {
         KubernetesPod(KubernetesUtil1, "", "")
         KubernetesPod(KubernetesUtil2, "","")
     }
