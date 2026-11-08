@@ -58,7 +58,7 @@ Everything lives side by side in that one folder:
 - **See it live** — the preview refreshes while you type, or only when you ask.
 - **Zoom** in, out, fit to window, back to 100%, or `Ctrl`/`⌘` + scroll.
 - **Export** to PNG, SVG, PUML or ArchiMate Model Exchange XML.
-- **Copy** the picture or the code to the clipboard.
+- **Copy** the picture, the code or the console output to the clipboard.
 - **Make it yours** — theme, font, window size, language (English, Português, Español).
 - **Use your own PlantUML** — point the app at any PlantUML JAR.
 
@@ -110,10 +110,13 @@ Open **Config**, set **PlantUML JAR Path** (or **Browse…**), press **Save**. C
 |--------|----------|
 | Undo | `⌘`/`Ctrl` + `Z` |
 | Redo | `⌘`/`Ctrl` + `Shift` + `Z`, or `Ctrl` + `Y` |
+| Cut | `⌘`/`Ctrl` + `X` |
 | Copy | `⌘`/`Ctrl` + `C` |
 | Copy Image | `⌘`/`Ctrl` + `Shift` + `C` |
 | Paste | `⌘`/`Ctrl` + `V` |
 | Select All | `⌘`/`Ctrl` + `A` |
+
+**Edit** follows the tab you are working in. Cut needs a selection in the **Code** tab. Copy and Select All act on the **Console** when it is the tab you used last (or the Code tab is hidden), otherwise on the code; with nothing selected, Copy takes the whole text.
 
 ## Help, it does not work
 
@@ -193,7 +196,7 @@ All under `com.diosaraiva.plantumlgui`, with the dependency direction `ui` → `
 
 | Package | Responsibility |
 |---------|----------------|
-| `util` | Helpers: `ResourceLocator`, `FileNames`, `I18n`, `SwingUtils`, `JarUtils`, `Background`, `Threads`, `TextLineNumber` |
+| `util` | Helpers: `ResourceLocator`, `FileNames`, `I18n`, `SwingUtils`, `JarUtils`, `Background`, `TextLineNumber` |
 | `service` | Headless logic: `AppSettings`, `PlantUmlFormat`, `PlantUmlRenderer`, `SampleLoader`, `ArchimatePlantUmlConverter`, `ArchimateExchangeModel` |
 | `ui` | Swing shell: `MainFrame`, `MenuBar`, `AboutDialog` |
 | `ui.plantuml` | The working area: `PlantUmlPanel` and its input, output and footer panels |

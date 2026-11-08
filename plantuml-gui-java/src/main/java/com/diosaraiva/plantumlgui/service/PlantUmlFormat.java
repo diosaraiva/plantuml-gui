@@ -1,6 +1,7 @@
 package com.diosaraiva.plantumlgui.service;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import com.diosaraiva.plantumlgui.util.I18n;
@@ -41,7 +42,7 @@ public enum PlantUmlFormat {
         return find(f -> f.extension.equalsIgnoreCase(String.valueOf(extension).strip()));
     }
 
-    private static Optional<PlantUmlFormat> find(java.util.function.Predicate<PlantUmlFormat> match) {
+    private static Optional<PlantUmlFormat> find(Predicate<PlantUmlFormat> match) {
         return Stream.of(values()).filter(match).findFirst();
     }
 }

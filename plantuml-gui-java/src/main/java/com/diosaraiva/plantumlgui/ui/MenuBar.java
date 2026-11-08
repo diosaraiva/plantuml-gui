@@ -6,6 +6,7 @@ import static com.diosaraiva.plantumlgui.util.SwingUtils.menuShortcut;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -16,7 +17,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
@@ -26,6 +26,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.diosaraiva.plantumlgui.service.AppSettings;
+import com.diosaraiva.plantumlgui.service.PlantUmlFormat;
 import com.diosaraiva.plantumlgui.util.I18n;
 import com.diosaraiva.plantumlgui.util.SwingUtils;
 
@@ -77,33 +78,41 @@ public final class MenuBar {
 
     private static JMenu createEditMenu(MainFrame frame) {
         var menu = menu(I18n.get("menu.edit"), KeyEvent.VK_E);
-        var input = frame.getPlantUmlPanel().getInputPanel();
+        var panel = frame.getPlantUmlPanel();
+        var input = panel.getInputPanel();
         int mod = menuShortcut();
 
         var undo = menuItem(I18n.get("menu.edit.undo"), KeyEvent.VK_U,
                 KeyStroke.getKeyStroke(KeyEvent.VK_Z, mod), e -> input.undo());
         var redo = menuItem(I18n.get("menu.edit.redo"), KeyEvent.VK_R,
                 KeyStroke.getKeyStroke(KeyEvent.VK_Z, mod | InputEvent.SHIFT_DOWN_MASK), e -> input.redo());
+        var cut = menuItem(I18n.get("menu.edit.cut"), KeyEvent.VK_C,
+                KeyStroke.getKeyStroke(KeyEvent.VK_X, mod), e -> panel.cut());
+        var copy = menuItem(I18n.get("menu.edit.copyText"), KeyEvent.VK_T,
+                KeyStroke.getKeyStroke(KeyEvent.VK_C, mod), e -> panel.copyText());
+        var paste = menuItem(I18n.get("menu.edit.paste"), KeyEvent.VK_P,
+                KeyStroke.getKeyStroke(KeyEvent.VK_V, mod), e -> panel.paste());
+
         menu.add(undo);
         menu.add(redo);
         menu.addSeparator();
-        menu.add(menuItem(I18n.get("menu.edit.copyText"), KeyEvent.VK_T,
-                KeyStroke.getKeyStroke(KeyEvent.VK_C, mod), e -> input.copyToClipboard()));
+        menu.add(cut);
+        menu.add(copy);
         menu.add(menuItem(I18n.get("menu.edit.copyImage"), KeyEvent.VK_I,
                 KeyStroke.getKeyStroke(KeyEvent.VK_C, mod | InputEvent.SHIFT_DOWN_MASK),
-                e -> frame.getPlantUmlPanel().copyImageToClipboard()));
-        menu.add(menuItem(I18n.get("menu.edit.paste"), KeyEvent.VK_P,
-                KeyStroke.getKeyStroke(KeyEvent.VK_V, mod), e -> input.paste()));
+                e -> panel.copyImageToClipboard()));
+        menu.add(paste);
         menu.add(menuItem(I18n.get("menu.edit.selectAll"), KeyEvent.VK_A,
-                KeyStroke.getKeyStroke(KeyEvent.VK_A, mod), e -> input.selectAll()));
+                KeyStroke.getKeyStroke(KeyEvent.VK_A, mod), e -> panel.selectAll()));
 
-        // Keep the two history items in step with the editor's undo manager.
-        Runnable sync = () -> {
+        // Follows the active tab, the selection and the undo history of the working area.
+        panel.setEditStateListener(() -> {
             undo.setEnabled(input.canUndo());
             redo.setEnabled(input.canRedo());
-        };
-        input.addUndoStateListener(sync);
-        sync.run();
+            cut.setEnabled(panel.canCut());
+            copy.setEnabled(panel.canCopyText());
+            paste.setEnabled(panel.canPaste());
+        });
         return menu;
     }
 
@@ -150,7 +159,7 @@ public final class MenuBar {
     private static JMenu createWindowMenu(MainFrame frame) {
         var menu = menu(I18n.get("menu.settings.window"), KeyEvent.VK_W);
         List<String> labels = RESOLUTIONS.stream().map(Resolution::label).toList();
-        String current = frame.getSelectedWidth() + " x " + frame.getSelectedHeight();
+        String current = new Resolution(frame.getSelectedWidth(), frame.getSelectedHeight()).label();
 
         addRadioGroup(menu, labels, labels.contains(current) ? current : null,
                 label -> RESOLUTIONS.stream()
@@ -184,19 +193,14 @@ public final class MenuBar {
     }
 
     private static void onOpenFile(MainFrame frame) {
-        var chooser = new JFileChooser();
-        chooser.setDialogTitle(I18n.get("dialog.open.title"));
-        chooser.setFileFilter(new FileNameExtensionFilter(I18n.get("dialog.open.filter"), "puml"));
-        if (chooser.showOpenDialog(frame) != JFileChooser.APPROVE_OPTION) {
-            return;
-        }
-        try {
-            String content = Files.readString(chooser.getSelectedFile().toPath());
-            frame.showPanel(frame.getPlantUmlPanel());
-            frame.getPlantUmlPanel().getInputPanel().setCode(content);
-        } catch (Exception ex) {
-            SwingUtils.showError(frame, I18n.get("app.title"), I18n.get("file.open.failed", ex.getMessage()));
-        }
+        var filter = new FileNameExtensionFilter(I18n.get("dialog.open.filter"), PlantUmlFormat.PUML.extension());
+        SwingUtils.chooseFile(frame, I18n.get("dialog.open.title"), filter).ifPresent(file -> {
+            try {
+                frame.getPlantUmlPanel().getInputPanel().setCode(Files.readString(file.toPath()));
+            } catch (IOException ex) {
+                SwingUtils.showError(frame, I18n.get("app.title"), I18n.get("file.open.failed", ex.getMessage()));
+            }
+        });
     }
 
     private static void applyLookAndFeel(String className, MainFrame frame) {

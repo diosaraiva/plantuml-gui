@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,7 +27,8 @@ public final class ArchimateExchangeModel {
 
     private static final String ARCHIMATE_NS = "http://www.archimatetool.com/archimate";
     private static final String XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
-    private static final String OTHER_LAYER = "other";
+    // Fallback layer for anything that names no known layer.
+    public static final String OTHER_LAYER = "other";
 
     private record FolderDef(String type, String displayName) { }
 
@@ -125,7 +127,7 @@ public final class ArchimateExchangeModel {
     }
 
     private static String normalizeLayer(String layer) {
-        String key = layer == null ? "" : layer.strip().toLowerCase();
+        String key = layer == null ? "" : layer.strip().toLowerCase(Locale.ROOT);
         return LAYER_FOLDERS.containsKey(key) ? key : OTHER_LAYER;
     }
 

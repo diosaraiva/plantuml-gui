@@ -2,6 +2,7 @@ package com.diosaraiva.plantumlgui.ui.plantuml;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
@@ -30,7 +31,8 @@ public final class PlantUmlPanel extends JPanel {
     private static final int DEFAULT_PREVIEW_DELAY_MS = 800;
 
     private final PlantUmlInputPanel inputPanel = new PlantUmlInputPanel();
-    private final PlantUmlOutputPanel outputPanel = new PlantUmlOutputPanel(this::renderPreview);
+    private final PlantUmlOutputPanel outputPanel =
+            new PlantUmlOutputPanel(this::renderPreview, this::fireEditStateChanged);
     private final PlantUmlFooterPanel footerPanel = new PlantUmlFooterPanel();
 
     // Coalesces keystrokes into a single render while auto preview is on.
@@ -38,6 +40,14 @@ public final class PlantUmlPanel extends JPanel {
             AppSettings.getInt(AppSettings.PREVIEW_DELAY_MS, DEFAULT_PREVIEW_DELAY_MS), e -> renderPreview());
 
     private record ExportResult(File output, File preview) { }
+
+    private Runnable editStateListener = () -> { };
+
+    // Which side the user worked in last; decides whether Copy and Select All target the console.
+    private boolean outputActive;
+
+    // Only the newest preview may reach the screen; slower, older renders are dropped.
+    private int renderGeneration;
 
     public PlantUmlPanel() {
         super(new BorderLayout(8, 8));
@@ -57,11 +67,48 @@ public final class PlantUmlPanel extends JPanel {
         inputPanel.addAutoPreviewListener(e -> {
             if (inputPanel.isAutoPreviewEnabled()) { renderPreview(); }
         });
+        inputPanel.setEditStateListener(this::fireEditStateChanged);
+        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                .addPropertyChangeListener("permanentFocusOwner", e -> trackActiveSide(e.getNewValue()));
 
         SwingUtilities.invokeLater(this::renderPreview);
     }
 
     public PlantUmlInputPanel getInputPanel() { return inputPanel; }
+
+    public boolean canCut() {
+        return !isConsoleTargeted() && inputPanel.isCodeTabSelected() && inputPanel.hasSelection();
+    }
+
+    public boolean canCopyText() { return isConsoleTargeted() || inputPanel.isCodeTabSelected(); }
+
+    public boolean canPaste() { return !isConsoleTargeted(); }
+
+    public void cut() { inputPanel.cut(); }
+
+    public void copyText() {
+        if (isConsoleTargeted()) {
+            outputPanel.copyConsoleToClipboard();
+        } else {
+            inputPanel.copyToClipboard();
+        }
+    }
+
+    public void paste() { inputPanel.paste(); }
+
+    public void selectAll() {
+        if (isConsoleTargeted()) {
+            outputPanel.selectAllConsole();
+        } else {
+            inputPanel.selectAll();
+        }
+    }
+
+    // Single slot rather than a list: the menu bar is rebuilt on every language or size change.
+    public void setEditStateListener(Runnable listener) {
+        editStateListener = listener;
+        listener.run();
+    }
 
     public boolean copyImageToClipboard() {
         var image = outputPanel.getCurrentImage();
@@ -100,9 +147,32 @@ public final class PlantUmlPanel extends JPanel {
     private static JPanel section(Component center, Component south) {
         var panel = new JPanel(new BorderLayout(0, 4));
         panel.setBorder(BorderFactory.createEmptyBorder(4, 6, 4, 6));
-        if (center != null) { panel.add(center, BorderLayout.CENTER); }
+        panel.add(center, BorderLayout.CENTER);
         if (south != null) { panel.add(south, BorderLayout.SOUTH); }
         return panel;
+    }
+
+    // The console wins while it is showing and was used last, or while the code editor is hidden.
+    private boolean isConsoleTargeted() {
+        return outputPanel.isConsoleSelected() && (outputActive || !inputPanel.isCodeTabSelected());
+    }
+
+    private void trackActiveSide(Object focusOwner) {
+        if (!(focusOwner instanceof Component owner)) {
+            return;
+        }
+        if (SwingUtilities.isDescendingFrom(owner, outputPanel)) {
+            outputActive = true;
+        } else if (SwingUtilities.isDescendingFrom(owner, inputPanel.getEditorComponent())) {
+            outputActive = false;
+        } else {
+            return;
+        }
+        fireEditStateChanged();
+    }
+
+    private void fireEditStateChanged() {
+        editStateListener.run();
     }
 
     private void restartPreviewTimer() {
@@ -110,6 +180,7 @@ public final class PlantUmlPanel extends JPanel {
     }
 
     private void renderPreview() {
+        int generation = ++renderGeneration;
         String code = inputPanel.getCode();
         if (code.isEmpty()) {
             outputPanel.showMessage(I18n.get("plantuml.code.empty"));
@@ -118,10 +189,12 @@ public final class PlantUmlPanel extends JPanel {
         outputPanel.showRendering();
         Background.run(() -> PlantUmlRenderer.compilePreview(code),
                 result -> {
+                    if (generation != renderGeneration) { return; }
                     outputPanel.showCompileResult(result);
                     footerPanel.setCopyImageEnabled(outputPanel.getCurrentImage() != null);
                 },
                 ex -> {
+                    if (generation != renderGeneration) { return; }
                     outputPanel.showRenderError(ex);
                     footerPanel.setCopyImageEnabled(false);
                 });

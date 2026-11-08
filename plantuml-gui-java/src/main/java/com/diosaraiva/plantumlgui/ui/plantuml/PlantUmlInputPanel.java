@@ -1,14 +1,10 @@
 package com.diosaraiva.plantumlgui.ui.plantuml;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -36,7 +32,6 @@ public final class PlantUmlInputPanel extends JPanel {
 
     private static final int CODE_TAB = 0;
     private static final int SAMPLES_TAB = 1;
-    private static final Font EDITOR_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 13);
     private static final float SMALL_FONT = 11f;
 
     private final JTabbedPane inputTabs = new JTabbedPane();
@@ -49,10 +44,10 @@ public final class PlantUmlInputPanel extends JPanel {
     private final JPanel controlsBar = new JPanel(new BorderLayout(8, 0));
 
     private final UndoManager undoManager = new UndoManager();
-    private final List<Runnable> undoStateListeners = new ArrayList<>();
+    private Runnable editStateListener = () -> { };
 
     public PlantUmlInputPanel() {
-        codeTextArea.setFont(EDITOR_FONT);
+        codeTextArea.setFont(SwingUtils.monospaced(SwingUtils.CODE_FONT_SIZE));
         codeTextArea.setLineWrap(true);
         codeTextArea.setWrapStyleWord(false);
 
@@ -71,6 +66,8 @@ public final class PlantUmlInputPanel extends JPanel {
         initUndo();
 
         codeTextArea.getDocument().addDocumentListener(SwingUtils.onDocumentChange(this::updateCounts));
+        codeTextArea.addCaretListener(e -> fireEditStateChanged());
+        inputTabs.addChangeListener(e -> fireEditStateChanged());
         updateCounts();
 
         sampleList.setSelectedValue(DiagramSample.ARCHIMATE_APPLICATION, true);
@@ -88,7 +85,7 @@ public final class PlantUmlInputPanel extends JPanel {
         codeTextArea.setText(code);
         codeTextArea.setCaretPosition(0);
         undoManager.discardAllEdits();
-        fireUndoStateChanged();
+        fireEditStateChanged();
     }
 
     public void addCodeDocumentListener(DocumentListener listener) {
@@ -111,30 +108,40 @@ public final class PlantUmlInputPanel extends JPanel {
 
     public void undo() {
         if (undoManager.canUndo()) { undoManager.undo(); }
-        fireUndoStateChanged();
+        fireEditStateChanged();
     }
 
     public void redo() {
         if (undoManager.canRedo()) { undoManager.redo(); }
-        fireUndoStateChanged();
+        fireEditStateChanged();
     }
 
-    // Copies the selection, or the whole buffer when nothing is selected.
-    public void copyToClipboard() {
-        String selected = codeTextArea.getSelectedText();
-        SwingUtils.copyText(selected == null || selected.isEmpty() ? codeTextArea.getText() : selected);
+    public boolean isCodeTabSelected() { return inputTabs.getSelectedIndex() == CODE_TAB; }
+
+    public boolean hasSelection() {
+        return codeTextArea.getSelectionStart() != codeTextArea.getSelectionEnd();
     }
 
-    public void paste() { codeTextArea.paste(); }
+    public void copyToClipboard() { SwingUtils.copyText(codeTextArea); }
+
+    public void cut() {
+        focusEditor();
+        codeTextArea.cut();
+    }
+
+    public void paste() {
+        focusEditor();
+        codeTextArea.paste();
+    }
 
     public void selectAll() {
-        inputTabs.setSelectedIndex(CODE_TAB);
-        codeTextArea.requestFocusInWindow();
+        focusEditor();
         codeTextArea.selectAll();
     }
 
-    public void addUndoStateListener(Runnable listener) {
-        undoStateListeners.add(listener);
+    // Single slot rather than a list: the menu bar is rebuilt on every language or size change.
+    public void setEditStateListener(Runnable listener) {
+        editStateListener = listener;
     }
 
     public void applyLanguage() {
@@ -147,13 +154,13 @@ public final class PlantUmlInputPanel extends JPanel {
     }
 
     private void buildControlsBar() {
-        autoPreviewCheck.setFont(autoPreviewCheck.getFont().deriveFont(Font.PLAIN, SMALL_FONT));
+        SwingUtils.setFontSize(autoPreviewCheck, SMALL_FONT);
         autoPreviewCheck.addActionListener(e -> {
             AppSettings.set(AppSettings.AUTO_PREVIEW, autoPreviewCheck.isSelected());
             updatePreviewButtonState();
         });
-        countLabel.setFont(countLabel.getFont().deriveFont(Font.PLAIN, 10f));
-        previewButton.setFont(previewButton.getFont().deriveFont(Font.PLAIN, SMALL_FONT));
+        SwingUtils.setFontSize(countLabel, 10f);
+        SwingUtils.setFontSize(previewButton, SMALL_FONT);
 
         controlsBar.add(autoPreviewCheck, BorderLayout.WEST);
         controlsBar.add(countLabel, BorderLayout.CENTER);
@@ -174,7 +181,7 @@ public final class PlantUmlInputPanel extends JPanel {
     private void initUndo() {
         codeTextArea.getDocument().addUndoableEditListener(e -> {
             undoManager.addEdit(e.getEdit());
-            fireUndoStateChanged();
+            fireEditStateChanged();
         });
         int mod = SwingUtils.menuShortcut();
         bindKey(KeyStroke.getKeyStroke(KeyEvent.VK_Z, mod), "undo", this::undo);
@@ -202,12 +209,17 @@ public final class PlantUmlInputPanel extends JPanel {
         inputTabs.setSelectedIndex(CODE_TAB);
     }
 
-    private void fireUndoStateChanged() {
-        undoStateListeners.forEach(Runnable::run);
+    private void focusEditor() {
+        inputTabs.setSelectedIndex(CODE_TAB);
+        codeTextArea.requestFocusInWindow();
+    }
+
+    private void fireEditStateChanged() {
+        editStateListener.run();
     }
 
     // Gallery entries; the file name resolves under resources/plantuml/samples.
-    public enum DiagramSample {
+    private enum DiagramSample {
     	ARCHIMATE_APPLICATION("Archimate Application", "archimate_application.puml"),
     	ARCHIMATE_BUSINESS("Archimate Business", "archimate_business.puml"),
     	ARCHIMATE_IMPLEMENTATION("Archimate Implementation", "archimate_implementation.puml"),
@@ -303,7 +315,6 @@ public final class PlantUmlInputPanel extends JPanel {
     	CONFIG_SUPPORTEDFORMATS("Config Supported Formats", "config_supportedformats.puml"),
     	CUSTOM_ARCHIMATE("Custom Archimate", "custom_archimate.puml"),
     	CUSTOM_MODULAR("Custom Modular", "custom_modular.puml"),
-    	//CUSTOM_MODULAR_REF("Custom Modular Reference", "custom_modular_ref.puml"),
     	UTILS_COLORS("List Available [colors]", "util_colors.puml"),
     	UTILS_EMOJI("List Available [emoji]", "util_emoji.puml"),
     	UTILS_OPENICONIC("List Available [icons]", "util_openiconic.puml"),

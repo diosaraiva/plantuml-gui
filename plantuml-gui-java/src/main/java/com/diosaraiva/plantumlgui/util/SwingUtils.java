@@ -12,13 +12,16 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,12 +31,17 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.FontUIResource;
+import javax.swing.text.JTextComponent;
 
 // Swing boilerplate shared by every panel: widget factories, clipboard, dialogs, look and feel.
 public final class SwingUtils {
 
     private static final Logger LOG = Logger.getLogger(SwingUtils.class.getName());
+
+    // Shared by the code editor and the text preview so source reads the same on both sides.
+    public static final int CODE_FONT_SIZE = 13;
 
     private SwingUtils() { }
 
@@ -59,6 +67,28 @@ public final class SwingUtils {
         return item;
     }
 
+    public static Font monospaced(int size) {
+        return new Font(Font.MONOSPACED, Font.PLAIN, size);
+    }
+
+    public static void setFontSize(JComponent component, float size) {
+        component.setFont(component.getFont().deriveFont(Font.PLAIN, size));
+    }
+
+    // Open dialog when a filter is given, save dialog otherwise.
+    public static Optional<File> chooseFile(Component parent, String title, FileNameExtensionFilter filter) {
+        var chooser = new JFileChooser();
+        chooser.setDialogTitle(title);
+        int result;
+        if (filter != null) {
+            chooser.setFileFilter(filter);
+            result = chooser.showOpenDialog(parent);
+        } else {
+            result = chooser.showSaveDialog(parent);
+        }
+        return result == JFileChooser.APPROVE_OPTION ? Optional.of(chooser.getSelectedFile()) : Optional.empty();
+    }
+
     public static JPanel createToolBar() {
         return new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 2));
     }
@@ -71,7 +101,10 @@ public final class SwingUtils {
         return button;
     }
 
-    public static void copyText(String text) {
+    // Copies the selection, or the whole text when nothing is selected.
+    public static void copyText(JTextComponent source) {
+        String selected = source.getSelectedText();
+        String text = selected == null || selected.isEmpty() ? source.getText() : selected;
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text), null);
     }
 
@@ -125,7 +158,7 @@ public final class SwingUtils {
         refreshAllWindows();
     }
 
-    public static void refreshAllWindows() {
+    private static void refreshAllWindows() {
         for (Window window : Window.getWindows()) {
             SwingUtilities.updateComponentTreeUI(window);
             window.validate();

@@ -19,8 +19,6 @@ public final class ArchimatePlantUmlConverter {
             "^\\s*Rel_([A-Za-z]+)\\s*\\(\\s*([A-Za-z0-9_]+)\\s*,\\s*([A-Za-z0-9_]+)\\s*"
                     + "(?:,\\s*\"([^\"]*)\")?\\s*\\)");
 
-    private static final String OTHER_LAYER = "other";
-
     private record Mapping(String archiType, String layer) { }
 
     // PlantUML macro -> ArchiMate type and owning layer.
@@ -52,7 +50,7 @@ public final class ArchimatePlantUmlConverter {
         plain("implementation", "Implementation_WorkPackage:WorkPackage",
                 "Implementation_Deliverable:Deliverable", "Implementation_Event:ImplementationEvent",
                 "Implementation_Plateau:Plateau", "Implementation_Gap:Gap");
-        plain(OTHER_LAYER, "Other_Location:Location", "Other_Grouping:Grouping", "Other_Junction:Junction");
+        plain(ArchimateExchangeModel.OTHER_LAYER, "Other_Location:Location", "Other_Grouping:Grouping", "Other_Junction:Junction");
     }
 
     private ArchimatePlantUmlConverter() { }

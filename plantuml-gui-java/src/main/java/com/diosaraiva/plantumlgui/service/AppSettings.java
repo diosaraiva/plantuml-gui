@@ -21,25 +21,25 @@ public final class AppSettings {
 
     private static final Logger LOG = Logger.getLogger(AppSettings.class.getName());
 
-    public static final String FILE_NAME = "java_config.ini";
+    private static final String FILE_NAME = "java_config.ini";
 
-    public static final String LANGUAGE = "app.language";
+    private static final String LANGUAGE = "app.language";
     public static final String THEME = "app.theme";
     public static final String FONT = "app.font";
-    public static final String WINDOW_WIDTH = "app.window.width";
-    public static final String WINDOW_HEIGHT = "app.window.height";
+    private static final String WINDOW_WIDTH = "app.window.width";
+    private static final String WINDOW_HEIGHT = "app.window.height";
     public static final String AUTO_PREVIEW = "app.autoPreview";
     public static final String PREVIEW_DELAY_MS = "app.previewDelayMs";
-    public static final String JAR_PATH = "plantuml.jarPath";
+    private static final String JAR_PATH = "plantuml.jarPath";
     public static final String BUNDLED_JAR = "plantuml.bundledJar";
     public static final String INCLUDE_DIR = "plantuml.includeDir";
     public static final String JVM_OPTIONS = "plantuml.jvmOptions";
-    public static final String OUTPUT_DIR = "plantuml.outputDir";
+    private static final String OUTPUT_DIR = "plantuml.outputDir";
     public static final String EXPORT_FORMAT = "export.format";
     public static final String EXPORT_TARGET = "export.targetFile";
 
-    public static final int DEFAULT_WINDOW_WIDTH = 1024;
-    public static final int DEFAULT_WINDOW_HEIGHT = 600;
+    private static final int DEFAULT_WINDOW_WIDTH = 1024;
+    private static final int DEFAULT_WINDOW_HEIGHT = 600;
 
     // Ordered key/value view of the active configuration.
     private static final Map<String, String> VALUES = new LinkedHashMap<>();
@@ -142,6 +142,15 @@ public final class AppSettings {
 
     public static void setLanguage(Locale locale) {
         set(LANGUAGE, locale.toLanguageTag());
+    }
+
+    public static int windowWidth() { return getInt(WINDOW_WIDTH, DEFAULT_WINDOW_WIDTH); }
+
+    public static int windowHeight() { return getInt(WINDOW_HEIGHT, DEFAULT_WINDOW_HEIGHT); }
+
+    public static void setWindowSize(int width, int height) {
+        set(WINDOW_WIDTH, width);
+        set(WINDOW_HEIGHT, height);
     }
 
     // Custom JAR path, or an empty string when the bundled JAR should be used.

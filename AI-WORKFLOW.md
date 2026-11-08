@@ -48,9 +48,8 @@ Before writing any of these, use the existing owner.
 | A file extension, CLI flag or export label | `PlantUmlFormat` | Extension string literals, parallel format maps |
 | Split, strip or swap a file extension | `FileNames` | Inline `lastIndexOf('.')` |
 | Run an external JAR | `JarUtils.runJar` | Raw `ProcessBuilder` |
-| Work off the EDT | `Background.run` | `new Thread`, `SwingWorker` |
-| A worker thread | `Threads.newDaemon` | `new Thread(...)`, virtual threads |
-| Dialog, clipboard, toolbar, menu item, look and feel, font | `SwingUtils` | Direct `JOptionPane` / `Toolkit` / `UIManager` calls |
+| Work off the EDT | `Background.run` | `new Thread`, `SwingWorker`, virtual threads |
+| Dialog, file chooser, clipboard, toolbar, menu item, look and feel, font | `SwingUtils` | Direct `JOptionPane` / `JFileChooser` / `Toolkit` / `UIManager` calls, `new Font` / `deriveFont` in panels |
 | A scratch file for rendering | `PlantUmlRenderer` | A temp directory of your own |
 
 ---
@@ -71,7 +70,7 @@ Before writing any of these, use the existing owner.
 - The compile target is **Java 17**, set once in `plantuml-gui-java/pom.xml` (`maven.compiler.release`). Never raise it to use a convenience API.
 - 17 is the floor because the code uses records, switch rules and pattern matching (16+), and the ceiling because nothing here justifies dropping older JDKs. The bundled PlantUML JAR is compiled for Java 11, so 17 always runs it.
 - Anything newer than 17 is banned: `Locale.of`, `Math.clamp`, `Thread.ofVirtual`, `Executors.newVirtualThreadPerTaskExecutor`, sequenced-collection methods. Verify with `javac --release 17`, not just "it compiles".
-- Worker threads come from `Threads.newDaemon`; they must be daemons so a pending task cannot block shutdown.
+- Worker threads come only from `Background`; they are daemons so a pending task cannot block shutdown.
 - The build is **one `pom.xml` with no dependencies**. `mvn package` produces two artifacts: the self-contained JAR in `plantuml-gui-java/target/` and the deliverable `plantuml-gui-java/release/plantuml-gui-java.zip`, which contains exactly the JAR and the two user launchers kept in `plantuml-gui-java/release/`.
 - Everything in the zip sits at its root, so an unzipped folder is a working installation with no nesting.
 - Artifact names live in three places that must agree: `pom.xml` (`finalName`, assembly descriptor), `java_config.ini` (`launcher.buildDir`, `launcher.releaseDir`, `launcher.jarName`, `launcher.zipName`) and the user launchers. Rename in all of them or in none.

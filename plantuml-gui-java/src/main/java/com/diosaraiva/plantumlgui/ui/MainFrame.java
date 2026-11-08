@@ -6,7 +6,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
@@ -18,11 +17,10 @@ import com.diosaraiva.plantumlgui.util.I18n;
 @SuppressWarnings("serial")
 public final class MainFrame extends JFrame {
 
-    private final JPanel contentPanel = new JPanel(new BorderLayout());
     private final PlantUmlPanel plantUmlPanel = new PlantUmlPanel();
 
-    private int selectedWidth = AppSettings.getInt(AppSettings.WINDOW_WIDTH, AppSettings.DEFAULT_WINDOW_WIDTH);
-    private int selectedHeight = AppSettings.getInt(AppSettings.WINDOW_HEIGHT, AppSettings.DEFAULT_WINDOW_HEIGHT);
+    private int selectedWidth = AppSettings.windowWidth();
+    private int selectedHeight = AppSettings.windowHeight();
 
     public MainFrame() {
         super(I18n.get("app.title"));
@@ -30,8 +28,7 @@ public final class MainFrame extends JFrame {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(selectedWidth, selectedHeight));
 
-        contentPanel.add(plantUmlPanel, BorderLayout.CENTER);
-        add(contentPanel, BorderLayout.CENTER);
+        add(plantUmlPanel, BorderLayout.CENTER);
 
         rebuildMenuBar();
         pack();
@@ -54,21 +51,13 @@ public final class MainFrame extends JFrame {
         });
     }
 
-    public void showPanel(JPanel panel) {
-        contentPanel.removeAll();
-        contentPanel.add(panel, BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
-
     // Applies the requested size, never growing beyond the usable screen area.
     // The choice is remembered in memory only; Config > Save persists it.
     public void applyResolution(int width, int height) {
         Rectangle screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         selectedWidth = width;
         selectedHeight = height;
-        AppSettings.set(AppSettings.WINDOW_WIDTH, width);
-        AppSettings.set(AppSettings.WINDOW_HEIGHT, height);
+        AppSettings.setWindowSize(width, height);
 
         setSize(Math.min(width, screen.width), Math.min(height, screen.height));
         setLocationRelativeTo(null);

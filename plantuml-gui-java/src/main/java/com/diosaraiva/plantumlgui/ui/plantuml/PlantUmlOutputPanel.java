@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -47,6 +46,7 @@ public final class PlantUmlOutputPanel extends JPanel {
     private static final double ZOOM_MIN = 0.1;
     private static final double ZOOM_MAX = 5.0;
     private static final int SCROLL_UNIT = 16;
+    private static final int CONSOLE_FONT_SIZE = 12;
 
     private final JTabbedPane tabs = new JTabbedPane();
 
@@ -69,13 +69,14 @@ public final class PlantUmlOutputPanel extends JPanel {
     private final JButton cleanButton =
             SwingUtils.createToolButton(I18n.get("console.clean"), I18n.get("console.clean.tooltip"));
 
-    public PlantUmlOutputPanel(Runnable onConsoleRefresh) {
+    public PlantUmlOutputPanel(Runnable onConsoleRefresh, Runnable onTabChanged) {
         super(new BorderLayout());
         refreshButton.addActionListener(e -> onConsoleRefresh.run());
         cleanButton.addActionListener(e -> clearConsole());
 
         tabs.addTab(I18n.get("tab.preview"), buildPreviewTab());
         tabs.addTab(I18n.get("tab.console"), buildConsoleTab());
+        tabs.addChangeListener(e -> onTabChanged.run());
         add(tabs, BorderLayout.CENTER);
     }
 
@@ -102,10 +103,9 @@ public final class PlantUmlOutputPanel extends JPanel {
         } catch (IOException ex) {
             showMessage(I18n.get("plantuml.preview.error", ex.getMessage()));
         }
-        appendConsole(result.isSuccess()
-                        ? I18n.get("console.compile.ok", result.exitCode())
-                        : I18n.get("console.compile.fail", result.exitCode()),
-                result.output().isBlank() ? I18n.get("console.no.output") : result.output());
+        var run = result.run();
+        appendConsole(I18n.get(run.isSuccess() ? "console.compile.ok" : "console.compile.fail", run.exitCode()),
+                run.output().isEmpty() ? I18n.get("console.no.output") : run.output());
         setRefreshEnabled(true);
     }
 
@@ -125,7 +125,7 @@ public final class PlantUmlOutputPanel extends JPanel {
         }
         switch (format) {
             case PNG -> showImage(output);
-            case PUML -> showText(output);
+            case PUML, ARCHIMATE -> showText(output);
             case SVG -> {
                 if (preview != null && preview.isFile()) {
                     showImage(preview);
@@ -133,12 +133,21 @@ public final class PlantUmlOutputPanel extends JPanel {
                     showMessage(I18n.get("preview.created", output.getAbsolutePath()));
                 }
             }
-            case ARCHIMATE -> showText(output);
         }
     }
 
     public void selectConsole() {
         tabs.setSelectedIndex(CONSOLE_TAB);
+    }
+
+    public boolean isConsoleSelected() { return tabs.getSelectedIndex() == CONSOLE_TAB; }
+
+    public void copyConsoleToClipboard() { SwingUtils.copyText(consoleArea); }
+
+    public void selectAllConsole() {
+        selectConsole();
+        consoleArea.requestFocusInWindow();
+        consoleArea.selectAll();
     }
 
     public void appendConsole(String header, String body) {
@@ -168,7 +177,7 @@ public final class PlantUmlOutputPanel extends JPanel {
     }
 
     private JPanel buildPreviewTab() {
-        zoomLabel.setFont(zoomLabel.getFont().deriveFont(Font.PLAIN, 11f));
+        SwingUtils.setFontSize(zoomLabel, 11f);
         zoomInButton.addActionListener(e -> zoomBy(ZOOM_STEP));
         zoomOutButton.addActionListener(e -> zoomBy(-ZOOM_STEP));
         resetButton.addActionListener(e -> setZoom(1.0));
@@ -192,7 +201,7 @@ public final class PlantUmlOutputPanel extends JPanel {
         imageScroll.getHorizontalScrollBar().setUnitIncrement(SCROLL_UNIT);
 
         textArea.setEditable(false);
-        textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
+        textArea.setFont(SwingUtils.monospaced(SwingUtils.CODE_FONT_SIZE));
 
         cardPanel.add(imageScroll, IMAGE_CARD);
         cardPanel.add(new JScrollPane(textArea), TEXT_CARD);
@@ -208,7 +217,7 @@ public final class PlantUmlOutputPanel extends JPanel {
     private JPanel buildConsoleTab() {
         consoleArea.setEditable(false);
         consoleArea.setLineWrap(true);
-        consoleArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        consoleArea.setFont(SwingUtils.monospaced(CONSOLE_FONT_SIZE));
 
         var toolBar = SwingUtils.createToolBar();
         toolBar.add(refreshButton);

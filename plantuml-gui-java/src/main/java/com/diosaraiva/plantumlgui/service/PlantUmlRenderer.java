@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import com.diosaraiva.plantumlgui.util.FileNames;
 import com.diosaraiva.plantumlgui.util.JarUtils;
+import com.diosaraiva.plantumlgui.util.JarUtils.JarRunResult;
 import com.diosaraiva.plantumlgui.util.ResourceLocator;
 
 // Runs the PlantUML JAR in a child JVM; owns the scratch directory used for previews.
@@ -24,22 +25,20 @@ public final class PlantUmlRenderer {
 
     private PlantUmlRenderer() { }
 
-    public record CompileResult(File previewImage, int exitCode, String output) {
-
-        public boolean isSuccess() { return exitCode == 0; }
-    }
+    public record CompileResult(File previewImage, JarRunResult run) { }
 
     // Renders the source to PNG in the scratch directory; previewImage() is null when nothing was produced.
-    public static CompileResult compilePreview(String code) throws IOException, InterruptedException {
+    // Synchronized because every preview shares one scratch file name.
+    public static synchronized CompileResult compilePreview(String code) throws IOException, InterruptedException {
         Path dir = tempDir();
         Path puml = dir.resolve(PREVIEW_NAME + ".puml");
         Files.writeString(puml, code);
 
-        JarUtils.JarRunResult run = JarUtils.runJar(resolveJar(), dir.toFile(), jvmOptions(),
+        JarRunResult run = JarUtils.runJar(resolveJar(), dir.toFile(), jvmOptions(),
                 PlantUmlFormat.PNG.cliFlag(), "-stdrpt:1", puml.toString(), "-o", dir.toString());
 
         File preview = dir.resolve(PREVIEW_NAME + ".png").toFile();
-        return new CompileResult(preview.isFile() ? preview : null, run.exitCode(), run.combinedOutput());
+        return new CompileResult(preview.isFile() ? preview : null, run);
     }
 
     // Writes the source next to the target and, for JAR-backed formats, renders the target itself.
@@ -50,24 +49,19 @@ public final class PlantUmlRenderer {
         Path puml = parent.toPath().resolve(FileNames.baseName(target) + ".puml");
         Files.writeString(puml, code);
 
-        if (format.needsJar()) {
-            JarUtils.runJar(resolveJar(), parent, jvmOptions(),
-                    format.cliFlag(), puml.toString(), "-o", parent.toString());
+        if (!format.needsJar()) {
+            return;
         }
-    }
-
-    // Custom JAR from the config file when it exists, otherwise the bundled one.
-    public static File resolveJar() throws IOException {
-        String custom = AppSettings.getJarPath();
-        if (!custom.isEmpty() && new File(custom).isFile()) {
-            return new File(custom);
+        JarRunResult run = JarUtils.runJar(resolveJar(), parent, jvmOptions(),
+                format.cliFlag(), puml.toString(), "-o", parent.toString());
+        if (!run.isSuccess()) {
+            throw new IOException(run.output().isEmpty() ? "PlantUML exit code " + run.exitCode() : run.output());
         }
-        return JarUtils.extractJar(AppSettings.get(AppSettings.BUNDLED_JAR));
     }
 
     public static String bundledJarPath() {
         try {
-            return JarUtils.extractJar(AppSettings.get(AppSettings.BUNDLED_JAR)).getAbsolutePath();
+            return bundledJar().getAbsolutePath();
         } catch (IOException ex) {
             LOG.warning(() -> "Bundled PlantUML JAR unavailable: " + ex.getMessage());
             return "";
@@ -84,6 +78,19 @@ public final class PlantUmlRenderer {
         } catch (IOException ex) {
             LOG.fine(() -> "Could not clean " + TEMP_DIR + ": " + ex.getMessage());
         }
+    }
+
+    // Custom JAR from the config file when it exists, otherwise the bundled one.
+    private static File resolveJar() throws IOException {
+        String custom = AppSettings.getJarPath();
+        if (!custom.isEmpty() && new File(custom).isFile()) {
+            return new File(custom);
+        }
+        return bundledJar();
+    }
+
+    private static File bundledJar() throws IOException {
+        return JarUtils.extractJar(AppSettings.get(AppSettings.BUNDLED_JAR));
     }
 
     private static Path tempDir() throws IOException {

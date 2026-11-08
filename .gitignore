@@ -22,6 +22,9 @@ target/
 .project
 .classpath
 
+# VS Code
+.vscode/
+
 # Build output
 bin/
 output/

@@ -14,7 +14,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -263,22 +262,13 @@ public final class PlantUmlFooterPanel extends JTabbedPane {
         I18n.setLocale(AppSettings.getLanguage());
 
         if (SwingUtilities.getWindowAncestor(this) instanceof MainFrame frame) {
-            frame.applyResolution(
-                    AppSettings.getInt(AppSettings.WINDOW_WIDTH, AppSettings.DEFAULT_WINDOW_WIDTH),
-                    AppSettings.getInt(AppSettings.WINDOW_HEIGHT, AppSettings.DEFAULT_WINDOW_HEIGHT));
+            frame.applyResolution(AppSettings.windowWidth(), AppSettings.windowHeight());
             frame.reloadLanguage();
         }
     }
 
     private void chooseFile(JTextField field, String title, FileNameExtensionFilter filter) {
-        var chooser = new JFileChooser();
-        chooser.setDialogTitle(title);
-        boolean open = filter != null;
-        if (open) { chooser.setFileFilter(filter); }
-        int result = open ? chooser.showOpenDialog(this) : chooser.showSaveDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            field.setText(chooser.getSelectedFile().getAbsolutePath());
-        }
+        SwingUtils.chooseFile(this, title, filter).ifPresent(file -> field.setText(file.getAbsolutePath()));
     }
 
     // Config value is either a name relative to the output dir or an absolute path.

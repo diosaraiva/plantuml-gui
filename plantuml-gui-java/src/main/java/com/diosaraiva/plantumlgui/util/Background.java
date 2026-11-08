@@ -11,8 +11,11 @@ import javax.swing.SwingUtilities;
 public final class Background {
 
     // Daemon threads only, so a pending task never keeps the JVM alive after the window closes.
-    private static final ExecutorService EXEC =
-            Executors.newCachedThreadPool(task -> Threads.newDaemon("background", task));
+    private static final ExecutorService EXEC = Executors.newCachedThreadPool(task -> {
+        Thread thread = new Thread(task, "background");
+        thread.setDaemon(true);
+        return thread;
+    });
 
     private Background() { }
 
