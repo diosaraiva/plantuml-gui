@@ -1,7 +1,8 @@
 @startuml
-
 !pragma layout smetana
 top to bottom direction
+' Stereotypes only select the skinparam colours below; keep them off the diagram.
+hide stereotype
 
 skinparam BackgroundColor  #ffffff
 skinparam DefaultFontName  Helvetica
@@ -9,14 +10,14 @@ skinparam DefaultFontSize  12
 skinparam DefaultFontColor #2c3e50
 skinparam ArrowThickness   1.5
 
-' ### FLOWS
+' flows
 skinparam arrow {
     FontColor        #495057
     FontSize         10
     MessageAlignment center
 }
 
-' ### BOXES
+' boxes
 skinparam component {
     BackgroundColor #cfffff
     BorderColor     #006080
@@ -37,7 +38,7 @@ skinparam componentBackgroundColor<<ApplicationComponent>>  #cfffff
 skinparam componentBorderColor<<ApplicationComponent>>      #006080
 skinparam componentFontColor<<ApplicationComponent>>        #003040
 
-' ### GROUP1
+' group1
 skinparam package {
     FontColor       #ffffff
     FontStyle       bold
@@ -49,7 +50,7 @@ skinparam packageBorderColor<<PkgBlue>>       #154360
 skinparam packageBackgroundColor<<PkgGreen>>  #1e6b4a
 skinparam packageBorderColor<<PkgGreen>>      #145a32
 
-' ### GROUP2
+' group2
 skinparam frame {
     BackgroundColor #f0f0f0
     BorderColor     #a0a0a0
@@ -59,7 +60,7 @@ skinparam frame {
     RoundCorner     0
 }
 
-' ### LEGEND
+' legend
 skinparam legend {
     BorderColor      #ffffff
     BackgroundColor  #f8f9fa
@@ -67,10 +68,21 @@ skinparam legend {
     FontSize         10
 }
 
-' ### MACROS
-!define Actor(alias,stereotype,label) rectangle <<stereotype>>\nlabel as alias <<Actor>>
-!define Component(type,alias,stereotype,label) component <<stereotype>>\nlabel as alias <<type>>
-!define Flow(stereotype,label) <<stereotype>>\nlabel
-!define Legend(col1,col2) | col1 | col2 |
+' macros
+!procedure Actor($alias, $stereotype, $label)
+rectangle "<<$stereotype>>\n$label" as $alias <<Actor>>
+!endprocedure
+
+!procedure Component($type, $alias, $stereotype, $label)
+component "<<$stereotype>>\n$label" as $alias <<$type>>
+!endprocedure
+
+!function Flow($stereotype, $label)
+!return "<<" + $stereotype + ">>\n" + $label
+!endfunction
+
+!procedure Legend($col1, $col2)
+| $col1 | $col2 |
+!endprocedure
 
 @enduml

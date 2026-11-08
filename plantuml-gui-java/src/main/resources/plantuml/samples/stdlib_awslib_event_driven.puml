@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/awslabs/aws-icons-for-plantuml
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -49,9 +48,9 @@ title AWS Event-Driven View - Order Processing
 !include <awslib/Database/DynamoDB>
 !include <awslib/Storage/SimpleStorageService>
 
+' ---- Elements ----
 left to right direction
 
-' ---- Elements ----
 Users(clients, "Clients", "REST")
 
 AWSCloudGroup(cloud) {

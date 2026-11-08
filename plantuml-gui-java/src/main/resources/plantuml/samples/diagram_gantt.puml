@@ -1,8 +1,42 @@
 @startgantt
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
 !pragma layout smetana
 
-title Project Schedule
+header Reference: https://plantuml.com/gantt-diagram
 
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Gantt Diagram - Project Schedule
+
+' ---- Elements ----
 Project starts 2026-01-05
 
 [Requirements] lasts 10 days
@@ -14,4 +48,5 @@ Project starts 2026-01-05
 [Testing] starts at [Development]'s end
 [Deployment] lasts 5 days
 [Deployment] starts at [Testing]'s end
+
 @endgantt

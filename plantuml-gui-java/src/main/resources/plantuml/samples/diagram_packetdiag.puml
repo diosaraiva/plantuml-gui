@@ -1,7 +1,45 @@
 @startpacketdiag
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: http://blockdiag.com/en/nwdiag/packetdiag-examples.html
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Packet Diagram - TCP Header
+
+' ---- Elements ----
 scale_interval = 2;
 0-7: Source Port
 8-15: Destination Port
 16-31: Sequence Number
 32-47: Acknowledgment Number
+
 @endpacketdiag

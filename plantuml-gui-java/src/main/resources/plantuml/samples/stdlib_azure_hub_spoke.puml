@@ -31,7 +31,7 @@ caption {
 
 header Reference: https://learn.microsoft.com/azure/architecture/networking/architecture/hub-spoke
 
-footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
 
 title Azure Network Topology - Hub and Spoke
 

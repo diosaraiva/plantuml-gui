@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/Templarian/MaterialDesign
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -49,9 +48,9 @@ title Material Design Icons - Order Journey
 !include <material/truck>
 !include <material/chart_line>
 
+' ---- Elements ----
 left to right direction
 
-' ---- Elements ----
 ' MA_<NAME>(color, scale, alias, shape, label)
 MA_ACCOUNT(Black, 1.5, customer, actor, "Customer")
 MA_CELLPHONE(SteelBlue, 1.5, app, rectangle, "Shop App")

@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/plantuml-stdlib/plantuml-kubernetes-sprites
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -39,6 +38,7 @@ title Kubernetes Sprites - Control Plane and Workloads
 ' ---- Includes ----
 !include <kubernetes/k8s-sprites-labeled-25pct>
 
+' ---- Elements ----
 ' Sprites are used directly as <$name> inside any element; <color:...> tints them.
 skinparam defaultTextAlignment center
 

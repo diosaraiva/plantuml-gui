@@ -1,4 +1,34 @@
 @startyaml
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+title YAML Diagram - Creole Text Formatting
 
 Creole:
   wave: ~~wave~~
@@ -23,8 +53,8 @@ HTML Creole:
   Orange: <back:orange>Orange background
   big: <size:20>big
 Graphic:
-  OpenIconic: account-login <&account-login> 
+  OpenIconic: account-login <&account-login>
   Unicode: This is <U+221E> long
   Emoji: <:calendar:> Calendar
-  
+
 @endyaml

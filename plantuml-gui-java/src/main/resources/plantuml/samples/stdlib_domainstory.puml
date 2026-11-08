@@ -4,16 +4,24 @@
 title {
   HorizontalAlignment center
   FontSize 16
+  FontColor black
 }
 
 header {
   HorizontalAlignment center
   FontSize 12
+  FontColor gray
 }
 
 footer {
   HorizontalAlignment center
   FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
 }
 
 caption {
@@ -23,7 +31,7 @@ caption {
 
 header Reference: https://github.com/johthor/DomainStory-PlantUML
 
-footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
 
 title Domain Story - Booking Cinema Tickets
 

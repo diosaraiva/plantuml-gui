@@ -1,6 +1,42 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
 !pragma layout smetana
 
+header Reference: https://plantuml.com/ascii-math
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title AsciiMath - Formulas in an Activity
+
+' ---- Elements ----
 :<math>int_0^1f(x)dx</math>;
 :<math>x^2+y_1+z_12^34</math>;
 note right

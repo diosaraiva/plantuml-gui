@@ -1,6 +1,42 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
 !pragma layout smetana
 
+header Reference: https://plantuml.com/preprocessing
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Preprocessing - JSON Variables
+
+' ---- Elements ----
 left to right direction
 
 !$data={"parts":[

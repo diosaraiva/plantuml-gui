@@ -1,12 +1,41 @@
 @startuml
-header Reference: https://github.com/dcasati/kubernetes-PlantUML
-footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
-title Kubernetes on Azure - AKS Reference
-scale max 1024 width
-skinparam linetype polyline
-skinparam nodesep 10
-skinparam ranksep 10
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
 
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/dcasati/kubernetes-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Kubernetes on Azure - AKS Reference
+
+' ---- Includes ----
 ' Azure
 !include <azure/AzureCommon>
 !include <azure/AzureSimplified>
@@ -24,6 +53,12 @@ skinparam ranksep 10
 !include <k8s/OSS/KubernetesApi>
 !include <k8s/OSS/KubernetesIng>
 !include <k8s/OSS/KubernetesPod>
+
+' ---- Elements ----
+scale max 1024 width
+skinparam linetype polyline
+skinparam nodesep 10
+skinparam ranksep 10
 
 actor "DevOps" as devopsAlias
 collections "Client Apps" as clientalias
@@ -43,7 +78,7 @@ AzurePipelines(ado, "CI/CD\nAzure Pipelines", "Global")
 ' Kubernetes Components
 Cluster_Boundary(cluster, "Kubernetes Cluster") {
     KubernetesApi(KubernetesApi, "Kubernetes API", "")
-    
+
     Namespace_Boundary(nsFrontEnd, "Front End") {
         KubernetesIng(ingress, "API Gateway", "")
     }

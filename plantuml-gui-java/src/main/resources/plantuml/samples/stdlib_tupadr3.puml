@@ -1,10 +1,46 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/tupadr3/plantuml-icon-font-sprites
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Tupadr3 - Font Awesome Styling
+
+' ---- Includes ----
 !include <tupadr3/common>
 !include <tupadr3/font-awesome/server>
 !include <tupadr3/font-awesome/database>
 
-title Styling example
-
+' ---- Elements ----
 FA_SERVER(web1,web1) #Green
 FA_SERVER(web2,web2) #Yellow
 FA_SERVER(web3,web3) #Blue

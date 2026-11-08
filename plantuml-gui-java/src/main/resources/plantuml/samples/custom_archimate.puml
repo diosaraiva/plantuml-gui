@@ -1,9 +1,45 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
 
-'###LIBS###
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
 !pragma layout smetana
+
+header Reference: https://plantuml.com/preprocessing
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Custom ArchiMate - Component Diagram Template
+
+' ---- Includes ----
 !include <archimate/Archimate>
 
+' ---- Elements ----
 !define actor(alias,stereotype,actorName) Business_Actor(alias, <center><<stereotype>>\nactorName)
 
 !define assetNew(alias,stereotype,assetName)   Application_Component(alias, <center><<stereotype>>\nassetName <font color=green>**[N]**</font>)
@@ -13,17 +49,16 @@
 !define exch(stereotype,exchLabel) <center><<stereotype>>\nexchLabel
 !define legendEntry(col,sign,desc) |<font color=col>**  sign**</font>|desc|
 
-'###SETTINGS###
-title Component Diagram Template
+' settings
 skinparam backgroundColor white
 skinparam legendBorderColor white
 top to bottom direction
 
-'###ACTORS###
+' actors
 actor(x1,"External","Customers")
 actor(x2,"Internal","Management")
 
-'###COMPONENTS###
+' components
 Group(g1, "Distribution") {
     Other_Grouping(g11, "On Premises") {
         assetNew(y11,"Application","SPA Application")
@@ -38,7 +73,7 @@ Group(g3, "Data") {
     assetReused(z11,"Database","PostgreSQL")
 }
 
-'###EXCHANGES###
+' exchanges
 x1 -[#red]->   y13: exch("GUI","subscription")
 x1 -[#black]-> y12: exch("GUI","reporting")
 x1 -[#blue]->  y11: exch("GUI","subscription")
@@ -49,7 +84,7 @@ y13 -[#black]-> y21: exch("API","subscription")
 y11 -[#black]-> y21: exch("API","reporting")
 y21 -[#black]-> z11: exch("SQL","query")
 
-'###LEGEND###
+' legend
 legend left
     | **Sign** | **Description**          |
     legendEntry(black,--->,"Existing Exchange")

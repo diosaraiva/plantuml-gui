@@ -1,5 +1,41 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
 
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/sub-diagram
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Sub-Diagram - Activity Embedded in a Class Note
+
+' ---- Elements ----
 abstract ATest {
   {static} +String id
   {abstract} -void doit()

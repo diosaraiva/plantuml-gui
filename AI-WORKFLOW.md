@@ -107,6 +107,13 @@ Run this on every touched file:
 - Samples live in `plantuml-gui-java/src/main/resources/plantuml/samples` and are named `<group>_<topic>.puml`, lower case with underscores. Groups, in gallery order: `uml`, `diagram`, `math`, `stdlib_<library>`, `preprocessing`, `style`, `custom`, `reference`, `list`.
 - Each gallery entry is a `DiagramSample` constant whose lower-cased name is the file name; only the display name (`<Group> - <Topic>`) is written out. A sample file with no constant is a bug, except a file that another sample `!include`s.
 - Samples must render offline with the bundled PlantUML JAR: use `!include <stdlib>` paths, never `!includeurl`.
+- Every sample follows the skeleton of the `uml_*` samples, in this order:
+  1. `@start<type>`, then `' ---- Customizations ----` and the shared `<style>` block (extra selectors may follow the standard five; `!pragma` lines go right after `</style>`).
+  2. `header Reference: <documentation or library URL>`, the shared `footer PlantUML GUI: ...` line, and `title <Kind> - <Subject>`, each separated by one blank line.
+  3. `' ---- Includes ----` (only when there are includes), then `' ---- Elements ----` and the diagram.
+  4. A blank line, then `@end<type>` with no trailing newline. Two-space indentation, no tabs, no trailing whitespace.
+- Only those three section markers exist; other comments are plain `' lower case` notes. Prefer `!procedure` / `!function` over `!define` in new code.
+- Exceptions, because the diagram type rejects the extra lines: JSON and YAML keep only the style block and title; ditaa and the `list_*` commands keep just their body (a `list_*` file is exactly three lines); `custom_modular_ref` is an include fragment.
 - Every library in the bundled stdlib keeps at least one sample. After a PlantUML upgrade, render every sample and fix what breaks.
 
 ## 9. Configuration rules

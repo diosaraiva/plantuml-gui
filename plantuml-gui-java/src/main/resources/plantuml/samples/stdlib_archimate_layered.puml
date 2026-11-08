@@ -31,7 +31,7 @@ caption {
 
 header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
 
-footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
 
 title ArchiMate - Cross-Layer Example
 
@@ -39,48 +39,46 @@ title ArchiMate - Cross-Layer Example
 !include <archimate/Archimate>
 
 ' ---- Elements ----
-
-' ---- Customizations ----
 skinparam legendBackgroundColor #white
 skinparam legendBorderColor #white
 skinparam legendFontSize 10
 
-' ---- Motivation ----
+' motivation
 Motivation_Stakeholder(stakeholder, "Customer")
 Motivation_Goal(goal, "Seamless Experience")
 Motivation_Requirement(req, "Low Latency")
 
-' ---- Strategy ----
+' strategy
 Strategy_Capability(cap, "Digital Commerce")
 Strategy_CourseOfAction(coa, "Platform Modernization")
 
-' ---- Business ----
+' business
 Business_Actor(buyer, "Online Buyer")
 Business_Process(purchase, "Purchase Process")
 Business_Service(orderSvc, "Order Service")
 Business_Object(order, "Order")
 
-' ---- Application ----
+' application
 Application_Component(shop, "E-Commerce App")
 Application_Component(payment, "Payment Gateway")
 Application_Service(appSvc, "Shopping Service")
 Application_DataObject(cart, "Shopping Cart")
 
-' ---- Technology ----
+' technology
 Technology_Node(cloud, "AWS Cloud")
 Technology_Device(cdn, "CDN Edge Node")
 Technology_Artifact(image, "Docker Image")
 Technology_Service(hosting, "Cloud Hosting")
 
-' ---- Physical ----
+' physical
 Physical_Facility(dc, "Data Center")
 Physical_Equipment(server, "Server Rack")
 
-' ---- Implementation ----
+' implementation
 Implementation_WorkPackage(wp, "Migration Sprint")
 Implementation_Deliverable(release, "v2.0 Release")
 
-' ---- Relationships across layers ----
+' relationships across layers
 Rel_Association(stakeholder, goal, "has")
 Rel_Influence(goal, req, "drives")
 Rel_Realization(cap, goal, "fulfills")

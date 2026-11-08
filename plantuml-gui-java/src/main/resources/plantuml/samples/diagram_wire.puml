@@ -1,5 +1,41 @@
 @startwire
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
 
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml/plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Wire Diagram - Connection Styles
+
+' ---- Elements ----
 * BOX_1 [100x200]
 --
 move(100,0)
@@ -13,4 +49,5 @@ BOX_1 =>  BOX_2 : abcd
 BOX_1 <=> BOX_2 #red : abcd
 BOX_1 <=  BOX_2 : abcd
 BOX_1 =   BOX_2 : abcd
+
 @endwire

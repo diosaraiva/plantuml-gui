@@ -1,7 +1,42 @@
 @startuml
-!pragma layout smetana
-title PlantUML Configuration Schema
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
 
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+!pragma layout smetana
+
+header Reference: https://plantuml.com/skinparam
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Reference - Skin Parameter Schema
+
+' ---- Elements ----
 skinparam classAttributeIconSize 0
 skinparam shadowing false
 skinparam class {

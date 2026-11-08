@@ -1,11 +1,47 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml-stdlib/cicon-plantuml-sprites
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Cloudinsight - Streaming Pipeline
+
+' ---- Includes ----
 !include <cloudinsight/tomcat>
 !include <cloudinsight/kafka>
 !include <cloudinsight/java>
 !include <cloudinsight/cassandra>
 
-title Cloudinsight sprites example
-
+' ---- Elements ----
 skinparam monochrome true
 
 rectangle "<$tomcat>\nwebapp" as webapp

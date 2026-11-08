@@ -31,7 +31,7 @@ caption {
 
 header Reference: https://plantuml.com/salt
 
-footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
 
 title Salt Wireframe - Image Viewer Preferences
 
@@ -46,7 +46,7 @@ title Salt Wireframe - Image Viewer Preferences
     Open image in: | ^Smart Mode^
     Background: | ^Dark^
     Zoom step: | "25      " | %
-    Default view: | () Fit to window | . | . 
+    Default view: | () Fit to window | . | .
     . | () Actual size | . | .
     . | () Fill screen | . | .
   }
@@ -87,4 +87,5 @@ title Salt Wireframe - Image Viewer Preferences
   [Restore defaults] | . | . | [Cancel] | [Apply] | [Close]
 }
 }
+
 @endsalt

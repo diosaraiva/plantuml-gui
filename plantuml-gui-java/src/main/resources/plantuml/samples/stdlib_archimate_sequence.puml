@@ -1,4 +1,3 @@
-
 @startuml
 ' ---- Customizations ----
 <style>
@@ -7,16 +6,28 @@ title {
   FontSize 16
   FontColor black
 }
+
 header {
   HorizontalAlignment center
   FontSize 12
   FontColor gray
 }
+
 footer {
   HorizontalAlignment center
   FontSize 12
   FontColor gray
 }
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+
 sequenceDiagram {
   ArrowColor #405A75
   LifeLineBorderColor #8294A8
@@ -31,23 +42,25 @@ sequenceDiagram {
 </style>
 
 header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
 title ArchiMate - Sequence Diagram
 
 ' ---- Includes ----
 !global $ARCH_SEQUENCE_SUPPORT = %true()
 !include <archimate/Archimate>
 
+' ---- Elements ----
 hide footbox
 autonumber "<b>[000]"
 
-' ---- Elements ----
 $actor("User","user")
 $applicationComponent("Web App","app")
 $applicationComponent("Identity Provider","idp")
 $applicationFunction("Validate\nCredentials","validate")
 
-' ---- Sequence ----
+' sequence
 == Authentication ==
 
 user -> app ++ : Enter credentials

@@ -1,6 +1,4 @@
 @startuml
-!pragma layout smetana
-
 ' ---- Customizations ----
 <style>
 title {
@@ -32,13 +30,15 @@ caption {
   FontSize 32
 }
 </style>
+!pragma layout smetana
 
-header some header
+header Reference: https://plantuml.com/style-evolution
 
-footer some footer
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
 
-title My title
+title Style - CSS-like Element Styling
 
+' ---- Elements ----
 caption This is caption
 
 legend

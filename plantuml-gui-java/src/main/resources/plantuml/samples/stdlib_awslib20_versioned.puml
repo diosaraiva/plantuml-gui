@@ -29,18 +29,17 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/awslabs/aws-icons-for-plantuml
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
 
 title AWS Icons v20 - Pinning a Library Version
 
+' ---- Includes ----
 ' <awslib> follows the default bundled release; <awslib10>, <awslib14> and <awslib20>
 ' pin a specific icon set so the diagram keeps its look across PlantUML upgrades.
 ' Paths can move between versions: API Gateway is under NetworkingContentDelivery in v20.
 
-' ---- Includes ----
 !include <awslib20/AWSCommon>
 !include <awslib20/General/Users>
 !include <awslib20/Groups/AWSCloud>
@@ -49,9 +48,9 @@ title AWS Icons v20 - Pinning a Library Version
 !include <awslib20/Database/DynamoDB>
 !include <awslib20/ArtificialIntelligence/Bedrock>
 
+' ---- Elements ----
 left to right direction
 
-' ---- Elements ----
 Users(users, "Users", "chat UI")
 
 AWSCloudGroup(cloud) {

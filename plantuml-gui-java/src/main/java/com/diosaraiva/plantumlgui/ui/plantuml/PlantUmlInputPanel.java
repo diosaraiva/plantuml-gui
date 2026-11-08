@@ -348,6 +348,7 @@ public final class PlantUmlInputPanel extends JPanel {
 
         String fileName() { return name().toLowerCase(Locale.ROOT) + ".puml"; }
 
-        @Override public String toString() { return displayName; }
+        // Numbered from the declaration order, so adding or moving a sample renumbers the list.
+        @Override public String toString() { return (ordinal() + 1) + ". " + displayName; }
     }
 }

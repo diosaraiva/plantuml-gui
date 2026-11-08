@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/twbs/icons
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -39,6 +38,7 @@ title Bootstrap Icons - Sprites, Scale and Colour
 ' ---- Includes ----
 !include <bootstrap/bootstrap>
 
+' ---- Elements ----
 skinparam defaultTextAlignment center
 
 ' Icons are sprites named bi-<icon>; options go in braces.

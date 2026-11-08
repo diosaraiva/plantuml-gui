@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/XReyRobert/ibm-icons-for-plantuml
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -53,12 +52,12 @@ title IBM Cloud - Hybrid AI Application
 !include <ibm/Groups/GenericBlue>
 !include <ibm/Groups/GenericGreen>
 
+' ---- Elements ----
 left to right direction
 
 ' Use the 4-argument form name(alias, label, technology, description):
 ' the 3-argument form of this library version emits an unterminated label.
 
-' ---- Elements ----
 user(customer, "Customer", "", "browser")
 mobilephone(app, "Mobile App", "", "iOS / Android")
 

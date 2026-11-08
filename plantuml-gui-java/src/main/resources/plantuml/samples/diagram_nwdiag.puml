@@ -1,4 +1,41 @@
 @startnwdiag
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/nwdiag
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Network Diagram - DMZ and Internal Networks
+
+' ---- Elements ----
 network DMZ {
   address = "y.x.x.x/24"
   web01 [address = "y.x.x.1"];
@@ -9,7 +46,7 @@ network Internal {
 web01;
   web02;
   db01 [address = "w.w.w.z", shape = database];
-} 
+}
 
 group {
   description = "long group label";
@@ -17,4 +54,5 @@ group {
   web02;
   db01;
 }
+
 @enduml

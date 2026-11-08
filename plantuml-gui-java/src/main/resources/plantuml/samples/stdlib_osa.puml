@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/Crashedmind/PlantUML-opensecurityarchitecture-icons
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -53,9 +52,9 @@ title Open Security Architecture - Office Network
 !include <osa/printer/printer>
 !include <osa/site_branch/site_branch>
 
+' ---- Elements ----
 skinparam defaultTextAlignment center
 
-' ---- Elements ----
 rectangle "<$developer>\nDeveloper" as dev
 rectangle "<$sysadmin>\nSysadmin" as admin
 rectangle "<$hat>\nAttacker" as attacker #MistyRose

@@ -1,9 +1,47 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
 !pragma layout smetana
+
+header Reference: https://github.com/plantuml-stdlib/Archimate-PlantUML
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title ArchiMate - Nested Elements and Special Shapes
+
+' ---- Includes ----
 !include <archimate/Archimate>
 
 !global $ARCH_SPECIAL_SHAPES = %true()
 
+' ---- Elements ----
 Motivation_Stakeholder(MS, "Motivation Stakeholder") {
     Motivation_Stakeholder(MSI, "Inner Stakeholder", $special=%true())
     Motivation_Stakeholder(MSI2, "Another Inner Stakeholder", $special=%false())

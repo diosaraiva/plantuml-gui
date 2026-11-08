@@ -31,7 +31,7 @@ caption {
 
 header Reference: https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/devops-teams-topologies
 
-footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
 
 title Azure DevOps - CI/CD with Environments
 

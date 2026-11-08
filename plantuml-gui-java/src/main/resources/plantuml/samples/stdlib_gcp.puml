@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/Crashedmind/PlantUML-icons-GCP
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -52,9 +51,9 @@ title Google Cloud - Serverless Web and Analytics
 !include <gcp/Security/Cloud_IAM>
 !include <gcp/Management_Tools/Monitoring>
 
+' ---- Elements ----
 left to right direction
 
-' ---- Elements ----
 actor "Users" as users
 
 package "Edge" {

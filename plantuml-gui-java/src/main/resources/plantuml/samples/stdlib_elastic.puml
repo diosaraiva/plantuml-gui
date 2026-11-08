@@ -1,12 +1,50 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/Crashedmind/PlantUML-Elastic-icons
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Elastic - Ingest, Search and Visualize
+
+' ---- Includes ----
 !include <elastic/common>
 !include <elastic/elasticsearch/elasticsearch>
 !include <elastic/logstash/logstash>
 !include <elastic/kibana/kibana>
 
+' ---- Elements ----
 ELASTICSEARCH(ElasticSearch, "Search and Analyze",database)
 LOGSTASH(Logstash, "Parse and Transform",node)
-KIBANA(Kibana, "Visualize",agent) 
+KIBANA(Kibana, "Visualize",agent)
 
 Logstash -right-> ElasticSearch: Transformed Data
 ElasticSearch -right-> Kibana: Data to View

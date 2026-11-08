@@ -1,7 +1,45 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
 !pragma layout smetana
+
+header Reference: https://plantuml.com/creole
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Reference - Emoji (Unicode 26xx)
+
+' ---- Includes ----
 !include <archimate/Archimate>
-title Emoji 26 - Number and Text Entries
+
+' ---- Elements ----
 skinparam shadowing false
 skinparam defaultTextAlignment left
 legend
@@ -177,4 +215,5 @@ legend
 | fuelpump | <:fuelpump:> |
 
 endlegend
+
 @enduml

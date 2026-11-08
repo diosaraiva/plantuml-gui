@@ -1,4 +1,41 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/cloudogu/plantuml-cloudogu-sprites
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Cloudogu - Ecosystem Dogus
+
+' ---- Includes ----
 !include <cloudogu/common>
 !include <cloudogu/dogus/jenkins>
 !include <cloudogu/dogus/cloudogu>
@@ -7,11 +44,12 @@
 !include <cloudogu/dogus/nexus>
 !include <cloudogu/tools/k8s>
 
+' ---- Elements ----
 node "Cloudogu Ecosystem" <<$cloudogu>> {
-	DOGU_JENKINS(jenkins, Jenkins) #ffffff
-	DOGU_SCM(scm, SCM-Manager) #ffffff
-	DOGU_SMEAGOL(smeagol, Smeagol) #ffffff
-	DOGU_NEXUS(nexus,Nexus) #ffffff
+  DOGU_JENKINS(jenkins, Jenkins) #ffffff
+  DOGU_SCM(scm, SCM-Manager) #ffffff
+  DOGU_SMEAGOL(smeagol, Smeagol) #ffffff
+  DOGU_NEXUS(nexus,Nexus) #ffffff
 }
 
 TOOL_K8S(k8s, Kubernetes) #ffffff

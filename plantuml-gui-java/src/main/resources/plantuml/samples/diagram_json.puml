@@ -1,4 +1,35 @@
 @startjson
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+title JSON Diagram - Company Directory
+
 #highlight "employees" /1 "skills"
 {
   "company": "ACME Corp",
@@ -28,4 +59,5 @@
     "support": null
   }
 }
+
 @endjson

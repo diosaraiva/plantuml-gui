@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/james-gadrow-kr/classy-plantuml
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -39,11 +38,12 @@ title Classy - Object-Oriented Preprocessor Code
 ' ---- Includes ----
 !include <classy/core>
 
+' ---- Elements ----
 ' Classy adds classes, instances and method calls to the PlantUML preprocessor.
 ' Method arguments arrive as an array; pop() takes the single value.
 ' Assign results with !$_ = ... so return values are not printed into the diagram.
 
-' ---- Class definition ----
+' class definition
 $class(Service)
   $classVar(name, string)
   $classVar(port, string, '80')
@@ -69,7 +69,7 @@ $class(Service)
   $endclassMethod(label)
 $endclass(Service)
 
-' ---- Instances ----
+' instances
 !$gateway = $call($call($new('Service'), 'setName', 'API Gateway'), 'setPort', '443')
 !$orders = $call($new('Service'), 'setName', 'Orders')
 !$billing = $call($call($new('Service'), 'setName', 'Billing'), 'setPort', '8081')
@@ -79,7 +79,7 @@ $endclass(Service)
 !$_ = $call($downstream, 'push', $orders)
 !$_ = $call($downstream, 'push', $billing)
 
-' ---- Rendering ----
+' rendering
 !$gatewayLabel = $call($gateway, 'label')
 component "$gatewayLabel" as gateway
 

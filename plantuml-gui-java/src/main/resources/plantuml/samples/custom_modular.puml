@@ -1,30 +1,76 @@
 @startuml
-
-!include custom_modular_ref.puml
-
-title Modular Component Diagram
-
-' ### ACTORS
-Actor(x1,External,Customers)
-Actor(x2,External,Customers)
-
-' ### COMPONENTS
-package "Distribution" <<PkgBlue>> {
-    
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
 }
 
-' ### FLOWS
-x1 -[#c0392b]->  y13: exch("GUI","subscription")
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
 
-' ### LEGEND
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://plantuml.com/preprocessing
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Custom Modular - Components from an Included Library
+
+' ---- Includes ----
+!include custom_modular_ref.puml
+
+' ---- Elements ----
+' actors
+Actor(customers, "External", "Customers")
+Actor(management, "Internal", "Management")
+
+' components
+package "Distribution" <<PkgBlue>> {
+  Component(Application, web, "Application", "SPA Application")
+  Component(Application, mobile, "Application", "Mobile Application")
+}
+
+package "Backend" <<PkgGreen>> {
+  Component(ApplicationComponent, api, "Application", "API Backend")
+}
+
+frame "Data" {
+  Component(ApplicationComponent, db, "Database", "PostgreSQL")
+}
+
+' flows
+customers -[#1e8449]-> web : Flow("GUI", "subscription")
+customers -[#2c3e50]-> mobile : Flow("GUI", "reporting")
+management -[#2c3e50]-> web : Flow("GUI", "administration")
+web -[#2c3e50]-> api : Flow("API", "orders")
+mobile -[#c0392b]-> api : Flow("API", "legacy sync")
+api -[#2c3e50]-> db : Flow("SQL", "persistence")
+
+' legend
 legend left
-    Legend(**Sign**,**Description**)
-    Legend(--->,"Existing Exchange")
-    Legend(--->,"New Exchange")
-    Legend(--->,"Removed Exchange")
-    Legend([N], "New Asset")
-    Legend([R], "Reused Asset")
-    Legend([D], "Decommissioned Asset")
+  Legend("**Sign**", "**Description**")
+  Legend("<color:#2c3e50>--></color>", "Existing exchange")
+  Legend("<color:#1e8449>--></color>", "New exchange")
+  Legend("<color:#c0392b>--></color>", "Exchange to remove")
 endlegend
 
 @enduml

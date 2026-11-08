@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/Crashedmind/PlantUML-opensecurityarchitecture2-icons
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -46,9 +45,9 @@ title Open Security Architecture 2 - Small Business
 !include <osa2/Server/all>
 !include <osa2/Site/all>
 
+' ---- Elements ----
 hide stereotype
 
-' ---- Elements ----
 together {
   osa_user_green_developer(dev, "Ana", "Product team", "Developer")
   osa_user_green_operations(ops, "Ravi", "IT team", "Server Admin")

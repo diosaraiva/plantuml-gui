@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/james-gadrow-kr/classy-c4
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -42,7 +41,8 @@ title Classy-C4 - C4 Elements as Objects
 !include <classy-c4/system>
 !include <classy-c4/container>
 
-' ---- Objects ----
+' ---- Elements ----
+' objects
 !$customer = $new('Person')
 !$_ = $call($customer, 'setName', 'Customer')
 !$_ = $call($customer, 'setDescription', 'Orders products online')
@@ -62,7 +62,7 @@ title Classy-C4 - C4 Elements as Objects
 !$_ = $call($payments, 'setDescription', 'Card processing')
 !$_ = $call($payments, 'setExternal')
 
-' ---- Rendering ----
+' rendering
 ' render() draws the element once and returns its alias for relationships.
 ' Prefer descriptive variable names: short ones such as $c can clash with Classy internals.
 !$customerAlias = $call($customer, 'render')

@@ -1,8 +1,46 @@
 @startboard
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/plantuml/plantuml
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Board Diagram - Story Map
+
+' ---- Elements ----
 A1
 +U1.1
 ++S1 R1
-++S1 R2 
+++S1 R2
 +U1.2
 A2
+
 @endboard

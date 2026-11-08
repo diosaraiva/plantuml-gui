@@ -1,8 +1,42 @@
 @startmindmap
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
 !pragma layout smetana
 
-title Project Planning
+header Reference: https://plantuml.com/mindmap-diagram
 
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Mind Map - Project Planning
+
+' ---- Elements ----
 * Project
 ** Requirements
 *** Functional
@@ -20,4 +54,5 @@ title Project Planning
 ** Deployment
 *** Staging
 *** Production
+
 @endmindmap

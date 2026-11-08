@@ -29,7 +29,6 @@ caption {
 }
 </style>
 
-
 header Reference: https://github.com/awslabs/aws-icons-for-plantuml
 
 footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
@@ -50,9 +49,9 @@ title AWS DevOps View - CI/CD Pipeline
 !include <awslib/ManagementGovernance/CloudWatch>
 !include <awslib/ApplicationIntegration/SimpleNotificationService>
 
+' ---- Elements ----
 left to right direction
 
-' ---- Elements ----
 Users(devs, "Developers", "git push")
 
 AWSCloudGroup(cloud) {

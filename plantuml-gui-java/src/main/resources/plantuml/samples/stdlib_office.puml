@@ -1,4 +1,41 @@
 @startuml
+' ---- Customizations ----
+<style>
+title {
+  HorizontalAlignment center
+  FontSize 16
+  FontColor black
+}
+
+header {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+footer {
+  HorizontalAlignment center
+  FontSize 12
+  FontColor gray
+}
+
+legend {
+  FontSize 12
+  BackGroundColor white
+}
+
+caption {
+  FontSize 32
+}
+</style>
+
+header Reference: https://github.com/Roemer/plantuml-office
+
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
+
+title Office - Server and Cloud Icons
+
+' ---- Includes ----
 !include <tupadr3/common>
 
 !include <office/Servers/database_server>
@@ -6,8 +43,7 @@
 !include <office/Concepts/firewall_orange>
 !include <office/Clouds/cloud_disaster_red>
 
-title Office Icons Example
-
+' ---- Elements ----
 package "Sprites" {
     OFF_DATABASE_SERVER(db,DB)
     OFF_APPLICATION_SERVER(app,App-Server)

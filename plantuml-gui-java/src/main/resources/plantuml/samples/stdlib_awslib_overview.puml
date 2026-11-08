@@ -31,9 +31,9 @@ caption {
 
 header Reference: https://github.com/awslabs/aws-icons-for-plantuml
 
-footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui 
+footer PlantUML GUI: https://github.com/diosaraiva/plantuml-gui
 
-title AWS Diagram
+title AWS Overview - Three-Tier Web Application
 
 ' ---- Includes ----
 !include <awslib/AWSCommon>
