@@ -125,6 +125,7 @@ Open **Config**, set **PlantUML JAR Path** (or **Browse…**), press **Save**. C
 | Nothing happens when I launch it | Java is missing or too old. Run `java -version`; you need **17 or newer**. |
 | "java was not found" | Install Java from [Adoptium](https://adoptium.net/), then open a new terminal or window. |
 | The launcher says the JAR is missing | Keep `plantuml-gui-java.jar` in the same folder as the launcher. |
+| "Cannot read the folder" or "Operation not permitted" (macOS) | macOS blocks apps from Downloads, Desktop and Documents until allowed. Move the unzipped folder elsewhere, or allow your terminal in **System Settings › Privacy & Security › Files and Folders**. |
 | Empty preview or "Preview error" | Read the **Console** tab. If you set a custom PlantUML JAR, clear that field in **Config** to use the bundled one. |
 | My settings disappear | Press **Save** in the **Config** tab; nothing is stored before that. |
 | I want a clean slate | Close the app and delete `java_config.ini`; it comes back with the defaults. |

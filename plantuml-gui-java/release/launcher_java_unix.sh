@@ -8,8 +8,26 @@
 
 set -u
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 JAR_NAME="plantuml-gui-java.jar"
+
+# macOS privacy controls (Downloads, Desktop, Documents, removable drives) can block
+# reading the folder this script sits in; the JVM then cannot resolve its working dir either.
+SCRIPT_DIR="$(cd "$(dirname "$0")" 2>/dev/null && pwd -P 2>/dev/null)"
+if [ -z "$SCRIPT_DIR" ] || ! ls "$SCRIPT_DIR" >/dev/null 2>&1; then
+    echo "[FAIL]  Cannot read the folder this launcher is in: $(dirname "$0")" >&2
+    if [ "$(uname -s)" = "Darwin" ]; then
+        echo "        macOS is blocking access to it (\"Operation not permitted\"). Either:" >&2
+        echo "          - move the unzipped folder somewhere else, e.g. ~/Applications or ~/plantuml-gui, or" >&2
+        echo "          - allow your terminal (Terminal, iTerm, VS Code...) in System Settings >" >&2
+        echo "            Privacy & Security > Files and Folders (or Full Disk Access), then reopen it." >&2
+    else
+        echo "        Check the folder permissions and try again." >&2
+    fi
+    exit 1
+fi
+
+# Run from the app folder so the JVM always has a readable working directory.
+cd "$SCRIPT_DIR" || exit 1
 
 if ! command -v java >/dev/null 2>&1; then
     echo "[FAIL]  'java' was not found on PATH. Install Java 17 or newer and try again." >&2
